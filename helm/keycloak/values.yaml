@@ -4,50 +4,66 @@ namespaceOverride: ""
 
 replicaCount: 1
 image:
-  repository: ghcr.io/dbildungsplattform/dbildungs-iam-keycloak
+  repository: "ghcr.io/dbildungsplattform/dbp-keycloak"
   tag: ""
-  pullPolicy: Always
-
-schoolsh:
-  clientId: https://school-sh.invalid
-  rootUrl: https://school-sh.invalid
+  pullPolicy: "Always"
 
 auth:
   # existingSecret: Refers to a secret already present in the cluster, which is required for the authentication and configuration of the database setup tasks.
   existingSecret: ""
-  secretName: dbildungs-iam-keycloak
+  secretName: "dbp-keycloak"
+  
   admin_password: ""
-  admin_user: ""
   keycloak_rs256_privateKey: ""
   keycloak_rs256_certificate: ""
   keycloak_adminSecret: ""
   keycloak_clientSecret: ""
   keycloak_serviceClientCertificate: ""
-  keycloak_itslearning_clientSecret: ""
-  keycloak_ox_clientSecret: ""
-  keycloak_nextcloud_clientId: ""
-  keycloak_nextcloud_clientSecret: ""
-  pi_base_url: ""
-  pi_admin_user: ""
-  pi_admin_password: ""
-  pi_user_resolver: ""
-  pi_user_realm: ""
-  schoolsh_clientSecret: ""
-  schoolsh_signingCertificate: ""
-  schoolsh_encryptionCertificate: ""
-
 
 command: []
-
-extraEnvVars: []
 extraVolumes: []
 extraVolumeMounts: []
 
+# extraConfig is used to add additional environment variables to the Keycloak container.
+extraConfig:
+  # The name of the ConfigMap that will be created.
+  name: ""
+  # If enabled, the ConfigMap will be created with the specified data.
+  create: false
+  # The data to be added to the ConfigMap.
+  data: {}
+    # KC_SCHOOLSH_CLIENT_ID: ""
+    # KC_SCHOOLSH_CLIENT_ROOT_URL: ""
+  # Add additional existing ConfigMaps. These will be active even if enabled is false.
+  external: []
+
+# extraSecret is used to add additional secrets to the Keycloak container.
+extraSecret:
+  # The name of the Secret that will be created.
+  name: ""
+  # If enabled, the Secret will be created with the specified data.
+  create: false
+  # The data to be added to the Secret.
+  data:
+    PI_ADMIN_PASSWORD: ""
+    PI_BASE_URL: ""
+    PI_ADMIN_USER: ""
+    PI_USER_RESOLVER: ""
+    PI_REALM: ""
+    KC_NEXTCLOUD_CLIENT_ID: ""
+    KC_NEXTCLOUD_CLIENT_SECRET: ""
+    KC_SCHOOLSH_CLIENT_SECRET: ""
+    KC_SCHOOLSH_CLIENT_SIGNING_CERTIFICATE: ""
+    KC_SCHOOLSH_CLIENT_ENCRYPTION_CERTIFICATE: ""
+    KC_ITSLEARNING_CLIENT_SECRET: ""
+    KC_OX_CLIENT_SECRET: ""
+  # Add additional existing Secrets. These will be active even if enabled is false.
+  external: []
+
 database:
-  name: "dbildungs_iam_keycloak"
-  host: ""
+  url: "jdbc:postgresql://db:5432/keycloak"
+  username: "keycloak"
   password: ""
-  username: "dbildungs_iam_keycloak"
 
 realm:
   name: dbildungs-iam-keycloak-realm
