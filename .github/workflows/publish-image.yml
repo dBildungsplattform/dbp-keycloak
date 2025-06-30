@@ -29,10 +29,10 @@ jobs:
         uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 #v5.5.1
         with:
           images: | 
-            name=ghcr.io/${{ github.repository_owner }}/${{ env.TARGET_IMAGE }}
+            name=ghcr.io/${{ github.repository_owner }}/${{ env.TARGET_IMAGE }}-${{ matrix.variant }}
           tags: |
-            type=match,pattern=\d.\d.\d,prefix=${{ matrix.variant }}-
-            type=raw,value=test,prefix=${{ matrix.variant }}-
+            type=ref,event=branch,enable=false,priority=600
+            type=sha,enable=true,priority=600,prefix=
       
       - name: Log into ghcr.io
         uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d #v3.0.0
@@ -53,8 +53,49 @@ jobs:
           build-args: |
             KEYCLOAK_VARIANT=${{ matrix.variant }}
   
-      - name: Derive registry and owner for image to scan
-        id: registry_and_owner
+  build_meta:
+    runs-on: ubuntu-latest
+    outputs:
+      branch: ${{ steps.extract_branch_meta.outputs.branch }}
+      sha: ${{ steps.extract_branch_meta.outputs.sha }}
+    steps:
+      - name: Extract branch meta
+        shell: bash
+        id: extract_branch_meta
         run: |
-          registry_and_owner=ghcr.io/${{ github.repository_owner }}
-          echo "registry_and_owner=$registry_and_owner" >> $GITHUB_OUTPUT
+          if [ "${{ github.event_name }}" == 'pull_request' ]; then
+            echo "branch=${{ github.event.pull_request.head.ref }}" >> $GITHUB_OUTPUT
+            echo "sha=${{ github.event.pull_request.head.sha }}" >> $GITHUB_OUTPUT
+          else
+            echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+            echo "sha=${{ github.sha }}" >> $GITHUB_OUTPUT
+          fi
+
+
+  trivy-vulnerability-scanning:
+    needs:
+      - build_and_upload_image
+      - build_meta
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - name: run trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.29.0
+        with:
+          image-ref: "ghcr.io/${{ github.repository }}-generic:${{ needs.build_meta.outputs.sha }}"
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "CRITICAL,HIGH"
+          ignore-unfixed: true
+          scan-type: 'image'
+        env:
+          TRIVY_SKIP_DB_UPDATE: true
+          TRIVY_SKIP_JAVA_DB_UPDATE: true
+      - name: upload trivy results
+        if: ${{ always() }}
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: "trivy-results.sarif"
