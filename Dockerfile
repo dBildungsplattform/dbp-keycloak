@@ -42,7 +42,10 @@ WORKDIR /opt/keycloak/
 RUN keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA -keysize 2048 -dname "CN=keycloak" -alias keycloak -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -validity 365 -keystore conf/server.keystore
 
 # load env vars and execute build
-RUN export $(cat /tmp/env-base /tmp/env-variant | xargs) && \
+RUN set -o allexport && \
+    . /tmp/env-base && \
+    . /tmp/env-variant && \
+    set +a && \
     env && \
     /opt/keycloak/bin/kc.sh build && \
     /opt/keycloak/bin/kc.sh show-config
