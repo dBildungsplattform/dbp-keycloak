@@ -38,5 +38,5 @@ The files are copied to `/opt/keycloak`.
 To build the container image, use the following command:
 
 ```bash
-podman build --build-arg KEYCLOAK_VARIANT=generic -f Dockerfile -t keycloak:dev variants/generic
+podman build --build-arg KEYCLOAK_VARIANT=generic -f Dockerfile -t keycloak:dev .
 ```
