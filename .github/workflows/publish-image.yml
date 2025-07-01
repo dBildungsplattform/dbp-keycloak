@@ -70,6 +70,7 @@ jobs:
             echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
             echo "sha=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
           fi
+          echo "repo=$(echo ${{ github.repository }} | awk '{print tolower($0)}')" >> $GITHUB_OUTPUT
 
 
   trivy-vulnerability-scanning:
@@ -85,7 +86,7 @@ jobs:
       - name: run trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.29.0
         with:
-          image-ref: "ghcr.io/dbildungsplattform/dbp-keycloak-generic:${{ needs.build_meta.outputs.sha }}"
+          image-ref: "ghcr.io/${{ needs.build_meta.outputs.repo }}-generic:${{ needs.build_meta.outputs.sha }}"
           format: "sarif"
           output: "trivy-results.sarif"
           severity: "CRITICAL,HIGH"
