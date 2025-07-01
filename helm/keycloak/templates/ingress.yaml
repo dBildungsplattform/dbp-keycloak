@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ template "common.names.name" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ template "common.names.namespace" . }}
   labels: 
     {{- include "common.labels" . | nindent 4 }}
@@ -22,6 +22,6 @@ spec:
             pathType: {{ .Values.ingress.pathType }}
             backend: 
               service:
-                name: {{ template "common.names.name" . }}
+                name: {{ template "common.names.fullname" . }}
                 port:
                   number: {{ .Values.service.ports.http }}
