@@ -71,7 +71,9 @@ realm:
 
 restartPolicy: Always
 
-keycloakHostname: ""
+keycloak:
+  hostname: ""
+  hostnameBackchannelDynamic: true
 frontendHostname: ""
 keycloak2ndHostname: ""
 
@@ -129,12 +131,8 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
 
 containerPorts:
-  - name: web
-    port: 8080
-    protocol: TCP
-  - name: mgmt
-    port: 8090
-    protocol: TCP
+
+javaOptsAppend: "-Djgroups.dns.query={{ tpl "common.names.fullname" . }}-headless.{{ tpl "common.names.namespace" . }}.svc.cluster.local"
 
 service:
   type: ClusterIP
@@ -148,6 +146,12 @@ keycloak:
     enabled: true
     path: "/metrics"
     port: 'mgmt'
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+  automountServiceAccountToken: false
 
 autoscaling:
   enabled: false

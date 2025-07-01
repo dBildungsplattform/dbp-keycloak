@@ -39,11 +39,12 @@ spec:
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           ports:
-            {{- range .Values.containerPorts }}
-            - name: {{ .name }}
-              containerPort: {{ .port }}
-              protocol: {{ .protocol }}
-            {{- end }}
+            - name: web
+              containerPort: 8080
+              protocol: TCP
+            - name: mgmt
+              containerPort: 8090
+              protocol: TCP
           startupProbe: {{- omit .Values.startupProbe "enabled" | toYaml | nindent 12 }}
           livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
           readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
@@ -51,10 +52,12 @@ spec:
             # configs
             - configMapRef:
                 name: {{ template "common.names.fullname" . }}
+            ## extra config
             {{- if .Values.extraConfig.create }}
             - configMapRef:
                 name: "{{ .Values.extraConfig.name }}"
             {{- end }}
+            ## list of external configs
             {{- range .Values.extraConfig.external }}
             - configMapRef:
                 name: "{{ . }}"
@@ -63,9 +66,11 @@ spec:
             - secretRef:
                 name: "{{ .Values.secret.name }}"
             {{- if .Values.extraSecret.create }}
+            ## extra secret
             - secretRef:
                 name: "{{ .Values.extraSecret.name }}"
             {{- end }}
+            ## list of external secrets
             {{- range .Values.extraSecret.external }}
             - secretRef:
                 name: "{{ . }}"
