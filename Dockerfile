@@ -56,5 +56,4 @@ FROM base AS final
 
 COPY --from=build /opt/ /opt/
 WORKDIR /opt/keycloak
-ENTRYPOINT [ "/opt/keycloak/bin/kc.sh", "start" ]
-CMD [ "--optimized" ]
+ENTRYPOINT [ "/opt/keycloak/bin/kc.sh", "start" , "--optimized" ]
