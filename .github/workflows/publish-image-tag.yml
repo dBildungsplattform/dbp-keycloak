@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       digest: ${{ steps.docker_build_push.outputs.digest }}
-      image_tag: ${{ steps.docker_meta_img.outputs.tags }}
+      image_tag: ${{ steps.docker_meta_img_trivy.outputs.tags }}
     permissions:
       packages: write
       contents: read
@@ -32,8 +32,18 @@ jobs:
           images: | 
             name=ghcr.io/${{ github.repository_owner }}/${{ env.TARGET_IMAGE }}-${{ matrix.variant }}
           tags: |
-            type=semver,pattern={{version}}
-      
+            type=semver,pattern={{raw}}
+
+      - name: Build image name and tags
+        id: docker_meta_img_trivy
+        uses: docker/metadata-action@v5
+        with:
+          images: | 
+            name=ghcr.io/${{ github.repository_owner }}/${{ env.TARGET_IMAGE }}-${{ matrix.variant }}
+          tags: |
+            latest=false
+            type=semver,pattern={{raw}}
+
       - name: Log into ghcr.io
         uses: docker/login-action@v3
         with:
