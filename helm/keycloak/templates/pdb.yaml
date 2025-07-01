@@ -2,16 +2,13 @@
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ template "common.names.name" . }}-pdb
+  name: {{ template "common.names.fullname" . }}-pdb
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: {{ include "common.names.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "common.labels" . | nindent 4 }}
 spec:
   minAvailable: {{ .Values.podDisruptionBudget.minAvailable }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: dbildungs-iam-keycloak
+      {{- include "common.selectorLabels" . | nindent 6 }}
 {{- end }}
