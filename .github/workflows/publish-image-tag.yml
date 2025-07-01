@@ -52,23 +52,10 @@ jobs:
           labels: ${{ steps.docker_meta_img.outputs.labels }}
           build-args: |
             KEYCLOAK_VARIANT=${{ matrix.variant }}
-  
-  build_meta:
-    runs-on: ubuntu-latest
-    outputs:
-      repo: ${{ steps.extract_branch_meta.outputs.repo }}
-    steps:
-      - name: Extract branch meta
-        shell: bash
-        id: extract_branch_meta
-        run: |
-          echo "repo=$(echo ${{ github.repository }} | awk '{print tolower($0)}')" >> $GITHUB_OUTPUT
-
 
   trivy-vulnerability-scanning:
     needs:
       - build_and_upload_image
-      - build_meta
     runs-on: ubuntu-latest
     permissions:
       actions: read
