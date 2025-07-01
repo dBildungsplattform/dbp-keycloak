@@ -65,10 +65,10 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" == 'pull_request' ]; then
             echo "branch=${{ github.event.pull_request.head.ref }}" >> $GITHUB_OUTPUT
-            echo "sha=$(echo ${{ github.event.pull_request.head.sha }} | cut -c1-8)" >> $GITHUB_OUTPUT
+            echo "sha=$(echo ${{ github.event.pull_request.head.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
           else
             echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
-            echo "sha=$(echo ${{ github.sha }} | cut -c1-8)" >> $GITHUB_OUTPUT
+            echo "sha=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
           fi
 
 
