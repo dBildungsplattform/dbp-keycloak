@@ -58,6 +58,7 @@ jobs:
     outputs:
       branch: ${{ steps.extract_branch_meta.outputs.branch }}
       sha: ${{ steps.extract_branch_meta.outputs.sha }}
+      repo: ${{ steps.extract_branch_meta.outputs.repo }}
     steps:
       - name: Extract branch meta
         shell: bash
