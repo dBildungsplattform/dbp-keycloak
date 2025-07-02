@@ -1,6 +1,6 @@
 apiVersion: v2
-name: dbildungs-iam-keycloak
+name: dbp-keycloak
 version: 0.1.1
-description: A Helm Chart for the dbildungs-iam-keycloak
+description: A Helm Chart for the dbp-keycloak
 type: application
 appVersion: ""
