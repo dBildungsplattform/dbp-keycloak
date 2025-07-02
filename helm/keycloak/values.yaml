@@ -142,10 +142,6 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
     nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
 
-containerPorts:
-
-javaOptsAppend: "-Djgroups.dns.query={{ tpl "common.names.fullname" . }}-headless.{{ tpl "common.names.namespace" . }}.svc.cluster.local"
-
 service:
   type: ClusterIP
   http:

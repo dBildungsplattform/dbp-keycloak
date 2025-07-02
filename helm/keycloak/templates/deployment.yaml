@@ -17,7 +17,7 @@ spec:
       labels:
         {{- include "common.labels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ include "serviceAccountName" . }}
+      serviceAccountName:  {{ include "common.serviceAccountName" . }}
       restartPolicy: {{ default "Always" .Values.restartPolicy }}
       containers:
         - name: {{ template "common.names.fullname" . }}
@@ -62,7 +62,7 @@ spec:
             {{- end }}
             # secrets
             - secretRef:
-                name: "{{ .Values.secret.name }}"
+                name: "{{ .Values.auth.secretName }}"
             {{- if .Values.extraSecret.create }}
             ## extra secret
             - secretRef:
@@ -78,12 +78,12 @@ spec:
               name: realm-config
               readOnly: true
             {{- with .Values.extraVolumes }}
-            {{- toYaml . | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
             {{- end }}
       volumes:
         - name: realm-config
           configMap:
             name: {{ .Values.realm.name }}
         {{- with .Values.extraVolumes }}
-        {{- toYaml . | nindent 8 }}
+        {{- . | toYaml | nindent 8 }}
         {{- end }}
