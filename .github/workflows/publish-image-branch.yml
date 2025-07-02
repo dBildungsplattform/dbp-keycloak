@@ -3,7 +3,7 @@ name: 'Publish image to GHCR on push to branch'
 on:
   push:
     branches-ignore:
-      - 'main'
+      - 'release'
 
 env:
   TARGET_IMAGE: "dbp-keycloak"
