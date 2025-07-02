@@ -82,6 +82,10 @@ restartPolicy: Always
 keycloak:
   hostname: ""
   hostnameBackchannelDynamic: true
+  serviceMonitor:
+    enabled: true
+    path: "/metrics"
+    port: 'mgmt'
 frontendHostname: ""
 keycloak2ndHostname: ""
 
@@ -148,12 +152,6 @@ service:
     enabled: true
   ports:
     http: 80
-
-keycloak:
-  serviceMonitor:
-    enabled: true
-    path: "/metrics"
-    port: 'mgmt'
 
 serviceAccount:
   create: true
