@@ -1,6 +1,6 @@
 # Keycloak Container Image
 
-This repository provides a Docker container image for running Keycloak. The container is built on Debian 12 and includes OpenJDK 17. Building different variants based on customer/project needs is supported.
+This repository provides a container image for running Keycloak. The container is built on Debian 12 and includes OpenJDK 17. Building different variants based on customer/project needs is supported.
 
 ## Configuration Options
 
