@@ -7,14 +7,13 @@ metadata:
     {{- include "common.labels" . | nindent 4 }}
 data:
   KC_HOSTNAME: "https://{{ .Values.keycloak.hostname }}"
-  KC_HOSTNAME_BACKCHANNEL_DYNAMIC: {{ .Values.keycloak.hostnameBackchannelDynamic }}
+  KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "{{ .Values.keycloak.hostnameBackchannelDynamic }}"
   KC_DB_URL: "{{ .Values.database.url }}"
   KC_DB_USERNAME: "{{ .Values.database.username }}"
   KC_ROOT_URL: "https://{{ .Values.frontendHostname }}"
   KC_PROXY_HEADERS: "xforwarded"
   KC_HTTP_ENABLED: "{{ default .Values.service.http.enabled false }}"
-  KEYCLOAK_ADMIN: admin
+  KEYCLOAK_ADMIN: "admin"
   KC_HTTP_MANAGEMENT_PORT: "8090"
-  JAVA_OPTS_APPEND: "{{ .Values.javaOptsAppend }}"
+  JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc.cluster.local" (include "common.names.fullname" .) (include "common.names.namespace" .) | quote }}
   KC_HTTP_POOL_MAX_THREADS: "{{ .Values.threadPool }}"
-  # KC_DB_URL: "jdbc:postgresql://$(DB_HOST)/$(DB_NAME)"
