@@ -9,7 +9,7 @@ This repository provides a Docker container image for running Keycloak. The cont
 * **`KEYCLOAK_VERSION`**: Version of Keycloak to be downloaded and installed. Default is `26.2.5`.  
   * Example: `--build-arg KEYCLOAK_VERSION=27.0.0`
 
-* **`KEYCLOAK_VARIANT`**: Defines the variant of Keycloak to be used. This refers to a subdirectory in `variants/` which contains a env file and supports adding more files (like themes) to keycloak.
+* **`KEYCLOAK_VARIANT`**: Defines the variant of Keycloak to be used. This refers to a subdirectory in `variants/` which contains an env file and supports adding more files (like themes) to keycloak.
   * `generic` (default): A general-purpose variant suitable for most use cases.  
   * Example: `--build-arg KEYCLOAK_VARIANT=custom`
 
