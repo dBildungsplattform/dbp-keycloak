@@ -21,7 +21,7 @@ During the build process, environment variables are loaded from:
 * `variants/base/env`: Base environment variables common to all variants.
 * `variants/<KEYCLOAK_VARIANT>/env`: Variant-specific environment variables.
 
-These variables are used to configure Keycloak during the build process.
+These variables are used to configure Keycloak during the build process. Env vars from `base` can also be overwritten by variant env.
 
 ### Custom files
 
