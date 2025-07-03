@@ -5,9 +5,6 @@ on:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+-?*' # matches v1.2.3 and v1.2.3-foobar
 
-env:
-  TARGET_IMAGE: "dbp-keycloak"
-
 jobs:
   build_and_upload_image:
     name: Publish image
@@ -30,16 +27,16 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: | 
-            name=ghcr.io/${{ github.repository_owner }}/${{ env.TARGET_IMAGE }}-${{ matrix.variant }}
+            name=ghcr.io/${{ github.repository }}-${{ matrix.variant }}
           tags: |
             type=semver,pattern={{version}}
 
-      - name: Build image name and tags
+      - name: Build image name and tags for trivy
         id: docker_meta_img_trivy
         uses: docker/metadata-action@v5
         with:
           images: | 
-            name=ghcr.io/${{ github.repository_owner }}/${{ env.TARGET_IMAGE }}-${{ matrix.variant }}
+            name=ghcr.io/${{ github.repository }}-${{ matrix.variant }}
           tags: |
             type=semver,pattern={{version}}
           flavor:
@@ -52,7 +49,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Build and push ${{ env.TARGET_IMAGE }} to ghcr
+      - name: Build and push image to ghcr
         id: docker_build_push
         uses: docker/build-push-action@v6
         with:
