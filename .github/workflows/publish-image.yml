@@ -27,22 +27,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Extract branch meta
-        id: extract_branch_meta
-        shell: bash
-        run: |
-          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            echo "branch=" >> $GITHUB_OUTPUT
-            echo "sha=${GITHUB_SHA}" >> $GITHUB_OUTPUT
-          elif [[ "${GITHUB_REF}" == refs/heads/* ]]; then
-            echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
-            echo "sha=${GITHUB_SHA}" >> $GITHUB_OUTPUT
-          else
-            echo "branch=" >> $GITHUB_OUTPUT
-            echo "sha=${GITHUB_SHA}" >> $GITHUB_OUTPUT
-          fi
-          echo "repo=$(echo ${{ github.repository }} | awk '{print tolower($0)}')" >> $GITHUB_OUTPUT
-
       - name: Build image name and tags
         id: docker_meta_img
         uses: docker/metadata-action@v5
@@ -52,7 +36,7 @@ jobs:
           tags: |
             type=semver,pattern={{version}},enable=${{ startsWith(github.ref, 'refs/tags/') }}
             type=ref,event=branch,enable=${{ startsWith(github.ref, 'refs/heads/') }}
-            type=sha,enable=${{ startsWith(github.ref, 'refs/heads/') }},prefix=,format=long
+            type=sha,enable=${{ startsWith(github.ref, 'refs/heads/') }},prefix=,format=long,priority=601
 
       - name: Build image name and tags for trivy
         id: docker_meta_img_trivy

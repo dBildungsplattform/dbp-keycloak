@@ -10,21 +10,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  release_image:
-    name: "Publish image and scan with trivy"
-    permissions:
-      packages: write
-      security-events: write
-      contents: read
-    uses: dBildungsplattform/dbp-github-workflows/.github/workflows/image-publish-trivy.yaml@7
-    with:
-      image_name: "dbp-keycloak"
-      run_trivy_scan: true
-      image_tag_generation: version_git_tag
-      container_registry: "ghcr.io"
-      fail_on_vulnerabilites: false
-      report_location: "Dockerfile"
-      target: "deployment"
   
   # Helm Chart
   scan_helm:
