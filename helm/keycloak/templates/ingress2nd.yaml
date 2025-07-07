@@ -4,7 +4,7 @@ kind: Ingress
 metadata:
   name: {{ template "common.names.fullname" . }}-2nd
   namespace: {{ template "common.names.namespace" . }}
-  labels: 
+  labels:
     {{- include "common.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
@@ -21,7 +21,7 @@ spec:
         paths:
           - path: {{ .Values.ingress.path }}
             pathType: {{ .Values.ingress.pathType }}
-            backend: 
+            backend:
               service:
                 name: {{ template "common.names.fullname" . }}
                 port:

@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ template "common.names.namespace" . }}
-  labels: 
+  labels:
     {{- include "common.labels" . | nindent 4 }}
 spec:
   selector:
