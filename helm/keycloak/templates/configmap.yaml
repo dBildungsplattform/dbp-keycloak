@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ template "common.names.namespace" . }}
-  labels: 
+  labels:
     {{- include "common.labels" . | nindent 4 }}
 data:
   KC_HOSTNAME: "https://{{ .Values.keycloak.hostname }}"
@@ -12,7 +12,7 @@ data:
   KC_DB_USERNAME: "{{ .Values.database.username }}"
   KC_ROOT_URL: "https://{{ .Values.frontendHostname }}"
   KC_PROXY_HEADERS: "xforwarded"
-  KC_HTTP_ENABLED: "{{ default .Values.service.http.enabled false }}"
+  KC_HTTP_ENABLED: "{{ .Values.service.http.enabled }}"
   KEYCLOAK_ADMIN: "admin"
   KC_HTTP_MANAGEMENT_PORT: "8090"
   JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc.cluster.local" (include "common.names.fullname" .) (include "common.names.namespace" .) | quote }}
