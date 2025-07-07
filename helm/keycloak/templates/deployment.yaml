@@ -19,10 +19,14 @@ spec:
     spec:
       serviceAccountName:  {{ include "common.serviceAccountName" . }}
       restartPolicy: {{ default "Always" .Values.restartPolicy }}
+      {{- with .Values.image.pullSecrets }}
+      imagePullSecrets:
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ template "common.names.fullname" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }} 
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .command }}
           command:
             {{- .command | toYaml | nindent 16 }}

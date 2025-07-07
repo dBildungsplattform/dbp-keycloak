@@ -7,12 +7,13 @@ image:
   repository: "ghcr.io/dbildungsplattform/dbp-keycloak"
   tag: ""
   pullPolicy: "Always"
+  pullSecrets: []
 
 auth:
   # existingSecret: Refers to a secret already present in the cluster, which is required for the authentication and configuration of the database setup tasks.
   existingSecret: ""
   secretName: "dbp-keycloak"
-  
+
   admin_password: ""
   keycloak_rs256_privateKey: ""
   keycloak_rs256_certificate: ""
