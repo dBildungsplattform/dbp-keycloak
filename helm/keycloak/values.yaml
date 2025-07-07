@@ -41,32 +41,18 @@ extraConfig:
   create: false
   # The data to be added to the ConfigMap.
   data: {}
-    # KC_SCHOOLSH_CLIENT_ID: ""
-    # KC_SCHOOLSH_CLIENT_ROOT_URL: ""
   # Add additional existing ConfigMaps. These will be active even if enabled is false.
   external: []
 
 # extraSecret is used to add additional secrets to the Keycloak container.
 extraSecret:
-  # The name of the Secret that will be created.
+  # name of the Secret that will be created.
   name: ""
-  # If enabled, the Secret will be created with the specified data.
+  # create enables the Secret with the specified data and name.
   create: false
-  # The data to be added to the Secret.
-  data:
-    PI_ADMIN_PASSWORD: ""
-    PI_BASE_URL: ""
-    PI_ADMIN_USER: ""
-    PI_USER_RESOLVER: ""
-    PI_REALM: ""
-    KC_NEXTCLOUD_CLIENT_ID: ""
-    KC_NEXTCLOUD_CLIENT_SECRET: ""
-    KC_SCHOOLSH_CLIENT_SECRET: ""
-    KC_SCHOOLSH_CLIENT_SIGNING_CERTIFICATE: ""
-    KC_SCHOOLSH_CLIENT_ENCRYPTION_CERTIFICATE: ""
-    KC_ITSLEARNING_CLIENT_SECRET: ""
-    KC_OX_CLIENT_SECRET: ""
-  # Add additional existing Secrets. These will be active even if enabled is false.
+  # data is a dict of environment variables to be added to the Secret.
+  data: {}
+  # external is a list of additional existing Secrets. These will be active even if enabled is false.
   external: []
 
 database:

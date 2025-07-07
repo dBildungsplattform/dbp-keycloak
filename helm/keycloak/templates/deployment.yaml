@@ -27,9 +27,9 @@ spec:
         - name: {{ template "common.names.fullname" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .command }}
+          {{- if .Values.command }}
           command:
-            {{- .command | toYaml | nindent 16 }}
+            {{- .Values.command | toYaml | nindent 16 }}
           {{- end }}
           args:
             {{ if .Values.importRealms -}}
@@ -81,7 +81,7 @@ spec:
             - mountPath: "/opt/keycloak/data/import"
               name: realm-config
               readOnly: true
-            {{- with .Values.extraVolumes }}
+            {{- with .Values.extraVolumeMounts }}
             {{- . | toYaml | nindent 12 }}
             {{- end }}
       volumes:
