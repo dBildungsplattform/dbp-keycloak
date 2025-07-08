@@ -21,13 +21,6 @@ auth:
   keycloak_clientSecret: ""
   keycloak_serviceClientCertificate: ""
 
-
-
-# importRealms is used to import realms on startup.
-# It will set "--import-realm" as arg to enable realm import on startup.
-# This will not recreate existing realms.
-importRealms: true
-
 command: []
 extraArgs: []
 extraVolumes: []
@@ -59,6 +52,11 @@ database:
   url: "jdbc:postgresql://db:5432/keycloak"
   username: "keycloak"
   password: ""
+
+# importRealms is used to import realms on startup.
+# It will set "--import-realm" as arg to enable realm import on startup.
+# This will not recreate existing realms.
+importRealms: true
 
 realm:
   name: ""
