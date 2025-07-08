@@ -4,8 +4,8 @@ namespaceOverride: ""
 
 replicaCount: 1
 image:
-  repository: "ghcr.io/dbildungsplattform/dbp-keycloak"
-  tag: ""
+  repository: "ghcr.io/dbildungsplattform/dbp-keycloak-generic"
+  tag: "latest"
   pullPolicy: "Always"
   pullSecrets: []
 
@@ -61,8 +61,8 @@ database:
   password: ""
 
 realm:
-  name: dbildungs-iam-keycloak-realm
-  filepath: "dev-realm-spsh.json"
+  name: ""
+  filepath: ""
 
 restartPolicy: Always
 
@@ -72,7 +72,7 @@ keycloak:
   serviceMonitor:
     enabled: true
     path: "/metrics"
-    port: 'mgmt'
+    port: "mgmt"
 frontendHostname: ""
 keycloak2ndHostname: ""
 
@@ -103,21 +103,34 @@ startupProbe:
   enabled: true
   httpGet:
     path: "/health/started"
-    port: mgmt
-  periodSeconds: 10
-  failureThreshold: 30
+    port: "mgmt"
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  timeoutSeconds: 1
+  failureThreshold: 60
+  successThreshold: 1
 
 livenessProbe:
   enabled: true
   httpGet:
-    path: /health/live
-    port: mgmt
+    path: "/health/live"
+    port: "mgmt"
+  initialDelaySeconds: 300
+  periodSeconds: 1
+  timeoutSeconds: 5
+  failureThreshold: 5
+  successThreshold: 1
 
 readinessProbe:
   enabled: true
   httpGet:
     path: "/health/ready"
-    port: mgmt
+    port: "mgmt"
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+  successThreshold: 1
 
 ingress:
   # Only enable if 2nd host name is defined
@@ -130,7 +143,6 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
 
 service:
-  type: ClusterIP
   http:
     enabled: true
   ports:
@@ -147,9 +159,6 @@ autoscaling:
   minReplicas: 1
   maxReplicas: 5
   targetCPUUtilizationPercentage: 60
-
-status:
-  url: "https://status.dev.spsh.dbildungsplattform.de/"
 
 podDisruptionBudget:
   enabled: false
