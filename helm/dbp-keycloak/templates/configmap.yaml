@@ -10,7 +10,7 @@ data:
   KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "{{ .Values.keycloak.hostnameBackchannelDynamic }}"
   KC_DB_URL: "{{ .Values.database.url }}"
   KC_DB_USERNAME: "{{ .Values.database.username }}"
-  KC_ROOT_URL: "https://{{ .Values.frontendHostname }}"
+  KC_ROOT_URL: "https://{{ .Values.keycloak.frontendHostname }}"
   KC_PROXY_HEADERS: "xforwarded"
   KC_HTTP_ENABLED: "{{ .Values.service.http.enabled }}"
   KEYCLOAK_ADMIN: "admin"
