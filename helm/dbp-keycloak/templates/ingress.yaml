@@ -12,10 +12,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - {{ .Values.keycloakHostname  }}
+        - {{ .Values.keycloak.hostname }}
   ingressClassName: {{ .Values.ingress.ingressClassName }}
   rules:
-    - host: {{ .Values.keycloakHostname  }}
+    - host: {{ .Values.keycloak.hostname }}
       http:
         paths:
           - path: {{ .Values.ingress.path }}

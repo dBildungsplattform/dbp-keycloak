@@ -71,8 +71,8 @@ keycloak:
     enabled: true
     path: "/metrics"
     port: "mgmt"
-frontendHostname: ""
-keycloak2ndHostname: ""
+  frontendHostname: ""
+  secondaryHostname: ""
 
 containerSecurityContext:
   enabled: true

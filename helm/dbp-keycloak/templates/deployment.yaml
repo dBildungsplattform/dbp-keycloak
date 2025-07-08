@@ -78,16 +78,20 @@ spec:
                 name: "{{ . }}"
             {{- end }}
           volumeMounts:
+            {{- if .Values.realm.name }}
             - mountPath: "/opt/keycloak/data/import"
               name: realm-config
               readOnly: true
+            {{- end }}
             {{- with .Values.extraVolumeMounts }}
             {{- . | toYaml | nindent 12 }}
             {{- end }}
       volumes:
+        {{- if .Values.realm.name }}
         - name: realm-config
           configMap:
             name: {{ .Values.realm.name }}
+        {{- end }}
         {{- with .Values.extraVolumes }}
         {{- . | toYaml | nindent 8 }}
         {{- end }}
