@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: "{{ .Values.extraConfig.name }}"
   namespace: {{ template "common.names.namespace" . }}
-  labels: 
+  labels:
     {{- include "common.labels" . | nindent 4 }}
 data:
   {{- .Values.extraConfig.data | toYaml | nindent 2 }}
