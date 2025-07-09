@@ -16,6 +16,12 @@ spec:
     metadata:
       labels:
         {{- include "common.labels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ tpl (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/extra-config: {{ tpl (print $.Template.BasePath "/extra-configmap.yaml") . | sha256sum }}
+        checksum/realm-config: {{ tpl (print $.Template.BasePath "/realm-configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ tpl (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        checksum/extra-secret: {{ tpl (print $.Template.BasePath "/extra-secret.yaml") . | sha256sum }}
     spec:
       serviceAccountName:  {{ include "common.serviceAccountName" . }}
       restartPolicy: {{ default "Always" .Values.restartPolicy }}
