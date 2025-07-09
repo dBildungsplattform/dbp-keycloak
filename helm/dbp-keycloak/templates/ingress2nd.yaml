@@ -25,5 +25,5 @@ spec:
               service:
                 name: {{ template "common.names.fullname" . }}
                 port:
-                  number: {{ .Values.service.ports.http }}
+                  name: http
 {{- end }}
