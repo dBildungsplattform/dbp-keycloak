@@ -143,8 +143,6 @@ ingress:
 service:
   http:
     enabled: true
-  ports:
-    http: 80
 
 serviceAccount:
   create: true
