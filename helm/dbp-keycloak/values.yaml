@@ -102,6 +102,7 @@ startupProbe:
   httpGet:
     path: "/health/started"
     port: "mgmt"
+    scheme: "HTTPS"
   initialDelaySeconds: 30
   periodSeconds: 5
   timeoutSeconds: 1
@@ -113,6 +114,7 @@ livenessProbe:
   httpGet:
     path: "/health/live"
     port: "mgmt"
+    scheme: "HTTPS"
   initialDelaySeconds: 300
   periodSeconds: 1
   timeoutSeconds: 5
@@ -124,6 +126,7 @@ readinessProbe:
   httpGet:
     path: "/health/ready"
     port: "mgmt"
+    scheme: "HTTPS"
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 1
