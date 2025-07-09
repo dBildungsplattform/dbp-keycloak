@@ -134,8 +134,11 @@ ingress:
   # Only enable if 2nd host name is defined
   enabled2nd: false
   ingressClassName: nginx
+  tls:
+    enabled: false
+    SecretName: ""
   path: /
-  pathType: Prefix
+  pathType: "Prefix"
   annotations:
     nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
     nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
