@@ -1,6 +1,9 @@
 nameOverride: ""
 fullnameOverride: ""
 namespaceOverride: ""
+# partOfOverride is used to override the partOf label in the deployment.
+# If it is not set the partOf label will be set to the chart name.
+partOfOverride: ""
 
 replicaCount: 1
 image:

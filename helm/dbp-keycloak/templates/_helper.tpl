@@ -37,6 +37,11 @@ Allow the release namespace to be overridden for multi-namespace deployments in 
 {{- default .Release.Namespace .Values.namespaceOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+
+{{- define "partOf" -}}
+{{- default (include "common.names.name" .) .Values.partOfOverride -}}
+{{- end -}}
+
 {{/*
 Create common labels
 */}}
@@ -55,7 +60,7 @@ Selector labels
 {{- define "common.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "common.names.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/part-of: {{ include "common.names.name" . }}
+app.kubernetes.io/part-of: {{ include "partOf" . }}
 app.kubernetes.io/component: "keycloak"
 {{- end }}
 
