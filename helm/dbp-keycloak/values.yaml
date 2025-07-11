@@ -68,18 +68,15 @@ realm:
 restartPolicy: Always
 
 keycloak:
-  hostname: ""
+  hostnames: []
   hostnameBackchannelDynamic: true
   serviceMonitor:
     enabled: true
     path: "/metrics"
     port: "mgmt"
   frontendHostname: ""
-  secondaryHostname: ""
 
 ingress:
-  # Only enable if 2nd host name is defined
-  enableSecondary: true
   ingressClassName: nginx
   tls:
     enabled: false
