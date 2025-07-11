@@ -37,12 +37,40 @@ Allow the release namespace to be overridden for multi-namespace deployments in 
 {{- default .Release.Namespace .Values.namespaceOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+
+{{- define "partOf" -}}
+{{- default (include "common.names.name" .) .Values.partOfOverride -}}
+{{- end -}}
+
 {{/*
 Create common labels
 */}}
 {{- define "common.labels" -}}
-app.kubernetes.io/name: {{ template "common.names.name" . }}
-app.kubernetes.io/version: {{ .Chart.AppVersion }}
+helm.sh/chart: {{ include "common.names.chart" . }}
+{{ include "common.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
+{{/*
+Selector labels
+*/}}
+{{- define "common.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "common.names.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/part-of: {{ include "partOf" . }}
+app.kubernetes.io/component: "keycloak"
+{{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "common.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
