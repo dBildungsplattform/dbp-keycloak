@@ -80,7 +80,7 @@ ingress:
   ingressClassName: nginx
   tls:
     enabled: false
-    SecretName: ""
+    secretName: ""
   path: /
   pathType: "Prefix"
   annotations:
