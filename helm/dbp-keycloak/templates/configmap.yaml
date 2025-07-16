@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "common.labels" . | nindent 4 }}
 stringData:
-  KC_HOSTNAME: "https://{{ .Values.keycloak.hostname }}"
+  KC_HOSTNAME: "https://{{ .Values.keycloak.hostnames | first }}"
   KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "{{ .Values.keycloak.hostnameBackchannelDynamic }}"
   KC_DB_URL: "{{ .Values.database.url }}"
   KC_DB_USERNAME: "{{ .Values.database.username }}"
