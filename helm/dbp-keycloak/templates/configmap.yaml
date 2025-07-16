@@ -5,7 +5,7 @@ metadata:
   namespace: {{ template "common.names.namespace" . }}
   labels:
     {{- include "common.labels" . | nindent 4 }}
-stringData:
+data:
   KC_HOSTNAME: "https://{{ .Values.keycloak.hostnames | first }}"
   KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "{{ .Values.keycloak.hostnameBackchannelDynamic }}"
   KC_DB_URL: "{{ .Values.database.url }}"
