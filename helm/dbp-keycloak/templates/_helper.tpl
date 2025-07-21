@@ -83,3 +83,11 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+
+{{/*
+Create the name of the headless service
+*/}}
+{{- define "common.headlessServiceName" -}}
+{{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end }}

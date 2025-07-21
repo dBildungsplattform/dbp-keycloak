@@ -15,5 +15,5 @@ data:
   KC_HTTP_ENABLED: "{{ .Values.service.http.enabled }}"
   KC_BOOTSTRAP_ADMIN_USERNAME: "{{ .Values.auth.adminUsername }}"
   KC_HTTP_MANAGEMENT_PORT: "8090"
-  JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc.cluster.local" (include "common.names.fullname" .) (include "common.names.namespace" .) | quote }}
+  JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s.%s.svc.cluster.local" (include "common.headlessServiceName" .) (include "common.names.namespace" .) | quote }}
   KC_HTTP_POOL_MAX_THREADS: "{{ .Values.threadPool }}"
