@@ -50,7 +50,6 @@ database:
   password: "{{ keycloak_database_password }}"
 
 realm:
-  name: "{{ keycloak_realm_name }}"
   filepath: "{{ keycloak_realm_filepath }}"
 
 keycloak:
@@ -75,7 +74,6 @@ threadPool: {{ keycloak_thread_pool }}
 
 startupProbe:
   enabled: {{ keycloak_startup_probe_enabled }}
-  initialDelaySeconds: {{ keycloak_startup_probe_initial_delay_seconds }}
   periodSeconds: {{ keycloak_startup_probe_period_seconds }}
   timeoutSeconds: {{ keycloak_startup_probe_timeout_seconds }}
   failureThreshold: {{ keycloak_startup_probe_failure_threshold }}
@@ -83,7 +81,6 @@ startupProbe:
 
 livenessProbe:
   enabled: {{ keycloak_liveness_probe_enabled }}
-  initialDelaySeconds: {{ keycloak_liveness_probe_initial_delay_seconds }}
   periodSeconds: {{ keycloak_liveness_probe_period_seconds }}
   timeoutSeconds: {{ keycloak_liveness_probe_timeout_seconds }}
   failureThreshold: {{ keycloak_liveness_probe_failure_threshold }}
@@ -91,7 +88,6 @@ livenessProbe:
 
 readinessProbe:
   enabled: {{ keycloak_readiness_probe_enabled }}
-  initialDelaySeconds: {{ keycloak_readiness_probe_initial_delay_seconds }}
   periodSeconds: {{ keycloak_readiness_probe_period_seconds }}
   timeoutSeconds: {{ keycloak_readiness_probe_timeout_seconds }}
   failureThreshold: {{ keycloak_readiness_probe_failure_threshold }}
@@ -99,8 +95,6 @@ readinessProbe:
 
 ingress:
   ingressClassName: "{{ keycloak_ingress_class_name }}"
-  path: "{{ keycloak_ingress_path }}"
-  pathType: "{{ keycloak_ingress_path_type }}"
   tls:
     enabled: {{ keycloak_ingress_tls_enabled }}
     secretName: "{{ keycloak_ingress_tls_secret_name }}"

@@ -14,7 +14,7 @@ keycloak_image_pull_policy: "Always"
 keycloak_image_pull_secrets: []
 
 keycloak_replica_count: 1
-keycloak_autoscaling_enabled: true
+keycloak_autoscaling_enabled: false
 keycloak_autoscaling_min_replicas: 1
 keycloak_autoscaling_max_replicas: 5
 keycloak_autoscaling_target_cpu_utilization_percentage: 60
@@ -90,14 +90,14 @@ keycloak_startup_probe_success_threshold: 1
 
 keycloak_liveness_probe_enabled: true
 keycloak_liveness_probe_initial_delay_seconds: 300
-keycloak_liveness_probe_period_seconds: 1
-keycloak_liveness_probe_timeout_seconds: 5
-keycloak_liveness_probe_failure_threshold: 5
+keycloak_liveness_probe_period_seconds: 5
+keycloak_liveness_probe_timeout_seconds: 3
+keycloak_liveness_probe_failure_threshold: 6
 keycloak_liveness_probe_success_threshold: 1
 
 keycloak_readiness_probe_enabled: true
 keycloak_readiness_probe_initial_delay_seconds: 30
-keycloak_readiness_probe_period_seconds: 10
+keycloak_readiness_probe_period_seconds: 5
 keycloak_readiness_probe_timeout_seconds: 1
 keycloak_readiness_probe_failure_threshold: 3
 keycloak_readiness_probe_success_threshold: 1
