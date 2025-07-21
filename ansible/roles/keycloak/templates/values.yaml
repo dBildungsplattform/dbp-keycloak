@@ -4,7 +4,9 @@ image:
   tag: "{{ keycloak_image_tag }}"
   pullPolicy: "{{ keycloak_image_pull_policy }}"
   pullSecrets:
-    {{ keycloak_image_pull_secrets | to_nice_yaml | indent(4) | trim  }}
+  {% for secret in keycloak_image_pull_secrets %}
+    - name: "{{ secret }}"
+  {% endfor %}
 
 auth:
   existingSecret: "{{ keycloak_auth_existing_secret }}"
@@ -20,9 +22,15 @@ auth:
 importRealms: {{ keycloak_import_realms }}
 
 command:
-  {{ keycloak_command | to_nice_yaml | indent(2) | trim }}
+  {% for command in keycloak_command %}
+  - "{{ command }}"
+  {% endfor %}
+
 extraArgs:
-  {{ keycloak_extra_args | to_nice_yaml | indent(2) | trim  }}
+  {% for arg in keycloak_extra_args %}
+  - "{{ arg }}"
+  {% endfor %}
+
 extraVolumes:
   {{ keycloak_extra_volumes | to_nice_yaml | indent(2) | trim }}
 extraVolumeMounts:
@@ -32,17 +40,25 @@ extraConfig:
   name: "{{ keycloak_extra_config_name }}"
   create: {{ keycloak_extra_config_create }}
   data:
-    {{ keycloak_extra_config_data | to_nice_yaml | indent(4) | trim  }}
+    {% for key, value in keycloak_extra_config_data.items() %}
+    {{ key }}: "{{ value }}"
+    {% endfor %}
   external:
-    {{ keycloak_extra_config_external  | to_nice_yaml | indent(4) | trim }}
+    {% for item in keycloak_extra_config_external %}
+    - "{{ item }}"
+    {% endfor %}
 
 extraSecret:
   name: "{{ keycloak_extra_secret_name }}"
   create: {{ keycloak_extra_secret_create }}
   data:
-    {{ keycloak_extra_secret_data | to_nice_yaml | indent(4) | trim  }}
+    {% for key, value in keycloak_extra_secret_data.items() %}
+    {{ key }}: "{{ value }}"
+    {% endfor %}
   external:
-    {{ keycloak_extra_secret_external | to_nice_yaml | indent(4) | trim }}
+    {% for item in keycloak_extra_secret_external %}
+    - "{{ item }}"
+    {% endfor %}
 
 database:
   url: "{{ keycloak_database_url }}"
@@ -54,7 +70,9 @@ realm:
 
 keycloak:
   hostnames:
-    {{ keycloak_hostnames | to_nice_yaml | indent(4) | trim }}
+    {% for hostname in keycloak_hostnames %}
+    - "{{ hostname }}"
+    {% endfor %}
   frontendHostname: "{{ keycloak_frontend_hostname }}"
   hostnameBackchannelDynamic: {{ keycloak_hostname_backchannel_dynamic }}
   serviceMonitor:
@@ -99,12 +117,16 @@ ingress:
     enabled: {{ keycloak_ingress_tls_enabled }}
     secretName: "{{ keycloak_ingress_tls_secret_name }}"
   annotations:
-    {{ keycloak_ingress_annotations | to_nice_yaml | indent(4) | trim }}
+    {% for key, value in keycloak_ingress_annotations.items() %}
+    {{ key }}: "{{ value }}"
+    {% endfor %}
 
 serviceAccount:
   create: {{ keycloak_service_account_create }}
   annotations:
-    {{ keycloak_service_account_annotations | to_nice_yaml | indent(4) | trim }}
+    {% for key, value in keycloak_service_account_annotations.items() %}
+    {{ key }}: "{{ value }}"
+    {% endfor %}
   name: "{{ keycloak_service_account_name }}"
   automountServiceAccountToken: {{ keycloak_service_account_automount_token }}
 
