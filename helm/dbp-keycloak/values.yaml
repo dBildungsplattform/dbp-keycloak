@@ -79,8 +79,6 @@ ingress:
   tls:
     enabled: false
     secretName: ""
-  path: /
-  pathType: "Prefix"
   annotations:
     nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
     nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
