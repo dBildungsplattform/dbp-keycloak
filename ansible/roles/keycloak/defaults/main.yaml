@@ -55,17 +55,13 @@ keycloak_database_username: "keycloak"
 keycloak_database_password: ""
 
 keycloak_import_realms: true
-keycloak_realm_name: ""
 keycloak_realm_filepath: ""
 
 keycloak_hostnames: []
 keycloak_frontend_hostname: ""
 keycloak_hostname_backchannel_dynamic: true
 
-keycloak_ingress_enabled_2nd: false
 keycloak_ingress_class_name: "nginx"
-keycloak_ingress_path: "/"
-keycloak_ingress_path_type: "Prefix"
 keycloak_ingress_tls_enabled: false
 keycloak_ingress_tls_secret_name: ""
 keycloak_ingress_annotations: {}
@@ -82,21 +78,18 @@ keycloak_resources_limits_memory: "1Gi"
 keycloak_thread_pool: 16
 
 keycloak_startup_probe_enabled: true
-keycloak_startup_probe_initial_delay_seconds: 30
 keycloak_startup_probe_period_seconds: 5
 keycloak_startup_probe_timeout_seconds: 1
 keycloak_startup_probe_failure_threshold: 60
 keycloak_startup_probe_success_threshold: 1
 
 keycloak_liveness_probe_enabled: true
-keycloak_liveness_probe_initial_delay_seconds: 300
 keycloak_liveness_probe_period_seconds: 5
 keycloak_liveness_probe_timeout_seconds: 3
 keycloak_liveness_probe_failure_threshold: 6
 keycloak_liveness_probe_success_threshold: 1
 
 keycloak_readiness_probe_enabled: true
-keycloak_readiness_probe_initial_delay_seconds: 30
 keycloak_readiness_probe_period_seconds: 5
 keycloak_readiness_probe_timeout_seconds: 1
 keycloak_readiness_probe_failure_threshold: 3
