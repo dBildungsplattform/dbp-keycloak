@@ -112,7 +112,6 @@ startupProbe:
     path: "/health/started"
     port: "mgmt"
     scheme: "HTTPS"
-  initialDelaySeconds: 30
   periodSeconds: 5
   timeoutSeconds: 1
   failureThreshold: 60
@@ -124,10 +123,9 @@ livenessProbe:
     path: "/health/live"
     port: "mgmt"
     scheme: "HTTPS"
-  initialDelaySeconds: 300
-  periodSeconds: 1
-  timeoutSeconds: 5
-  failureThreshold: 5
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 6
   successThreshold: 1
 
 readinessProbe:
@@ -136,8 +134,7 @@ readinessProbe:
     path: "/health/ready"
     port: "mgmt"
     scheme: "HTTPS"
-  initialDelaySeconds: 30
-  periodSeconds: 10
+  periodSeconds: 5
   timeoutSeconds: 1
   failureThreshold: 3
   successThreshold: 1
