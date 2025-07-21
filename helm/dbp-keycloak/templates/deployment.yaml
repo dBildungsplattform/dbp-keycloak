@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "common.names.fullname" . }}
-  namespace: {{ template "common.names.namespace" . }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels:
     {{- include "common.labels" . | nindent 4 }}
 spec:
@@ -58,7 +58,7 @@ spec:
           envFrom:
             # configs
             - configMapRef:
-                name: {{ template "common.names.fullname" . }}
+                name: {{ include "common.names.fullname" . }}
             ## extra config
             {{- if .Values.extraConfig.create }}
             - configMapRef:
@@ -83,7 +83,7 @@ spec:
                 name: "{{ . }}"
             {{- end }}
           volumeMounts:
-            {{- if .Values.realm.name }}
+            {{- if .Values.realm.filepath }}
             - mountPath: "/opt/keycloak/data/import"
               name: realm-config
               readOnly: true
@@ -92,10 +92,10 @@ spec:
             {{- . | toYaml | nindent 12 }}
             {{- end }}
       volumes:
-        {{- if .Values.realm.name }}
+        {{- if .Values.realm.filepath }}
         - name: realm-config
           configMap:
-            name: {{ .Values.realm.name }}
+            name: {{ include "keycloak.realmConfigmap" . }}
         {{- end }}
         {{- with .Values.extraVolumes }}
         {{- . | toYaml | nindent 8 }}

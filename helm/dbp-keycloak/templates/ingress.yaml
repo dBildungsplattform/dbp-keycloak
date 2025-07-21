@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ template "common.names.fullname" . }}
-  namespace: {{ template "common.names.namespace" . }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels:
     {{- include "common.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
@@ -30,7 +30,7 @@ spec:
             pathType: "Prefix"
             backend:
               service:
-                name: "{{ template "common.names.fullname" $ }}"
+                name: "{{ include "common.names.fullname" $ }}"
                 port:
                   name: "http"
 {{- end }}
