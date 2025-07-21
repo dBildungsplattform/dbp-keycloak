@@ -150,7 +150,7 @@ serviceAccount:
   automountServiceAccountToken: false
 
 autoscaling:
-  enabled: true
+  enabled: false
   minReplicas: 1
   maxReplicas: 5
   # targetCPUUtilizationPercentage is used to set the target CPU utilization for the Horizontal Pod Autoscaler.
