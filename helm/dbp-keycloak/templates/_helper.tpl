@@ -91,3 +91,10 @@ Create the name of the headless service
 {{- define "common.headlessServiceName" -}}
 {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end }}
+
+{{/*
+Create the name of the realm configmap
+*/}}
+{{- define "keycloak.realmConfigmap" -}}
+{{- printf "%s-realm-config" (include "common.names.fullname" .) -}}
+{{- end }}

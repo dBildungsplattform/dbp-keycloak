@@ -62,7 +62,6 @@ database:
 importRealms: true
 
 realm:
-  name: ""
   filepath: ""
 
 keycloak:

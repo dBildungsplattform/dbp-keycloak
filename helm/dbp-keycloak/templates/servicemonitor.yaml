@@ -2,10 +2,11 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "common.names.fullname" . }}
-  namespace: {{ template "common.names.namespace" . }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels:
     {{- include "common.labels" . | nindent 4 }}
+    service.kubernetes.io/headless: true
 spec:
   namespaceSelector:
     matchNames:
