@@ -70,8 +70,13 @@ spec:
                 name: "{{ . }}"
             {{- end }}
             # secrets
+            {{- if not .Values.auth.existingSecret }}
             - secretRef:
                 name: "{{ .Values.auth.secretName }}"
+            {{- else }}
+            - secretRef:
+                name: "{{ .Values.auth.existingSecret }}"
+            {{- end }}
             {{- if .Values.extraSecret.create }}
             ## extra secret
             - secretRef:
