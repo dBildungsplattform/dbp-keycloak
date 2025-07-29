@@ -84,7 +84,7 @@ ingress:
 
 containerSecurityContext:
   enabled: true
-  runAsUser: 1000
+  runAsUser: 1001
   runAsNonRoot: true
   privileged: false
   readOnlyRootFilesystem: false
