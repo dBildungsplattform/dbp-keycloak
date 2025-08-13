@@ -52,7 +52,9 @@ extraSecret:
   external: []
 
 database:
-  type: "postgresql"
+  # type is the type of database to use.
+  # Allowed values are: dev-file (default), dev-mem, mariadb, mssql, mysql, oracle, postgres
+  type: "postgres"
   host: ""
   port: "5432"
   name: "keycloak"
