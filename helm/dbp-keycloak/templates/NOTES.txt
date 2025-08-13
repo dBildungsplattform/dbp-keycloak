@@ -3,4 +3,6 @@ A manual restart is required to have the pods use the new version.
 
 {{ if (or (or .Values.auth.existingSecret .Values.extraConfig.external) .Values.extraSecret.external) }}
 External secrets or ConfigMaps are used by this Helm deployment!
+{{ else }}
+No external secrets or ConfigMaps are used by this Helm deployment!
 {{ end }}
