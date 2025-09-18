@@ -79,7 +79,6 @@ jobs:
         with:
           ref: ${{ needs.get_tag.outputs.tag }}
           fetch-tags: true
-          token: ${{ secrets.token }}
 
       - name: Build image name and tags
         id: docker_meta_img
