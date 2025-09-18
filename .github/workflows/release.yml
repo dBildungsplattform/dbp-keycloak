@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       digest: ${{ steps.docker_build_push.outputs.digest }}
-      image_tag: ${{ steps.docker_meta_img_trivy.outputs.tags }}
+      image_tag: ${{ steps.lower-repo.outputs.repository }}:${{ steps.get_tag.outputs.tag }}
       branch: ${{ steps.extract_branch_meta.outputs.branch }}
       sha: ${{ steps.extract_branch_meta.outputs.sha }}
       repo: ${{ steps.extract_branch_meta.outputs.repo }}
@@ -92,20 +92,6 @@ jobs:
             type=semver,pattern={{version}},enable=${{ startsWith(github.ref, 'refs/tags/') }}
             type=semver,pattern={{major}}.{{minor}},enable=${{ startsWith(github.ref, 'refs/tags/') }}
 
-      - name: Build image name and tags for trivy
-        id: docker_meta_img_trivy
-        uses: docker/metadata-action@v5
-        with:
-          images: |
-            name=ghcr.io/${{ github.repository }}-${{ matrix.variant }}
-          labels: |
-            org.opencontainers.image.version=${{ needs.get_tag.outputs.tag }}
-          tags: |
-            type=semver,pattern={{version}},enable=${{ startsWith(github.ref, 'refs/tags/') }}
-            type=sha,enable=${{ startsWith(github.ref, 'refs/heads/') }},prefix=,format=long
-          flavor:
-            latest=false
-
       - name: Log into ghcr.io
         uses: docker/login-action@v3
         with:
@@ -118,9 +104,6 @@ jobs:
         run: |
           repo_var=${{ github.repository }}-${{ matrix.variant }}
           echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
-      - name: Repository to lowercase
-        run: |
-          echo ${{ steps.lower-repo.outputs.repository }}
       - name: Build and push image to ghcr
         id: docker_build_push
         uses: docker/build-push-action@v6
@@ -128,7 +111,7 @@ jobs:
           context: .
           platforms: linux/amd64
           push: true
-          tags: ghcr.io/${{ github.repository }}-${{ matrix.variant }}:${{ needs.get_tag.outputs.tag }}
+          tags: ${{ steps.lower-repo.outputs.repository }}:${{ needs.get_tag.outputs.tag }}
           labels: ${{ steps.docker_meta_img.outputs.labels }}
           build-args: |
             KEYCLOAK_VARIANT=${{ matrix.variant }}
