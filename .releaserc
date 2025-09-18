@@ -1,5 +1,5 @@
 {
-  "branches": ["release"],
+  "branches": ["release", "DOPS-228-fix-ci"],
   "tagFormat": "${version}",
   "plugins": [
     "@semantic-release/commit-analyzer",
