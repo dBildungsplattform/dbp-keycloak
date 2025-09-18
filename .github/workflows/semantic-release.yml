@@ -34,3 +34,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
+  call_build:
+    uses: "./.github/workflows/publish-image.yml"
