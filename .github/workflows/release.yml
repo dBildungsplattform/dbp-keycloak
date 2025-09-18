@@ -55,8 +55,6 @@ jobs:
 
       - if: inputs.tag_run == true
         id: get_tag
-        outputs:
-          tag: 
         run: |
          tag=$(git describe --tags)
          echo "tag=$tag" >> $GITHUB_OUTPUT
