@@ -79,7 +79,6 @@ jobs:
         with:
           ref: ${{ needs.get_tag.outputs.tag }}
           fetch-tags: true
-
       - name: Build image name and tags
         id: docker_meta_img
         uses: docker/metadata-action@v5.7.0
@@ -113,6 +112,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - id: lower-repo
+        name: Repository to lowercase
+        run: |
+          echo "repository=${GITHUB_REPOSITORY@L}-${MATRIX_VARIANT@l}" >> $GITHUB_OUTPUT
 
       - name: Build and push image to ghcr
         id: docker_build_push
