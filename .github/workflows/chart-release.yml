@@ -7,7 +7,6 @@ on:
     branches-ignore:
       - "release"
       - "main"
-      - "dev"
 
 concurrency:
   group: dbp-keycloak-chart
