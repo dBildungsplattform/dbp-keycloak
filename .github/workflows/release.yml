@@ -69,7 +69,6 @@ jobs:
       repo: ${{ steps.extract_branch_meta.outputs.repo }}
     permissions:
       packages: write
-      contents: read
     strategy:
       matrix:
         variant: ['generic', 'erwin', 'enrichment']
@@ -104,6 +103,7 @@ jobs:
         run: |
           repo_var=${{ github.repository }}-${{ matrix.variant }}
           echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
+      
       - name: Build and push image to ghcr
         id: docker_build_push
         uses: docker/build-push-action@v6
@@ -111,7 +111,8 @@ jobs:
           context: .
           platforms: linux/amd64
           push: true
-          tags: ${{ steps.lower-repo.outputs.repository }}:${{ needs.get_tag.outputs.tag }}
+          pull: true
+          tags: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.get_tag.outputs.tag }}
           labels: ${{ steps.docker_meta_img.outputs.labels }}
           build-args: |
             KEYCLOAK_VARIANT=${{ matrix.variant }}
