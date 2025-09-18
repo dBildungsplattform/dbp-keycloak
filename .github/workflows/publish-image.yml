@@ -7,7 +7,7 @@ on:
     branches-ignore:
       - 'release'
       - 'main'
-
+  workflow_call:
 jobs:
   build_and_upload_image:
     name: Publish image
