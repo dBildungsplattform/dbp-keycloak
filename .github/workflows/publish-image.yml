@@ -39,8 +39,8 @@ jobs:
           tags: |
             type=semver,pattern={{version}}
             
-            type=ref,event=branch,enable=${{ startsWith(github.ref, 'refs/heads/') }}
-            type=sha,enable=${{ startsWith(github.ref, 'refs/heads/') }},prefix=,format=long,priority=601
+          #type=ref,event=branch,enable=${{ startsWith(github.ref, 'refs/heads/') }}
+          #type=sha,enable=${{ startsWith(github.ref, 'refs/heads/') }},prefix=,format=long,priority=601
 
       - name: Build image name and tags for trivy
         id: docker_meta_img_trivy
