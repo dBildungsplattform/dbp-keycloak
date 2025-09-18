@@ -68,7 +68,7 @@ jobs:
       security-events: write
     uses: ./.github/workflows/publish-image.yml
     with:
-      tag: ${{ needs.get_tag.outputs.tag }}
+      tag: ${{ needs.get_tag.tag }}
       tag_run: true
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
