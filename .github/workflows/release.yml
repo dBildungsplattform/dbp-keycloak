@@ -50,7 +50,6 @@ jobs:
         with:
           fetch-depth: 0
           fetch-tags: true
-          token: ${{ secrets.token }}
 
       - id: get_tag
         run: |
