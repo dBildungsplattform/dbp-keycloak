@@ -125,7 +125,7 @@ jobs:
     steps:
       - name: run trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.29.0
-        with: image_repo
+        with: 
           image-ref: ghcr.io/${{ needs.build_and_upload_image.outputs.image_repo }}:${{ needs.build_and_upload_image.outputs.image_tag }}
           format: "sarif"
           output: "trivy-results.sarif"
