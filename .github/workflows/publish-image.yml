@@ -4,9 +4,12 @@ on:
   workflow_call:
     inputs:
       tag_run:
-         required: true
+         required: false
          type: boolean
          default: false
+      tag:
+         required: false
+         type: string
     secrets:
       token:
         required: true
@@ -29,16 +32,21 @@ jobs:
         variant: ['generic', 'erwin', 'enrichment']
     steps:
       - name: Checkout Code
+        if: inputs.tag_run == false
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           fetch-tags: true
           token: ${{ secrets.token }}
 
-      - if: inputs.tag_run == true
-        run: |
-         tag=$(git describe --tags)
-         git checkout -B $tag
+      - name: Checkout Code
+        if: inputs.tag_run == true
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+          fetch-depth: 0
+          fetch-tags: true
+          token: ${{ secrets.token }}
 
       - name: Build image name and tags
         id: docker_meta_img
