@@ -10,5 +10,8 @@ on:
 jobs:
   docker-image:
     uses: ./.github/workflows/publish-image.yml
+    permissions:
+      packages: write
+      contents: read
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
