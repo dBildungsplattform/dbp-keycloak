@@ -43,6 +43,7 @@ jobs:
       - name: Build image name and tags
         id: docker_meta_img
         uses: docker/metadata-action@v5
+        context: git
         with:
           images: |
             name=ghcr.io/${{ github.repository }}-${{ matrix.variant }}
