@@ -42,4 +42,6 @@ jobs:
       contents: read
       actions: read
       security-events: write
-    uses: "./.github/workflows/publish-image.yml"
+    uses: ./.github/workflows/publish-image.yml
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,13 +1,11 @@
 name: 'Publish image to GHCR (branch or tag)'
 
 on:
-  push:
-    tags:
-      - '[0-9]+.[0-9]+.[0-9]+-?*' # matches v1.2.3 and v1.2.3-foobar
-    branches-ignore:
-      - 'release'
-      - 'main'
   workflow_call:
+    secrets:
+      token:
+        required: true
+
 jobs:
   build_and_upload_image:
     name: Publish image
@@ -27,6 +25,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+          token: ${{ secrets.token }}
 
       - name: Build image name and tags
         id: docker_meta_img
