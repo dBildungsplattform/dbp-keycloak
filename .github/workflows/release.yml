@@ -62,11 +62,8 @@ jobs:
       - get_tag
     runs-on: ubuntu-latest
     outputs:
-      digest: ${{ steps.docker_build_push.outputs.digest }}
-      image_tag: ${{ steps.lower-repo.outputs.repository }}:${{ steps.get_tag.outputs.tag }}
-      branch: ${{ steps.extract_branch_meta.outputs.branch }}
-      sha: ${{ steps.extract_branch_meta.outputs.sha }}
-      repo: ${{ steps.extract_branch_meta.outputs.repo }}
+      image_tag: ${{ steps.get_tag.outputs.tag }}
+      image_repo: ${{ steps.lower-repo.outputs.repository }}
     permissions:
       packages: write
     strategy:
@@ -128,8 +125,8 @@ jobs:
     steps:
       - name: run trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.29.0
-        with:
-          image-ref: ${{ needs.build_and_upload_image.outputs.image_tag }}
+        with: image_repo
+          image-ref: ghcr.io/${{ needs.build_and_upload_image.outputs.image_repo }}:${{ needs.build_and_upload_image.outputs.image_tag }}
           format: "sarif"
           output: "trivy-results.sarif"
           severity: "CRITICAL,HIGH"
