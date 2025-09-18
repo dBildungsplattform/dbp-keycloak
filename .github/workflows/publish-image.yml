@@ -25,6 +25,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        secrets:
           token: ${{ secrets.token }}
 
       - name: Build image name and tags
