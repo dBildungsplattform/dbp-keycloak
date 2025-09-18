@@ -116,8 +116,10 @@ jobs:
       - id: lower-repo
         name: Repository to lowercase
         run: |
-          echo "repository=${GITHUB_REPOSITORY@L}-${MATRIX_VARIANT@l}" >> $GITHUB_OUTPUT
-
+          echo "repository=${GITHUB_REPOSITORY@L}-${MATRIX_VARIANT@l}" >> $
+      - name: Repository to lowercase
+        run: |
+          echo ${{ steps.lower-repo.outputs.repository }}
       - name: Build and push image to ghcr
         id: docker_build_push
         uses: docker/build-push-action@v6
