@@ -117,7 +117,7 @@ jobs:
         name: Repository to lowercase
         run: |
           repo_var=${{ github.repository }}-${{ matrix.variant }}
-          echo "repository=${repo_var@L}" >> $
+          echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
       - name: Repository to lowercase
         run: |
           echo ${{ steps.lower-repo.outputs.repository }}
