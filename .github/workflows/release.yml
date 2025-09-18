@@ -35,7 +35,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
-        
+
   call_build:
     needs: release
     permissions:
@@ -44,5 +44,7 @@ jobs:
       actions: read
       security-events: write
     uses: ./.github/workflows/publish-image.yml
+    with:
+      tag_run: true
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}

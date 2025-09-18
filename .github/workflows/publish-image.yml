@@ -2,6 +2,11 @@ name: 'Publish image to GHCR (branch or tag)'
 
 on:
   workflow_call:
+    inputs:
+      tag_run:
+         required: true
+         type: bool
+         default: false
     secrets:
       token:
         required: true
@@ -29,8 +34,11 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
           token: ${{ secrets.token }}
-      - run: |
-         git describe --tags
+
+      - if: input.tag_run == true
+        run: |
+         tag=git describe --tags
+         git checkout $tag
 
       - name: Build image name and tags
         id: docker_meta_img
