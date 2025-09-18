@@ -36,6 +36,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
   call_build:
+    needs: release
     permissions:
       packages: write
       contents: read
