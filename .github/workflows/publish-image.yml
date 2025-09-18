@@ -36,7 +36,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          fetch-tags: true
           token: ${{ secrets.token }}
 
       - name: Checkout Code
@@ -44,7 +43,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.tag }}
-          fetch-depth: 0
           fetch-tags: true
           token: ${{ secrets.token }}
 
@@ -52,12 +50,12 @@ jobs:
         id: docker_meta_img
         uses: docker/metadata-action@v5
         with:
-          #context: git
+          context: git
           images: |
             name=ghcr.io/${{ github.repository }}-${{ matrix.variant }}
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{version}},enable=${{ startsWith(github.ref, 'refs/tags/') }}
+            type=semver,pattern={{major}}.{{minor}},enable=${{ startsWith(github.ref, 'refs/tags/') }}
           
           # ,enable=${{ startsWith(github.ref, 'refs/tags/') }}
           #type=ref,event=branch,enable=${{ startsWith(github.ref, 'refs/heads/') }}
