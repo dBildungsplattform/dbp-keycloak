@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'release'
+      - "DOPS-228-fix-ci"
     
 jobs:
   release:
