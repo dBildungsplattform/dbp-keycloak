@@ -116,7 +116,7 @@ jobs:
       - id: lower-repo
         name: Repository to lowercase
         run: |
-          echo "repository=${GITHUB_REPOSITORY@L}-${MATRIX_VARIANT@l}" >> $
+          echo "repository=${GITHUB_REPOSITORY@L}" >> $
       - name: Repository to lowercase
         run: |
           echo ${{ steps.lower-repo.outputs.repository }}
