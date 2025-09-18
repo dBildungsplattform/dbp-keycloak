@@ -37,7 +37,7 @@ jobs:
 
       - if: inputs.tag_run == true
         run: |
-         tag=git describe --tags
+         tag=$(git describe --tags)
          git checkout $tag
 
       - name: Build image name and tags
