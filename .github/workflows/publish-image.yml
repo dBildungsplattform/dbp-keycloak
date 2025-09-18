@@ -35,7 +35,7 @@ jobs:
           fetch-tags: true
           token: ${{ secrets.token }}
 
-      - if: input.tag_run == true
+      - if: inputs.tag_run == true
         run: |
          tag=git describe --tags
          git checkout $tag
