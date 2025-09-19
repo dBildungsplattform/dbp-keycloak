@@ -139,7 +139,7 @@ jobs:
       helm_chart_version_generation: specified
       image_tag_generation: specified
       helm_chart_version: "0.0.1-${{ needs.extract_branch_meta.outputs.sha }}"
-      image_tag: ghcr.io/${{ needs.lower_generic_repo.outputs.image_re/po }}:${{ needs.extract_branch_meta.outputs.sha }}
+      image_tag: ghcr.io/${{ needs.lower_generic_repo.outputs.image_repo }}:${{ needs.extract_branch_meta.outputs.sha }}
 
   helm_releas_branch:
     needs: 
@@ -154,4 +154,4 @@ jobs:
       helm_chart_version_generation: specified
       image_tag_generation: specified
       helm_chart_version: "0.0.1-${{ needs.extract_branch_meta.outputs.branch }}"
-      image_tag: ghcr.io/${{ needs.lower_generic_repo.outputs.image_re/po }}:${{ needs.extract_branch_meta.outputs.branch }}
+      image_tag: ghcr.io/${{ needs.lower_generic_repo.outputs.image_repo }}:${{ needs.extract_branch_meta.outputs.branch }}
