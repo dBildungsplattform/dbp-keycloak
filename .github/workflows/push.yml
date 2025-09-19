@@ -29,7 +29,7 @@ jobs:
           fi
           
   lower_generic_repo:
-    name: Publish image
+    name: lower repo name
     runs-on: ubuntu-latest
     outputs:
       image_repo: ${{ steps.lower-repo.outputs.repository }}
