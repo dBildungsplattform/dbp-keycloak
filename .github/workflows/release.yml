@@ -55,17 +55,31 @@ jobs:
         run: |
          tag=$(git describe --tags)
          echo "tag=$tag" >> $GITHUB_OUTPUT
+  
+  lower_generic_repo:
+    name: Publish image
+    runs-on: ubuntu-latest
+    outputs:
+      image_repo: ${{ steps.lower-repo.outputs.repository }}
+    permissions:
+      contents: read
+    steps:          
+      - id: lower-repo
+        name: Repository to lowercase
+        run: |
+          repo_var=${{ github.repository }}-generic
+          echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
 
   build_and_upload_image:
     name: Publish image
     needs:
       - get_tag
     runs-on: ubuntu-latest
-    outputs:
-      image_tag: ${{ steps.get_tag.outputs.tag }}
-      image_repo: ${{ steps.lower-repo.outputs.repository }}
     permissions:
       packages: write
+      actions: read
+      contents: read
+      security-events: write
     strategy:
       matrix:
         variant: ['generic', 'erwin', 'enrichment']
@@ -113,20 +127,10 @@ jobs:
           labels: ${{ steps.docker_meta_img.outputs.labels }}
           build-args: |
             KEYCLOAK_VARIANT=${{ matrix.variant }}
-
-  trivy-vulnerability-scanning:
-    needs:
-      - build_and_upload_image
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-    steps:
       - name: run trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.29.0
         with: 
-          image-ref: ghcr.io/${{ needs.build_and_upload_image.outputs.image_repo }}:${{ needs.build_and_upload_image.outputs.image_tag }}
+          image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.get_tag.outputs.tag }}
           format: "sarif"
           output: "trivy-results.sarif"
           severity: "CRITICAL,HIGH"
@@ -140,3 +144,24 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: "trivy-results.sarif"
+
+  # Helm Chart
+  scan_helm:
+    uses: dBildungsplattform/dbp-github-workflows/.github/workflows/check-helm-kics.yaml@5
+    permissions:
+      contents: read
+
+  release_helm:
+    needs:
+     - scan_helm
+     - build_and_upload_image
+     - get_tag
+     - lower_generic_repo
+    uses: dBildungsplattform/dbp-github-workflows/.github/workflows/chart-release.yaml@7
+    secrets: inherit
+    with:
+      chart_name: "dbp-keycloak"
+      helm_chart_version_generation: specified 
+      image_tag_generation: specified 
+      helm_chart_version: ${{ needs.get_tag.outputs.tag }}
+      image_tag: ghcr.io/${{ needs.lower_generic_repo.outputs.image_repo }}:${{ needs.get_tag.outputs.tag }}
