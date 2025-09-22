@@ -69,8 +69,8 @@ jobs:
           images: |
             name=ghcr.io/${{ github.repository }}-${{ matrix.variant }}
           tags: |
-            #type=ref,event=branch,priority=601
-            #type=sha,format=long,priority=600,prefix=
+            type=ref,event=branch,priority=601
+            type=sha,format=long,priority=600,prefix=
 
       - name: Build image name and tags for trivy
         id: docker_meta_img_trivy
