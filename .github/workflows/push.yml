@@ -45,6 +45,8 @@ jobs:
   build_and_upload_image:
     name: Publish image
     runs-on: ubuntu-latest
+    needs:
+      - branch_meta
     outputs:
       image_tag: ${{ steps.docker_meta_img_trivy.outputs.tags }}
     permissions:
@@ -60,6 +62,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          
+      - id: lower-repo
+        name: Repository to lowercase
+        run: |
+          repo_var=${{ github.repository }}-${{ matrix.variant }}
+          echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
 
       - name: Build image name and tags
         id: docker_meta_img
@@ -94,7 +102,7 @@ jobs:
       - name: run trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.29.0
         with:
-          image-ref: ${{ steps.docker_meta_img.outputs.tags }}
+          image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }}
           format: "sarif"
           output: "trivy-results.sarif"
           severity: "CRITICAL,HIGH"
