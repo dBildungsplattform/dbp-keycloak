@@ -123,6 +123,9 @@ jobs:
     permissions:
       contents: read
   helm_releas_sha:
+    concurrency:
+      group: helm_releas
+      cancel-in-progress: false
     needs: 
       - scan
       - lower_generic_repo
@@ -138,6 +141,9 @@ jobs:
       image_tag: ghcr.io/${{ needs.lower_generic_repo.outputs.image_repo }}:${{ needs.branch_meta.outputs.sha }}
 
   helm_releas_branch:
+    concurrency:
+      group: helm_releas
+      cancel-in-progress: false
     needs: 
       - scan
       - lower_generic_repo

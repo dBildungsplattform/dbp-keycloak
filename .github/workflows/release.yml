@@ -152,6 +152,9 @@ jobs:
       contents: read
 
   release_helm:
+    concurrency:
+      group: helm_releas
+      cancel-in-progress: false
     needs:
      - scan_helm
      - build_and_upload_image
