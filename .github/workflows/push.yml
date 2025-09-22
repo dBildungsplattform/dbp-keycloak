@@ -63,14 +63,14 @@ jobs:
 
       - name: Build image name and tags
         id: docker_meta_img
-        uses: docker/metadata-action@v5.7.0
+        uses: docker/metadata-action@v5
         with:
           context: git
           images: |
             name=ghcr.io/${{ github.repository }}-${{ matrix.variant }}
           tags: |
-            #type=ref,event=branch,enable=${{ startsWith(github.ref, 'refs/heads/') }}
-            #type=sha,enable=${{ startsWith(github.ref, 'refs/heads/') }},prefix=,format=long,priority=601
+            #type=ref,event=branch,priority=601
+            #type=sha,format=long,priority=600,prefix=
 
       - name: Build image name and tags for trivy
         id: docker_meta_img_trivy
@@ -81,7 +81,7 @@ jobs:
           labels: |
             org.opencontainers.image.version=
           tags: |
-            type=sha,enable=${{ startsWith(github.ref, 'refs/heads/') }},prefix=,format=long
+            type=sha,format=long,enable=true,priority=600,prefix=
           flavor:
             latest=false
 
@@ -138,8 +138,8 @@ jobs:
       chart_path: "./helm"
       helm_chart_version_generation: specified
       image_tag_generation: specified
-      helm_chart_version: "0.0.1-${{ needs.extract_branch_meta.outputs.sha }}"
-      image_tag: ghcr.io/${{ needs.lower_generic_repo.outputs.image_repo }}:${{ needs.extract_branch_meta.outputs.sha }}
+      helm_chart_version: "0.0.1-${{ needs.branch_meta.outputs.sha }}"
+      image_tag: ghcr.io/${{ needs.lower_generic_repo.outputs.image_repo }}:${{ needs.branch_meta.outputs.sha }}
 
   helm_releas_branch:
     needs: 
@@ -153,5 +153,5 @@ jobs:
       chart_path: "./helm"
       helm_chart_version_generation: specified
       image_tag_generation: specified
-      helm_chart_version: "0.0.1-${{ needs.extract_branch_meta.outputs.branch }}"
-      image_tag: ghcr.io/${{ needs.lower_generic_repo.outputs.image_repo }}:${{ needs.extract_branch_meta.outputs.branch }}
+      helm_chart_version: "0.0.1-${{ needs.branch_meta.outputs.branch }}"
+      image_tag: ghcr.io/${{ needs.lower_generic_repo.outputs.image_repo }}:${{ needs.branch_meta.outputs.branch }}
