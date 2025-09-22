@@ -161,6 +161,7 @@ jobs:
     secrets: inherit
     with:
       chart_name: "dbp-keycloak"
+      chart_path: "./helm"
       helm_chart_version_generation: specified 
       image_tag_generation: specified 
       helm_chart_version: ${{ needs.get_tag.outputs.tag }}
