@@ -137,7 +137,7 @@ jobs:
 
   release_helm:
     concurrency:
-      group: helm_release
+      group: helm_release_b
       cancel-in-progress: false
     needs:
      - scan_helm
