@@ -111,7 +111,7 @@ jobs:
   helm_release_sha:
 
     concurrency:
-      group: helm_release_b
+      group: helm_release
       cancel-in-progress: false
     needs: 
       - scan
@@ -128,7 +128,7 @@ jobs:
 
   helm_release_branch:
     concurrency:
-      group: helm_release_b
+      group: helm_release
       cancel-in-progress: false
     needs: 
       - scan
