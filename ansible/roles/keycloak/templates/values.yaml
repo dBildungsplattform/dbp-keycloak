@@ -74,9 +74,9 @@ realm:
 keycloak:
   hosts:
 {% for item in keycloak_hosts %}
-    - name: "{{ item.name }}"
-      {% if item.auth_only is defined %}
-      authOnly: "{{ item.auth_only }}"
+    - name: "{{ keycloak_hosts[item].name }}"
+      {% if keycloak_hosts[item].auth_only is defined %}
+      authOnly: "{{ keycloak_hosts[item].auth_only }}"
       {% else %}
       authOnly: "{{ keycloak_ingress_path_auth_only }}"
       {% endif %}
