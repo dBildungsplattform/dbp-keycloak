@@ -74,12 +74,7 @@ realm:
 keycloak:
   hosts:
     {% for key, value  in keycloak_hosts.items() %}
-    - name: "{{ value.name }}"
-      {% if value.auth_only is defined %}
-      authOnly: "{{ value.auth_only }}"
-      {% else %}
-      authOnly: "{{ keycloak_ingress_path_auth_only }}"
-      {% endif %}
+      {{ key }}
     {% endfor %}
   frontendHostname: "{{ keycloak_frontend_hostname }}"
   hostnameBackchannelDynamic: {{ keycloak_hostname_backchannel_dynamic }}
