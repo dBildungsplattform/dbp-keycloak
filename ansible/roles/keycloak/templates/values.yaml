@@ -73,10 +73,10 @@ realm:
 
 keycloak:
   hosts:
-{% for value in keycloak_hosts %}
-    - name: "{{ value.name }}"
-      {% if value.authOnly is defined %}
-      authOnly: "{{ value.auth_only }}"
+{% for keycloak_host in keycloak_hosts %}
+    - name: "{{ keycloak_host.name }}"
+      {% if keycloak_host.authOnly is defined %}
+      authOnly: "{{ keycloak_host.auth_only }}"
       {% else %}
       authOnly: "{{ keycloak_ingress_path_auth_only }}"
       {% endif %}
