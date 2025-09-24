@@ -1,3 +1,4 @@
+#jinja2: trim_blocks:True, lstrip_blocks:True
 {% for key, value  in keycloak_hosts.items() %}
 {{ key }}:
   name: "{{ value.name }}"
