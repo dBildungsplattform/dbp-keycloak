@@ -73,8 +73,8 @@ realm:
 
 keycloak:
   hosts:
-    {% for key, value  in keycloak_hosts.items() %}
-    - name: "{{ value.host }}"
+    {% for value  in keycloak_hosts %}
+    - name: "{{ value.name }}"
       {% if value.auth_only is defined %}
       authOnly: "{{ value.auth_only }}"
       {% else %}
