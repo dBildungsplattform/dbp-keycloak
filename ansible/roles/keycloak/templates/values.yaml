@@ -1,9 +1,4 @@
 {% for key, value  in keycloak_hosts.items() %}
 {{ key }}:
   name: "{{ value.name }}"
-  {% if value.auth_only is defined %}
-  authOnly: "{{ value.auth_only }}"
-  {% else %}
-  authOnly: "{{ keycloak_ingress_path_auth_only }}"
-  {% endif %}
 {% endfor %}
