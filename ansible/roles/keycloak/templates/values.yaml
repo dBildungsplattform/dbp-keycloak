@@ -3,6 +3,6 @@
 {{ key }}:
   name: "{{ value.name }}"
   {% if value.auth_only is defined %}
-    authOnly: "{{ value.auth_only }}"
+  authOnly: "{{ value.auth_only }}"
   {% endif %}
 {% endfor %}
