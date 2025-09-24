@@ -6,7 +6,9 @@
 
 - name: "Debug a fact"
   ansible.builtin.debug:
-    msg: "keycloak_ingress_path_auth_only {{ keycloak_ingress_path_auth_only }}"
+    msg: 
+     - "keycloak_ingress_path_auth_only {{ keycloak_ingress_path_auth_only }}"
+     - "{{ lookup('template', 'values.yaml') | from_yaml }}"
 
 - name: "Deploy keycloak helmchart"
   delegate_to: localhost
