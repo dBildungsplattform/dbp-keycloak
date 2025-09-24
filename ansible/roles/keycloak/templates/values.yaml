@@ -73,8 +73,9 @@ realm:
 
 keycloak:
   hosts:
-{% for item in keycloak_hosts %}
-    {{ item | | to_nice_yaml | indent(4) | trim }}
+{% for key, value  in keycloak_hosts.items() %}
+    key: {{ key }
+    value: {{ value }}}
 {% endfor %}
   frontendHostname: "{{ keycloak_frontend_hostname }}"
   hostnameBackchannelDynamic: {{ keycloak_hostname_backchannel_dynamic }}
