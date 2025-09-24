@@ -4,17 +4,6 @@
     name: "{{ keycloak_chart_repo_name }}"
     repo_url: "{{ keycloak_chart_repo_url }}"
 
-- name: "Debug a fact 1"
-  ansible.builtin.debug:
-    msg: 
-     - "keycloak_ingress_path_auth_only {{ keycloak_ingress_path_auth_only }}"
-     - "{{ keycloak_hosts }}"
-
-- name: "Debug a fact 2"
-  ansible.builtin.debug:
-    msg: 
-     - "{{ lookup('template', 'values.yaml') | from_yaml }}"
-
 - name: "Deploy keycloak helmchart"
   delegate_to: localhost
   kubernetes.core.helm:
