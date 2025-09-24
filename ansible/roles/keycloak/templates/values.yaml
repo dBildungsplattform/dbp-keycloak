@@ -1,8 +1,8 @@
 #jinja2: trim_blocks:True, lstrip_blocks:True
-{% for key, value  in keycloak_hosts.items() %}
-{{ key }}:
-  name: "{{ value.name }}"
+test:
+{% for value  in keycloak_hosts.items() %}
+  - name: "{{ value.name }}"
   {% if value.auth_only is defined %}
-  authOnly: "{{ value.auth_only }}"
+    authOnly: "{{ value.auth_only }}"
   {% endif %}
 {% endfor %}
