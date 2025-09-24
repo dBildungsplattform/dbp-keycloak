@@ -69,6 +69,17 @@ database:
   name: "{{ keycloak_database_name }}"
   type: "{{ keycloak_database_type }}"
 
+realm:
+  filepath: "{{ keycloak_realm_filepath }}"
+
+keycloak:
+  frontendHostname: "{{ keycloak_frontend_hostname }}"
+  hostnameBackchannelDynamic: {{ keycloak_hostname_backchannel_dynamic }}
+  serviceMonitor:
+    enabled: {{ keycloak_service_monitor_enabled }}
+    path: "{{ keycloak_service_monitor_path }}"
+    port: "{{ keycloak_service_monitor_port }}"
+
 test:
 {% for value  in keycloak_hosts %}
   - name: "{{ value.name }}"
