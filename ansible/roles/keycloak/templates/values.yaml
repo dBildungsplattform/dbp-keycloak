@@ -27,6 +27,48 @@ command:
   - "{{ command }}"
 {% endfor %}
 
+extraArgs:
+{% for arg in keycloak_extra_args %}
+  - "{{ arg }}"
+{% endfor %}
+
+extraVolumes:
+  {{ keycloak_extra_volumes | to_nice_yaml | indent(2) | trim }}
+extraVolumeMounts:
+  {{ keycloak_extra_volume_mounts | to_nice_yaml | indent(2) | trim }}
+
+extraConfig:
+  name: "{{ keycloak_extra_config_name }}"
+  create: {{ keycloak_extra_config_create }}
+  data:
+{% for key, value in keycloak_extra_config_data.items() %}
+    {{ key }}: "{{ value }}"
+{% endfor %}
+  external:
+{% for item in keycloak_extra_config_external %}
+    - "{{ item }}"
+{% endfor %}
+
+extraSecret:
+  name: "{{ keycloak_extra_secret_name }}"
+  create: {{ keycloak_extra_secret_create }}
+  data:
+{% for key, value in keycloak_extra_secret_data.items() %}
+    {{ key }}: "{{ value }}"
+{% endfor %}
+  external:
+{% for item in keycloak_extra_secret_external %}
+    - "{{ item }}"
+{% endfor %}
+
+database:
+  username: "{{ keycloak_database_username }}"
+  password: "{{ keycloak_database_password }}"
+  host: "{{ keycloak_database_host }}"
+  port: "{{ keycloak_database_port }}"
+  name: "{{ keycloak_database_name }}"
+  type: "{{ keycloak_database_type }}"
+
 test:
 {% for value  in keycloak_hosts %}
   - name: "{{ value.name }}"
