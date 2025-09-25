@@ -60,6 +60,10 @@ keycloak_database_password: ""
 keycloak_import_realms: true
 keycloak_realm_filepath: ""
 
+# for example:
+# keycloak_hosts:
+#   - name: "kc.example.com"
+#     auth_only: true
 keycloak_hosts: []
 keycloak_frontend_hostname: ""
 keycloak_hostname_backchannel_dynamic: true

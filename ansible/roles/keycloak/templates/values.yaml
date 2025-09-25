@@ -77,9 +77,9 @@ keycloak:
 {% for value  in keycloak_hosts %}
     - name: "{{ value.name }}"
   {% if value.auth_only is defined %}
-      authOnly: "{{ value.auth_only }}"
+      authOnly: {{ value.auth_only }}
   {% else %}
-      authOnly: "{{ keycloak_ingress_path_auth_only }}"
+      authOnly: {{ keycloak_ingress_path_auth_only }}
   {% endif %}
 {% endfor %}
   frontendHostname: "{{ keycloak_frontend_hostname }}"
