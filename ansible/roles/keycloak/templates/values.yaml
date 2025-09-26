@@ -109,6 +109,8 @@ threadPool: {{ keycloak_thread_pool }}
 
 startupProbe:
   enabled: {{ keycloak_startup_probe_enabled }}
+  httpGet:
+    path: "{{ keycloak_startup_probe_http_get_path }}"
   periodSeconds: {{ keycloak_startup_probe_period_seconds }}
   timeoutSeconds: {{ keycloak_startup_probe_timeout_seconds }}
   failureThreshold: {{ keycloak_startup_probe_failure_threshold }}
@@ -116,6 +118,8 @@ startupProbe:
 
 livenessProbe:
   enabled: {{ keycloak_liveness_probe_enabled }}
+  httpGet:
+    path: "{{ keycloak_liveness_probe_http_get_path }}"
   periodSeconds: {{ keycloak_liveness_probe_period_seconds }}
   timeoutSeconds: {{ keycloak_liveness_probe_timeout_seconds }}
   failureThreshold: {{ keycloak_liveness_probe_failure_threshold }}
@@ -123,6 +127,8 @@ livenessProbe:
 
 readinessProbe:
   enabled: {{ keycloak_readiness_probe_enabled }}
+  httpGet:
+    path: "{{ keycloak_readiness_probe_http_get_path }}"
   periodSeconds: {{ keycloak_readiness_probe_period_seconds }}
   timeoutSeconds: {{ keycloak_readiness_probe_timeout_seconds }}
   failureThreshold: {{ keycloak_readiness_probe_failure_threshold }}

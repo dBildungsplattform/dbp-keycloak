@@ -93,18 +93,21 @@ keycloak_resources_limits_memory: "1Gi"
 keycloak_thread_pool: 16
 
 keycloak_startup_probe_enabled: true
+keycloak_startup_probe_http_get_path: "/health/started"
 keycloak_startup_probe_period_seconds: 5
 keycloak_startup_probe_timeout_seconds: 1
 keycloak_startup_probe_failure_threshold: 60
 keycloak_startup_probe_success_threshold: 1
 
 keycloak_liveness_probe_enabled: true
+keycloak_liveness_probe_http_get_path: "/health/live"
 keycloak_liveness_probe_period_seconds: 5
 keycloak_liveness_probe_timeout_seconds: 3
 keycloak_liveness_probe_failure_threshold: 6
 keycloak_liveness_probe_success_threshold: 1
 
 keycloak_readiness_probe_enabled: true
+keycloak_readiness_probe_http_get_path: "/health/ready"
 keycloak_readiness_probe_period_seconds: 5
 keycloak_readiness_probe_timeout_seconds: 1
 keycloak_readiness_probe_failure_threshold: 3
