@@ -2,3 +2,4 @@
 
 KC_FEATURES_DISABLED="impersonation,ciba,par,web-authn"
 KC_HTTP_RELATIVE_PATH="/auth"
+KC_RUN_IN_CONTAINER="true"
