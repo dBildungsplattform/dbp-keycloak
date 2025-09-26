@@ -97,9 +97,9 @@ keycloak:
     enabled: {{ keycloak_service_monitor_enabled }}
     path: "{{ keycloak_service_monitor_path }}"
     port: "{{ keycloak_service_monitor_port }}"
-{{% if keycloak_http_relative_path is defined %}}
+{% if keycloak_http_relative_path is defined %}
   httpRelativePath: "{{ keycloak_http_relative_path }}"
-{{% endif %}}
+{% endif %}
 
 resources:
   limits:
