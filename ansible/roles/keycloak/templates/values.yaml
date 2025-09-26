@@ -74,7 +74,6 @@ realm:
 
 keycloak:
   hosts:
-{% if keycloak_hostname_enable %}
 {% for value  in keycloak_hosts %}
     - name: "{{ value.name }}"
   {% if value.auth_only is defined %}
@@ -84,7 +83,6 @@ keycloak:
   {% endif %}
       protocol: {{ value.protocol | default(keycloak_host_protocol) }}
 {% endfor %}
-{% endif %}
   hostname:
     strict: {{ keycloak_hostname_strict }}
     strictHTTPS: {{ keycloak_hostname_strict_https }}
