@@ -81,13 +81,25 @@ keycloak:
   {% else %}
       authOnly: {{ keycloak_ingress_path_auth_only }}
   {% endif %}
+  {% if value.protocoll is defined %}
+      protocoll: {{ value.protocoll }}
+  {% else %}
+      protocoll: {{ keycloak_host_protocoll }}
+  {% endif %}
 {% endfor %}
+  hostname:
+    strict: {{ keycloak_hostname_strict }}
+    strictHTTPS: {{ keycloak_hostname_strict_https }}
   frontendHostname: "{{ keycloak_frontend_hostname }}"
+  frontendProtocoll: "{{ keycloak_frontend_protocoll }}"
   hostnameBackchannelDynamic: {{ keycloak_hostname_backchannel_dynamic }}
   serviceMonitor:
     enabled: {{ keycloak_service_monitor_enabled }}
     path: "{{ keycloak_service_monitor_path }}"
     port: "{{ keycloak_service_monitor_port }}"
+{{% if keycloak_http_relative_path is defined %}}
+  httpRelativePath: "{{ keycloak_http_relative_path }}"
+{{% endif %}}
 
 resources:
   limits:

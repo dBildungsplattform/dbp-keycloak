@@ -72,12 +72,17 @@ realm:
 
 keycloak:
   hosts: []
+  hostname:
+    strict: true
+    strictHTTPS: true
   hostnameBackchannelDynamic: true
   serviceMonitor:
     enabled: true
     path: "/metrics"
     port: "mgmt"
-  frontendHostname: ""
+  frontendHostname: ""  
+  frontendProtocoll: "https"
+  # httpRelativePath: "/auth"
 
 ingress:
   ingressClassName: nginx
