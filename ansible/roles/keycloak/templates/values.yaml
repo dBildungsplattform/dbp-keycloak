@@ -81,11 +81,7 @@ keycloak:
   {% else %}
       authOnly: {{ keycloak_ingress_path_auth_only }}
   {% endif %}
-  {% if value.protocol is defined %}
-      protocol: {{ value.protocol }}
-  {% else %}
-      protocol: {{ keycloak_host_protocol }}
-  {% endif %}
+      protocol: {{ value.protocol | default(keycloak_host_protocol) }}
 {% endfor %}
   hostname:
     strict: {{ keycloak_hostname_strict }}
