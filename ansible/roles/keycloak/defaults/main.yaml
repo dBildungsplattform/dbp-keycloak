@@ -64,11 +64,11 @@ keycloak_realm_filepath: ""
 # keycloak_hosts:
 #   - name: "kc.example.com"
 #     auth_only: true
-#     protocoll: https
+#     protocol: https
 keycloak_hosts: []
-keycloak_host_protocoll: "https"
+keycloak_host_protocol: "https"
 keycloak_frontend_hostname: ""
-keycloak_frontend_protocoll: "https"
+keycloak_frontend_protocol: "https"
 keycloak_hostname_backchannel_dynamic: true
 keycloak_hostname_strict: true
 keycloak_hostname_strict_https: true

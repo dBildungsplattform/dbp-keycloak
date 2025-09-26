@@ -81,17 +81,17 @@ keycloak:
   {% else %}
       authOnly: {{ keycloak_ingress_path_auth_only }}
   {% endif %}
-  {% if value.protocoll is defined %}
-      protocoll: {{ value.protocoll }}
+  {% if value.protocol is defined %}
+      protocol: {{ value.protocol }}
   {% else %}
-      protocoll: {{ keycloak_host_protocoll }}
+      protocol: {{ keycloak_host_protocol }}
   {% endif %}
 {% endfor %}
   hostname:
     strict: {{ keycloak_hostname_strict }}
     strictHTTPS: {{ keycloak_hostname_strict_https }}
   frontendHostname: "{{ keycloak_frontend_hostname }}"
-  frontendProtocoll: "{{ keycloak_frontend_protocoll }}"
+  frontendProtocol: "{{ keycloak_frontend_protocol }}"
   hostnameBackchannelDynamic: {{ keycloak_hostname_backchannel_dynamic }}
   serviceMonitor:
     enabled: {{ keycloak_service_monitor_enabled }}

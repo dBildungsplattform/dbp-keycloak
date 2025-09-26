@@ -81,7 +81,7 @@ keycloak:
     path: "/metrics"
     port: "mgmt"
   frontendHostname: ""  
-  frontendProtocoll: "https"
+  frontendProtocol: "https"
   # httpRelativePath: "/auth"
 
 ingress:
