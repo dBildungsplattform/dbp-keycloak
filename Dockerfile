@@ -50,8 +50,8 @@ RUN set -o allexport && \
     . /tmp/env-variant && \
     set +a && \
     env && \
-    /opt/keycloak/bin/kc.sh show-config && \
-    /opt/keycloak/bin/kc.sh --verbose build
+    /opt/keycloak/bin/kc.sh build && \
+    /opt/keycloak/bin/kc.sh show-config
 
 RUN echo "Built variant $KEYCLOAK_VARIANT"
 # build final image
