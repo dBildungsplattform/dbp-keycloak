@@ -6,10 +6,14 @@ metadata:
   labels:
     {{- include "common.labels" . | nindent 4 }}
 data:
+{{- if .Values.keycloak.hostname.enable }}
 {{- with (first .Values.keycloak.hosts) }}
   KC_HOSTNAME: "{{ .protocol }}://{{ .name }}"
 {{- end }}
+{{- end }}
+{{- if .Values.keycloak.frontendEnable }}
   KC_ROOT_URL: "{{ .Values.keycloak.frontendProtocol }}://{{ .Values.keycloak.frontendHostname }}"
+{{- end }}
   KC_HOSTNAME_STRICT:  "{{ .Values.keycloak.hostname.strict }}"
   KC_HOSTNAME_STRICT_HTTPS: "{{ .Values.keycloak.hostname.strictHTTPS }}"
 {{- if .Values.keycloak.httpRelativePath }}
