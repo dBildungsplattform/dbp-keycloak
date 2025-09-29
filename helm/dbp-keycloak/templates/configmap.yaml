@@ -11,7 +11,7 @@ data:
   KC_HOSTNAME: "{{ .protocol }}://{{ .name }}"
 {{- end }}
 {{- end }}
-{{- if .Values.keycloak.frontendEnable }}
+{{- if .Values.keycloak.frontendEnabled }}
   KC_ROOT_URL: "{{ .Values.keycloak.frontendProtocol }}://{{ .Values.keycloak.frontendHostname }}"
 {{- end }}
   KC_HOSTNAME_STRICT:  "{{ .Values.keycloak.hostname.strict }}"

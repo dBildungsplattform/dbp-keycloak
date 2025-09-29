@@ -75,7 +75,7 @@ keycloak:
   hostname:
     strict: true
     strictHTTPS: true
-    enable: true
+    enabled: true
   hostnameBackchannelDynamic: true
   serviceMonitor:
     enabled: true
@@ -83,7 +83,7 @@ keycloak:
     port: "mgmt"
   frontendHostname: ""  
   frontendProtocol: "https"
-  frontendEnable: true
+  frontendEnabled: true
   # httpRelativePath: "/auth"
 
 ingress:
