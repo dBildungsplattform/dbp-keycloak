@@ -63,7 +63,6 @@ keycloak_realm_filepath: ""
 # for example:
 # keycloak_hosts:
 #   - name: "kc.example.com"
-#     auth_only: true
 #     protocol: https
 keycloak_hosts: []
 keycloak_host_protocol: "https"
@@ -80,7 +79,6 @@ keycloak_http_relative_path: ""
 keycloak_ingress_class_name: "nginx"
 keycloak_ingress_tls_enabled: false
 keycloak_ingress_tls_secret_name: ""
-keycloak_ingress_path_auth_only: false
 keycloak_ingress_annotations: {}
 
 keycloak_service_monitor_enabled: true
