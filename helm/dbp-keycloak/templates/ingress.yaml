@@ -26,7 +26,7 @@ spec:
     - host: "{{ $host.name }}"
       http:
         paths:
-          {{- range $path := $host.exposedPaths }}
+          {{- range $path := $.Values.keycloak.exposedPaths }}
           - path: "{{ $.Values.keycloak.httpRelativePath }}{{ $path }}"
             pathType: "Prefix"
             backend:
