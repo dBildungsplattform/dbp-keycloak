@@ -22,20 +22,12 @@ spec:
   {{- end }}
   ingressClassName: "{{ $.Values.ingress.ingressClassName }}"
   rules:
-{{- range .Values.keycloak.hosts }}
-    - host: "{{ .name }}"
+{{- range $host := .Values.keycloak.hosts }}
+    - host: "{{ $host.name }}"
       http:
         paths:
-          {{- if .authOnly }}
-          - path: "/auth"
-            pathType: "Prefix"
-            backend:
-              service:
-                name: "{{ include "common.names.fullname" $ }}"
-                port:
-                  name: "http"
-          {{- else }}
-          - path: "/"
+          {{- range $path := $host.exposedPaths }}
+          - path: "{{ $.Values.keycloak.httpRelativePath }}{{ $path }}"
             pathType: "Prefix"
             backend:
               service:
@@ -43,4 +35,5 @@ spec:
                 port:
                   name: "http"
           {{- end }}
+          # todo rewrite path from /.well-known to /auth/.well-known
 {{- end }}
