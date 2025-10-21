@@ -85,7 +85,6 @@ keycloak:
 {% endfor %}
   hostname:
     strict: {{ keycloak_hostname_strict }}
-    strictHTTPS: {{ keycloak_hostname_strict_https }}
     enabled: {{ keycloak_hostname_enabled }}
 {% if keycloak_frontend_enabled %}
   frontendHostname: "{{ keycloak_frontend_hostname }}"
@@ -97,9 +96,7 @@ keycloak:
     enabled: {{ keycloak_service_monitor_enabled }}
     path: "{{ keycloak_service_monitor_path }}"
     port: "{{ keycloak_service_monitor_port }}"
-{% if keycloak_http_relative_path is defined %}
   httpRelativePath: "{{ keycloak_http_relative_path }}"
-{% endif %}
 
 resources:
   limits:

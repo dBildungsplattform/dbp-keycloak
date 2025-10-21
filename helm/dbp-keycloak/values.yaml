@@ -74,17 +74,24 @@ keycloak:
   hosts: []
   hostname:
     strict: true
-    strictHTTPS: true
     enabled: true
+  # see https://www.keycloak.org/server/reverseproxy#_exposed_path_recommendations
+  exposedPaths:
+    # This path is needed to work correctly, for example, for OIDC endpoints.
+    - "/realms"
+    # This path is needed to serve assets correctly. It may be served from a CDN instead of the Keycloak path.
+    - "/resources"
+    # This path is needed to resolve Authorization Server Metadata and other information via RFC8414.
+    - "/.well-known"
   hostnameBackchannelDynamic: true
   serviceMonitor:
     enabled: true
     path: "/metrics"
     port: "mgmt"
-  frontendHostname: ""  
+  frontendHostname: ""
   frontendProtocol: "https"
   frontendEnabled: true
-  # httpRelativePath: "/auth"
+  httpRelativePath: ""
 
 ingress:
   ingressClassName: nginx

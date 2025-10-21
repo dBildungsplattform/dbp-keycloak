@@ -15,7 +15,6 @@ data:
   KC_ROOT_URL: "{{ .Values.keycloak.frontendProtocol }}://{{ .Values.keycloak.frontendHostname }}"
 {{- end }}
   KC_HOSTNAME_STRICT:  "{{ .Values.keycloak.hostname.strict }}"
-  KC_HOSTNAME_STRICT_HTTPS: "{{ .Values.keycloak.hostname.strictHTTPS }}"
 {{- if .Values.keycloak.httpRelativePath }}
   KC_HTTP_RELATIVE_PATH: "{{.Values.keycloak.httpRelativePath }}"
 {{- end }}
