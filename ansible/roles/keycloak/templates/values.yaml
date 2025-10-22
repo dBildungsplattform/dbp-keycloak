@@ -10,7 +10,9 @@ image:
 {% endfor %}
 
 auth:
+{% if keycloak_auth_existing_secret | length > 0 %}
   existingSecret: "{{ keycloak_auth_existing_secret }}"
+{% else %}
   secretName: "{{ keycloak_auth_secret_name }}"
   adminUsername: "{{ keycloak_auth_admin_username }}"
   adminPassword: "{{ keycloak_auth_admin_password }}"
@@ -19,7 +21,7 @@ auth:
   keycloakAdminSecret: "{{ keycloak_auth_admin_secret }}"
   keycloakClientSecret: "{{ keycloak_auth_client_secret }}"
   keycloakServiceClientCertificate: "{{ keycloak_auth_service_client_certificate }}"
-
+{% endif %}
 importRealms: {{ keycloak_import_realms }}
 
 command:
