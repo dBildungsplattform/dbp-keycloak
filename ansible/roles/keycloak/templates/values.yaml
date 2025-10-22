@@ -73,25 +73,16 @@ realm:
   filepath: "{{ keycloak_realm_filepath }}"
 
 keycloak:
-  hosts:
-{% for value  in keycloak_hosts %}
-    - name: "{{ value.name }}"
-      protocol: {{ value.protocol | default(keycloak_host_protocol) }}
-{% endfor %}
-  hostname:
+  host:
+    name: "{{ keycloak_hostname }}"
+    admin: "{{ keycloak_hostname_admin }}"
     strict: {{ keycloak_hostname_strict }}
-    enabled: {{ keycloak_hostname_enabled }}
-{% if keycloak_frontend_enabled %}
-  frontendHostname: "{{ keycloak_frontend_hostname }}"
-  frontendProtocol: "{{ keycloak_frontend_protocol }}"
-{% endif %}
-  frontendEnabled: {{ keycloak_frontend_enabled }}
   hostnameBackchannelDynamic: {{ keycloak_hostname_backchannel_dynamic }}
+  httpRelativePath: "{{ keycloak_http_relative_path }}"
   serviceMonitor:
     enabled: {{ keycloak_service_monitor_enabled }}
     path: "{{ keycloak_service_monitor_path }}"
     port: "{{ keycloak_service_monitor_port }}"
-  httpRelativePath: "{{ keycloak_http_relative_path }}"
 
 resources:
   limits:
