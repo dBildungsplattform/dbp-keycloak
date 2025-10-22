@@ -71,10 +71,11 @@ realm:
   filepath: ""
 
 keycloak:
-  hosts: []
-  hostname:
+  host:
+    name: ""
+    admin: "http://localhost:8080"
     strict: true
-    enabled: true
+  httpRelativePath: ""
   # see https://www.keycloak.org/server/reverseproxy#_exposed_path_recommendations
   exposedPaths:
     # This path is needed to work correctly, for example, for OIDC endpoints.
@@ -88,10 +89,6 @@ keycloak:
     enabled: true
     path: "/metrics"
     port: "mgmt"
-  frontendHostname: ""
-  frontendProtocol: "https"
-  frontendEnabled: true
-  httpRelativePath: ""
 
 ingress:
   ingressClassName: nginx

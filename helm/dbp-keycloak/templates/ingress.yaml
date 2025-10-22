@@ -13,20 +13,17 @@ spec:
   {{- if .Values.ingress.tls.enabled }}
   tls:
     - hosts:
-    {{- range .Values.keycloak.hosts }}
-        - "{{ .name }}"
-    {{- end }}
+        - "{{ .Values.keycloak.host.name }}"
       {{- if .Values.ingress.tls.secretName }}
       secretName: "{{ .Values.ingress.tls.secretName }}"
       {{- end }}
   {{- end }}
-  ingressClassName: "{{ $.Values.ingress.ingressClassName }}"
+  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
   rules:
-{{- range $host := .Values.keycloak.hosts }}
-    - host: "{{ $host.name }}"
+    - host: "{{ .Values.ingress.host.name }}"
       http:
         paths:
-          {{- range $path := $.Values.keycloak.exposedPaths }}
+          {{- range $path := .Values.keycloak.exposedPaths }}
           - path: "{{ $.Values.keycloak.httpRelativePath }}{{ $path }}"
             pathType: "Prefix"
             backend:
@@ -36,4 +33,3 @@ spec:
                   name: "http"
           {{- end }}
           # todo rewrite path from /.well-known to /auth/.well-known
-{{- end }}

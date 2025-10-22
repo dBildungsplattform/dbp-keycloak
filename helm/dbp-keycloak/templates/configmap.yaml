@@ -6,17 +6,14 @@ metadata:
   labels:
     {{- include "common.labels" . | nindent 4 }}
 data:
-{{- if .Values.keycloak.hostname.enable }}
-{{- with (first .Values.keycloak.hosts) }}
-  KC_HOSTNAME: "{{ .protocol }}://{{ .name }}"
-{{- end }}
-{{- end }}
-{{- if .Values.keycloak.frontendEnabled }}
-  KC_ROOT_URL: "{{ .Values.keycloak.frontendProtocol }}://{{ .Values.keycloak.frontendHostname }}"
-{{- end }}
-  KC_HOSTNAME_STRICT:  "{{ .Values.keycloak.hostname.strict }}"
+  # is ignored if KC_HOSTNAME is set
+  KC_HOSTNAME_STRICT:  "{{ .Values.keycloak.host.strict }}"
+  # must be set if KC_HOSTNAME_STRICT is true
+  KC_HOSTNAME: "{{ .Values.keycloak.host.name }}"
+  # if set, KC_HOSTNAME must be set to a url
+  KC_HOSTNAME_ADMIN: "{{ .Values.keycloak.host.admin }}"
 {{- if .Values.keycloak.httpRelativePath }}
-  KC_HTTP_RELATIVE_PATH: "{{.Values.keycloak.httpRelativePath }}"
+  KC_HTTP_RELATIVE_PATH: "{{ .Values.keycloak.httpRelativePath }}"
 {{- end }}
   KC_PROXY_HEADERS: "xforwarded"
   KC_HTTP_ENABLED: "{{ .Values.service.http.enabled }}"
