@@ -68,11 +68,13 @@ extraSecret:
 {% endfor %}
 
 database:
+{% if keycloak_auth_existing_secret | length == 0 %}
   username: "{{ keycloak_database_username }}"
   password: "{{ keycloak_database_password }}"
   host: "{{ keycloak_database_host }}"
   port: "{{ keycloak_database_port }}"
   name: "{{ keycloak_database_name }}"
+{% endif %}
   type: "{{ keycloak_database_type }}"
 
 realm:
