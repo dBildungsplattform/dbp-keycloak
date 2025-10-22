@@ -9,7 +9,7 @@ metadata:
   annotations:
     {{- toYaml . | nindent 4 }}
     nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /.well-known/$2
+    nginx.ingress.kubernetes.io/rewrite-target: /auth/.well-known/$2
   {{- end }}
 spec:
   {{- if .Values.ingress.tls.enabled }}
@@ -25,13 +25,10 @@ spec:
     - host: "{{ .Values.ingress.host.name }}"
       http:
         paths:
-          {{- range $path := .Values.keycloak.exposedPaths }}
-          - path: /auth/.well-known(/|$)(.*)
+          - path: /.well-known(/|$)(.*)
             pathType: "Prefix"
             backend:
               service:
                 name: "{{ include "common.names.fullname" $ }}"
                 port:
                   name: "http"
-          {{- end }}
-          # todo rewrite path from /.well-known to /auth/.well-known
