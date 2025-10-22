@@ -40,24 +40,28 @@ extraVolumeMounts:
   {{ keycloak_extra_volume_mounts | to_nice_yaml | indent(2) | trim }}
 
 extraConfig:
+{% if keycloak_extra_config_create %}
   name: "{{ keycloak_extra_config_name }}"
   create: {{ keycloak_extra_config_create }}
   data:
 {% for key, value in keycloak_extra_config_data.items() %}
     {{ key }}: "{{ value }}"
 {% endfor %}
+{% endif %}
   external:
 {% for item in keycloak_extra_config_external %}
     - "{{ item }}"
 {% endfor %}
 
 extraSecret:
+{% if keycloak_extra_secret_create %}
   name: "{{ keycloak_extra_secret_name }}"
   create: {{ keycloak_extra_secret_create }}
   data:
 {% for key, value in keycloak_extra_secret_data.items() %}
     {{ key }}: "{{ value }}"
 {% endfor %}
+{% endif %}
   external:
 {% for item in keycloak_extra_secret_external %}
     - "{{ item }}"
