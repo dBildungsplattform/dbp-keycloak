@@ -75,10 +75,9 @@ realm:
   filepath: "{{ keycloak_realm_filepath }}"
 
 keycloak:
-  host:
-    name: "{{ keycloak_hostname }}"
-    admin: "{{ keycloak_hostname_admin }}"
-    strict: {{ keycloak_hostname_strict }}
+  hostname: "{{ keycloak_hostname }}"
+  hostnameAdmin: "{{ keycloak_hostname_admin }}"
+  hostnameStrict: {{ keycloak_hostname_strict }}
   hostnameBackchannelDynamic: {{ keycloak_hostname_backchannel_dynamic }}
   httpRelativePath: "{{ keycloak_http_relative_path }}"
   serviceMonitor:

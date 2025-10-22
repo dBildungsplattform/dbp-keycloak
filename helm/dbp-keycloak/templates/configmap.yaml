@@ -7,11 +7,11 @@ metadata:
     {{- include "common.labels" . | nindent 4 }}
 data:
   # is ignored if KC_HOSTNAME is set
-  KC_HOSTNAME_STRICT:  "{{ .Values.keycloak.host.strict }}"
+  KC_HOSTNAME_STRICT:  "{{ .Values.keycloak.hostnameStrict }}"
   # must be set if KC_HOSTNAME_STRICT is true
-  KC_HOSTNAME: "{{ .Values.keycloak.host.name }}"
+  KC_HOSTNAME: "{{ .Values.keycloak.hostname }}"
   # if set, KC_HOSTNAME must be set to a url
-  KC_HOSTNAME_ADMIN: "{{ .Values.keycloak.host.admin }}"
+  KC_HOSTNAME_ADMIN: "{{ .Values.keycloak.hostnameAdmin }}"
 {{- if .Values.keycloak.httpRelativePath }}
   KC_HTTP_RELATIVE_PATH: "{{ .Values.keycloak.httpRelativePath }}"
 {{- end }}

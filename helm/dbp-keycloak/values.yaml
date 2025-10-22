@@ -71,10 +71,10 @@ realm:
   filepath: ""
 
 keycloak:
-  host:
-    name: ""
-    admin: "http://localhost:8080"
-    strict: true
+  hostname: ""
+  hostnameAdmin: "http://localhost:8080"
+  hostnameStrict: true
+  hostnameBackchannelDynamic: true
   httpRelativePath: ""
   # see https://www.keycloak.org/server/reverseproxy#_exposed_path_recommendations
   exposedPaths:
@@ -84,7 +84,6 @@ keycloak:
     - "/resources"
     # This path is needed to resolve Authorization Server Metadata and other information via RFC8414.
     - "/.well-known"
-  hostnameBackchannelDynamic: true
   serviceMonitor:
     enabled: true
     path: "/metrics"
