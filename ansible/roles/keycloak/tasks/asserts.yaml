@@ -91,7 +91,6 @@
       - "keycloak_hostname | length > 0"
       - "keycloak_http_relative_path | length > 0"
       - "keycloak_ingress_tls_secret_name | length > 0"
-      - "keycloak_service_account_name | length > 0"
       - >
         keycloak_auth_existing_secret | length > 0
         or keycloak_auth_secret_name is string
