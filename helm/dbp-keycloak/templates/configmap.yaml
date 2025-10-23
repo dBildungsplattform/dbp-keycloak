@@ -9,9 +9,9 @@ data:
   # is ignored if KC_HOSTNAME is set
   KC_HOSTNAME_STRICT:  "{{ .Values.keycloak.hostnameStrict }}"
   # must be set if KC_HOSTNAME_STRICT is true
-  KC_HOSTNAME: "{{ .Values.keycloak.hostname }}"
+  KC_HOSTNAME: "https://{{ .Values.keycloak.hostname }}{{ .Values.keycloak.httpRelativePath }}"
   # if set, KC_HOSTNAME must be set to a url
-  KC_HOSTNAME_ADMIN: "{{ .Values.keycloak.hostnameAdmin }}"
+  KC_HOSTNAME_ADMIN: "http://{{ .Values.keycloak.hostnameAdmin }}{{ .Values.keycloak.httpRelativePath }}"
 {{- if .Values.keycloak.httpRelativePath }}
   KC_HTTP_RELATIVE_PATH: "{{ .Values.keycloak.httpRelativePath }}"
 {{- end }}

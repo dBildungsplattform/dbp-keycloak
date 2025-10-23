@@ -22,7 +22,7 @@ spec:
   {{- end }}
   ingressClassName: "{{ .Values.ingress.ingressClassName }}"
   rules:
-    - host: "{{ .Values.ingress.host.name }}"
+    - host: "{{ .Values.keycloak.hostname }}"
       http:
         paths:
           - path: /.well-known(/|$)(.*)

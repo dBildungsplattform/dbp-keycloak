@@ -61,7 +61,7 @@ keycloak_import_realms: true
 keycloak_realm_filepath: ""
 
 # keycloak_hostname: ""
-keycloak_hostname_admin: "http://localhost:8080"
+keycloak_hostname_admin: "localhost:8080"
 keycloak_hostname_strict: true
 keycloak_hostname_backchannel_dynamic: true
 # For keycloak_http_relative_path example:
