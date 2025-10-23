@@ -107,5 +107,6 @@ keycloak_readiness_probe_success_threshold: 1
 
 keycloak_service_account_create: true
 keycloak_service_account_annotations: {}
-# keycloak_service_account_name: ""
+# if set to "", the default defined in the helm chart will be used
+keycloak_service_account_name: ""
 keycloak_service_account_automount_token: false
