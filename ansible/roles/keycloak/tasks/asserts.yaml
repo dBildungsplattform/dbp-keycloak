@@ -31,6 +31,8 @@
       - "keycloak_startup_probe_http_get_path is string"
       - "keycloak_liveness_probe_http_get_path is string"
       - "keycloak_readiness_probe_http_get_path is string"
+      - "keycloak_ingress_tls_secret_name is string"
+      - "keycloak_http_relative_path is string"
 
       # List values
       - "keycloak_image_pull_secrets is iterable"
@@ -89,8 +91,7 @@
       - "not keycloak_extra_config_create or keycloak_extra_config_name | length > 0"
       - "not keycloak_extra_secret_create or keycloak_extra_secret_name | length > 0"
       - "keycloak_hostname | length > 0"
-      - "keycloak_http_relative_path | length > 0"
-      - "keycloak_ingress_tls_secret_name | length > 0"
+      - "not keycloak_ingress_tls_enabled or keycloak_ingress_tls_secret_name | length > 0"
       - >
         keycloak_auth_existing_secret | length > 0
         or keycloak_auth_secret_name is string

@@ -64,13 +64,13 @@ keycloak_realm_filepath: ""
 keycloak_hostname_admin: "localhost:8080"
 keycloak_hostname_strict: true
 keycloak_hostname_backchannel_dynamic: true
-# For keycloak_http_relative_path example:
-# keycloak_http_relative_path: "/auth"
-# keycloak_http_relative_path: ""
+## For keycloak_http_relative_path example:
+## keycloak_http_relative_path: "/auth"
+keycloak_http_relative_path: ""
 
 keycloak_ingress_class_name: "nginx"
-keycloak_ingress_tls_enabled: false
-# keycloak_ingress_tls_secret_name: ""
+keycloak_ingress_tls_enabled: true
+keycloak_ingress_tls_secret_name: "keycloak-tls"
 keycloak_ingress_annotations: {}
 
 keycloak_service_monitor_enabled: true
