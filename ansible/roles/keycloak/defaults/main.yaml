@@ -58,7 +58,7 @@ keycloak_database_username: "keycloak"
 # keycloak_database_password: ""
 
 keycloak_import_realms: true
-# keycloak_realm_filepath: ""
+keycloak_realm_filepath: ""
 
 # keycloak_hostname: ""
 keycloak_hostname_admin: "http://localhost:8080"
