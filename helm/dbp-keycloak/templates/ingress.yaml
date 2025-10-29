@@ -13,7 +13,7 @@ spec:
   {{- if .Values.ingress.tls.enabled }}
   tls:
     - hosts:
-        - "{{ .Values.keycloak.host.name }}"
+        - "{{ .Values.keycloak.hostname }}"
       {{- if .Values.ingress.tls.secretName }}
       secretName: "{{ .Values.ingress.tls.secretName }}"
       {{- end }}
