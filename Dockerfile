@@ -13,7 +13,7 @@ ARG KEYCLOAK_VARIANT="generic"
 
 RUN echo "Building variant $KEYCLOAK_VARIANT"
 
-RUN apt-get update && apt-get install -y --no-install-recommends curl tar sha1sum
+RUN apt-get update && apt-get install -y --no-install-recommends curl tar
 
 RUN mkdir /tmp/keycloak && \
     curl --location --fail \
