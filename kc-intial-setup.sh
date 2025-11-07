@@ -74,25 +74,6 @@ SMTP_USER="user"
 SMTP_PASS="smtp-password"
 SMTP_STARTTLS="true"
 
-echo "Konfiguriere SMTP für den Master Realm..."
-
-curl -s -X PUT "$KEYCLOAK_HOST/auth/admin/realms/master" \
-  -H "Authorization: Bearer $KC_ACCESS_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d "{
-    \"smtpServer\": {
-      \"host\": \"$SMTP_HOST\",
-      \"port\": \"$SMTP_PORT\",
-      \"from\": \"$SMTP_FROM\",
-      \"auth\": \"$SMTP_AUTH\",
-      \"user\": \"$SMTP_USER\",
-      \"password\": \"$SMTP_PASS\",
-      \"starttls\": \"$SMTP_STARTTLS\"
-    }
-  }"
-
-echo "SMTP Konfiguration für den Master Realm abgeschlossen."
-
 echo "Konfiguriere SMTP für den $REALM Realm..."
 
 curl -s -X PUT "$KEYCLOAK_HOST/auth/admin/realms/$REALM" \
@@ -111,22 +92,6 @@ curl -s -X PUT "$KEYCLOAK_HOST/auth/admin/realms/$REALM" \
   }"
 
 echo "SMTP Konfiguration für den $REALM Realm abgeschlossen."
-
-# --- Enable User Event and Admin Event Monitoring ---
-echo "Aktiviere User Event und Admin Event Monitoring für Realm 'master'..."
-
-curl -s -X PUT "$KEYCLOAK_HOST/auth/admin/realms/master" \
-  -H "Authorization: Bearer $KC_ACCESS_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d "{
-    \"eventsEnabled\": true,
-    \"eventsListeners\": [\"jboss-logging\"],
-    \"adminEventsEnabled\": true,
-    \"adminEventsDetailsEnabled\": true,
-    \"eventsExpiration\": $EVENTS_EXPIRATION_SECONDS
-  }"
-
-echo "User Event und Admin Event Monitoring für Realm 'master' aktiviert."
 
 # --- Enable User Event and Admin Event Monitoring ---
 echo "Aktiviere User Event und Admin Event Monitoring für Realm '$REALM'..."
@@ -152,21 +117,6 @@ QUICK_LOGIN_CHECK_MILLISECONDS=1000
 MINIMUM_QUICK_LOGIN_WAIT_SECONDS=60
 MAX_WAIT_SECONDS=900
 FAILURE_RESET_TIME_SECONDS=43200
-
-echo "Konfiguriere Brute-Force-Detection für Realm 'master'..."
-curl -s -X PUT "$KEYCLOAK_HOST/auth/admin/realms/master" \
-  -H "Authorization: Bearer $KC_ACCESS_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d "{
-    \"bruteForceProtected\": $BRUTE_FORCE_ENABLED,
-    \"maxFailureWaitSeconds\": $MAX_WAIT_SECONDS,
-    \"minimumQuickLoginWaitSeconds\": $MINIMUM_QUICK_LOGIN_WAIT_SECONDS,
-    \"waitIncrementSeconds\": $WAIT_INCREMENT_SECONDS,
-    \"quickLoginCheckMilliSeconds\": $QUICK_LOGIN_CHECK_MILLISECONDS,
-    \"maxDeltaTimeSeconds\": $FAILURE_RESET_TIME_SECONDS,
-    \"failureFactor\": $MAX_FAILURES
-  }"
-echo "Brute-Force-Detection für Realm 'master' konfiguriert."
 
 echo "Konfiguriere Brute-Force-Detection für Realm '$REALM'..."
 curl -s -X PUT "$KEYCLOAK_HOST/auth/admin/realms/$REALM" \
