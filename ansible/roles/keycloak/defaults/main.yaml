@@ -40,13 +40,11 @@ keycloak_extra_args: []
 keycloak_extra_volumes: []
 keycloak_extra_volume_mounts: []
 
-# keycloak_extra_config_name: ""
-keycloak_extra_config_create: false
+keycloak_extra_config_name: ""
 keycloak_extra_config_data: {}
 keycloak_extra_config_external: []
 
-# keycloak_extra_secret_name: ""
-keycloak_extra_secret_create: false
+keycloak_extra_secret_name: ""
 keycloak_extra_secret_data: {}
 keycloak_extra_secret_external: []
 

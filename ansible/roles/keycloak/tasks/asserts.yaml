@@ -46,8 +46,6 @@
       - "keycloak_create_namespace is boolean"
       - "keycloak_autoscaling_enabled is boolean"
       - "keycloak_pod_disruption_budget_enabled is boolean"
-      - "keycloak_extra_config_create is boolean"
-      - "keycloak_extra_secret_create is boolean"
       - "keycloak_import_realms is boolean"
       - "keycloak_hostname_strict is boolean"
       - "keycloak_hostname_backchannel_dynamic is boolean"
@@ -86,8 +84,6 @@
 
       # For variables with default "", check that they are set (not empty)
       - "keycloak_namespace | length > 0"
-      - "not keycloak_extra_config_create or keycloak_extra_config_name | length > 0"
-      - "not keycloak_extra_secret_create or keycloak_extra_secret_name | length > 0"
       - "keycloak_hostname | length > 0"
       - "not keycloak_ingress_tls_enabled or keycloak_ingress_tls_secret_name | length > 0"
       - >
