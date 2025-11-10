@@ -28,9 +28,9 @@ curl -s -X PUT "$KEYCLOAK_HOST/auth/admin/realms/$REALM" \
         \"bruteForceProtected\": true,
         \"eventsEnabled\": true,
         \"adminEventsEnabled\": true,
-        \"ssoSessionIdleTimeout\": 2400,
-        \"ssoSessionMaxLifespan\": 28800,
-        \"accessTokenLifespan\": 1800,
+        \"ssoSessionIdleTimeout\": 900,
+        \"ssoSessionMaxLifespan\": 3600,
+        \"accessTokenLifespan\": 300,
         \"passwordPolicy\": \"length(16) and digits(1) and upperCase(1) and lowerCase(1) and specialChars(1) and notUsername() and notEmail() \"
       }"
 echo "Realm '$REALM' updated."
