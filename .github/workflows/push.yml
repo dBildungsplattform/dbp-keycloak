@@ -140,5 +140,5 @@ jobs:
       chart_path: "./helm"
       helm_chart_version_generation: specified
       image_tag_generation: specified
-      helm_chart_version: "0.0.3-${{ needs.branch_meta.outputs.branch }}"
+      helm_chart_version: "0.0.1-${{ needs.branch_meta.outputs.branch }}"
       image_tag: ${{ needs.branch_meta.outputs.branch }}
