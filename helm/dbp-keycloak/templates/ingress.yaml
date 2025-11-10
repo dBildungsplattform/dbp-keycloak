@@ -32,4 +32,3 @@ spec:
                 port:
                   name: "http"
           {{- end }}
-          # todo rewrite path from /.well-known to /auth/.well-known
