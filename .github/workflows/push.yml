@@ -146,11 +146,9 @@ jobs:
         id: extract_branch_meta
         env:
           CHART_VERSION: "0.0.1-${{ needs.branch_meta.outputs.branch }}"
-          CHART_APP_VERSION: $CHART_VERSION
+          CHART_APP_VERSION: "0.0.1-${{ needs.branch_meta.outputs.branch }}"
           CHART_NAME: "dbp-keycloak"
-          CHART_DIR: "helm/$CHART_NAME"
-          CHART_TGZ_FILE: "$CHART_NAME-$CHART_VERSION.tgz"
-          HELM_REGISTRY_URL: oci://ghcr.io/${{ github.repository }}
+          CHART_DIR: "helm"
         run: |
-          helm package $CHART_DIR --version $CHART_VERSION --app-version $CHART_APP_VERSION
-          helm push $CHART_TGZ_FILE $HELM_REGISTRY_URL
+          helm package "$CHART_DIR/$CHART_NAME" --version $CHART_VERSION --app-version $CHART_APP_VERSION
+          helm push "$CHART_NAME-$CHART_VERSION.tgz" oci://ghcr.io/${{ github.repository }}
