@@ -108,23 +108,23 @@ jobs:
     uses: dBildungsplattform/dbp-github-workflows/.github/workflows/check-helm-kics.yaml@5
     permissions:
       contents: read
-  helm_release_sha:
+  # helm_release_sha:
 
-    concurrency:
-      group: helm_release
-      cancel-in-progress: false
-    needs:
-      - scan
-      - branch_meta
-    uses: dBildungsplattform/dbp-github-workflows/.github/workflows/chart-release.yaml@7
-    secrets: inherit
-    with:
-      chart_name: "dbp-keycloak"
-      chart_path: "./helm"
-      helm_chart_version_generation: specified
-      image_tag_generation: specified
-      helm_chart_version: "0.0.1-${{ needs.branch_meta.outputs.sha }}"
-      image_tag: ${{ needs.branch_meta.outputs.sha }}
+  #   concurrency:
+  #     group: helm_release
+  #     cancel-in-progress: false
+  #   needs:
+  #     - scan
+  #     - branch_meta
+  #   uses: dBildungsplattform/dbp-github-workflows/.github/workflows/chart-release.yaml@7
+  #   secrets: inherit
+  #   with:
+  #     chart_name: "dbp-keycloak"
+  #     chart_path: "./helm"
+  #     helm_chart_version_generation: specified
+  #     image_tag_generation: specified
+  #     helm_chart_version: "0.0.1-${{ needs.branch_meta.outputs.sha }}"
+  #     image_tag: ${{ needs.branch_meta.outputs.sha }}
 
   helm_release_branch:
     runs-on: ubuntu-latest
@@ -132,7 +132,7 @@ jobs:
       group: helm_release
       cancel-in-progress: false
     needs:
-      - scan
+      # - scan
       - branch_meta
     steps:
       - name: Checkout Code
