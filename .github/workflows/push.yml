@@ -134,6 +134,9 @@ jobs:
     needs:
       # - scan
       - branch_meta
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -160,4 +163,4 @@ jobs:
           CHART_DIR: "helm"
         run: |
           helm package "$CHART_DIR/$CHART_NAME" --version $CHART_VERSION --app-version $CHART_APP_VERSION
-          helm push "$CHART_NAME-$CHART_VERSION.tgz" oci://ghcr.io/dbildungsplattform
+          helm push "$CHART_NAME-$CHART_VERSION.tgz" oci://ghcr.io/${{ steps.lower-helm-repo.outputs.repository }}
