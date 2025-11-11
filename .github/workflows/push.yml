@@ -127,19 +127,20 @@ jobs:
       image_tag: ${{ needs.branch_meta.outputs.sha }}
 
   helm_release_branch:
+    runs-on: ubuntu-latest
     concurrency:
       group: helm_release
       cancel-in-progress: false
     needs:
       - scan
       - branch_meta
-    uses: bsord/helm-push@v4.1.0
-    secrets: inherit
-    with:
-      useOCIRegistry: true
-      registry-url:  oci://ghcr.io/${{ github.repository }}
-      username: ${{ github.actor }}
-      password: ${{ secrets.GITHUB_TOKEN }}
-      version: "0.0.1-${{ needs.branch_meta.outputs.branch }}"
-      force: true
-      chart-folder: "helm"
+    steps:
+      - uses: bsord/helm-push@v4.1.0
+        with:
+          useOCIRegistry: true
+          registry-url:  oci://ghcr.io/${{ github.repository }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          version: "0.0.1-${{ needs.branch_meta.outputs.branch }}"
+          force: true
+          chart-folder: "helm"
