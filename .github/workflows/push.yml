@@ -47,8 +47,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - id: lower-repo
         name: Repository to lowercase
@@ -122,8 +120,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - id: lower-helm-repo
         name: Repository to lowercase
         run: |
@@ -162,8 +158,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - id: lower-helm-repo
         name: Repository to lowercase
         run: |
