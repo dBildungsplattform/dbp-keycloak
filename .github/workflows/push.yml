@@ -140,6 +140,7 @@ jobs:
           CHART_NAME: "dbp-keycloak"
           CHART_DIR: "helm"
         run: |
+          helm version
           helm package "$CHART_DIR/$CHART_NAME" --version $CHART_VERSION --app-version $CHART_APP_VERSION
           helm push "$CHART_NAME-$CHART_VERSION.tgz" oci://ghcr.io/${{ steps.lower-helm-repo.outputs.repository }}
 
@@ -178,5 +179,6 @@ jobs:
           CHART_NAME: "dbp-keycloak"
           CHART_DIR: "helm"
         run: |
+          helm version
           helm package "$CHART_DIR/$CHART_NAME" --version $CHART_VERSION --app-version $CHART_APP_VERSION
           helm push "$CHART_NAME-$CHART_VERSION.tgz" oci://ghcr.io/${{ steps.lower-helm-repo.outputs.repository }}
