@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - 'release'
-    
+
 jobs:
   release:
     name: Create Release
@@ -92,13 +92,13 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - id: lower-repo
         name: Repository to lowercase
         run: |
           repo_var=${{ github.repository }}-${{ matrix.variant }}
           echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
-      
+
       - name: Build and push image to ghcr
         id: docker_build_push
         uses: docker/build-push-action@v6
@@ -113,7 +113,7 @@ jobs:
             KEYCLOAK_VARIANT=${{ matrix.variant }}
       - name: run trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.29.0
-        with: 
+        with:
           image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.get_tag.outputs.tag }}
           format: "sarif"
           output: "trivy-results.sarif"
@@ -136,6 +136,10 @@ jobs:
       contents: read
 
   release_helm:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     concurrency:
       group: helm_release
       cancel-in-progress: false
@@ -143,12 +147,29 @@ jobs:
      - scan_helm
      - build_and_upload_image
      - get_tag
-    uses: dBildungsplattform/dbp-github-workflows/.github/workflows/chart-release.yaml@7
-    secrets: inherit
-    with:
-      chart_name: "dbp-keycloak"
-      chart_path: "./helm"
-      helm_chart_version_generation: specified 
-      image_tag_generation: specified 
-      helm_chart_version: ${{ needs.get_tag.outputs.tag }}
-      image_tag: ${{ needs.get_tag.outputs.tag }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - id: lower-helm-repo
+        name: Repository to lowercase
+        run: |
+          repo_var=${{ github.repository }}
+          echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
+      - name: Log into ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push helm chart to ghcr
+        shell: bash
+        id: extract_branch_meta
+        env:
+          CHART_VERSION: "${{ needs.get_tag.outputs.tag }}"
+          CHART_APP_VERSION: "${{ needs.get_tag.outputs.tag }}"
+          CHART_NAME: "dbp-keycloak"
+          CHART_DIR: "helm"
+        run: |
+          helm version
+          helm package "$CHART_DIR/$CHART_NAME" --version $CHART_VERSION --app-version $CHART_APP_VERSION
+          helm push "$CHART_NAME-$CHART_VERSION.tgz" oci://ghcr.io/${{ steps.lower-helm-repo.outputs.repository }}
