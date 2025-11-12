@@ -85,6 +85,7 @@
       # For variables with default "", check that they are set (not empty)
       - "keycloak_namespace | length > 0"
       - "keycloak_hostname | length > 0"
+      - "keycloak_chart_version | length > 0"
       - "not keycloak_ingress_tls_enabled or keycloak_ingress_tls_secret_name | length > 0"
       - >
         keycloak_auth_existing_secret | length > 0

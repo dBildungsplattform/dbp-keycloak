@@ -6,6 +6,7 @@
   kubernetes.core.helm_repository:
     name: "{{ keycloak_chart_repo_name }}"
     repo_url: "{{ keycloak_chart_repo_url }}"
+  when: "'oci' not in keycloak_chart_ref"
 
 - name: "Deploy keycloak helmchart"
   delegate_to: localhost
