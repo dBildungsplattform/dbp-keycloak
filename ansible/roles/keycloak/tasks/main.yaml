@@ -6,6 +6,7 @@
   kubernetes.core.helm_repository:
     name: "{{ keycloak_chart_repo_name }}"
     repo_url: "{{ keycloak_chart_repo_url }}"
+  when: "'oci' not in keycloak_chart_ref"
 
 - name: "Deploy keycloak helmchart"
   delegate_to: localhost
@@ -17,5 +18,5 @@
     release_state: "{{ keycloak_state }}"
     create_namespace: "{{ keycloak_create_namespace }}"
     kubeconfig: "{{ kubeconfig | default(omit) }}"
-    update_repo_cache: true
+    update_repo_cache: "{{ 'oci' not in keycloak_chart_ref }}"
     values: "{{ lookup('template', 'values.yaml') | from_yaml }}"

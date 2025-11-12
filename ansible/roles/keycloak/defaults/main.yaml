@@ -1,9 +1,9 @@
 ---
 keycloak_state: "present"
-keycloak_chart_repo_name: "dbildungsplattform"
-keycloak_chart_repo_url: "https://dbildungsplattform.github.io/helm-charts-registry/"
-keycloak_chart_ref: "{{ keycloak_chart_repo_name }}/dbp-keycloak"
-keycloak_chart_version: "1.0.0"
+keycloak_chart_repo_name: "dbp-keycloak"
+keycloak_chart_repo_url: "ghcr.io/dbildungsplattform/dbp-keycloak"
+keycloak_chart_ref: "oci://ghcr.io/dbildungsplattform/dbp-keycloak/dbp-keycloak"
+# keycloak_chart_version: ""
 keycloak_release_name: "keycloak"
 # keycloak_namespace: ""
 keycloak_create_namespace: true
