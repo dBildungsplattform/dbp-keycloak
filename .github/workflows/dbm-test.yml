@@ -3,7 +3,7 @@ name: Test Trivy Action on Feature Branch
 on:
   push:
     branches:
-      - feature/test-action
+      - DOPS-383-Image-Scan
   workflow_dispatch: # Optional: Manuelles Auslösen im GitHub UI
 
 jobs:
