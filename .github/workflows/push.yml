@@ -112,12 +112,12 @@ jobs:
       - name: Export Docker image as tar
         run: |
           docker save ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }} -o image.tar
-          mkdir -p ${{ github.workspace }}/scan
-          mv image.tar ${{ github.workspace }}/scan/image.tar
+          mkdir -p ${{ github.workspace }}/clamavscan
+          mv image.tar ${{ github.workspace }}/clamavscan/image.tar
 
       - name: Extract image filesystem
         run: |
-          docker run --rm -v ${{ github.workspace }}:/scan clamav/clamav:latest clamscan /scan/image.tar > ${{ github.workspace }}/clamav-results.txt
+          docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest clamscan /scan/image.tar > ${{ github.workspace }}/clamav-results.txt
 
       - name: Upload ClamAV scan results
         if: ${{ always() }}
