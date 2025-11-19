@@ -102,6 +102,37 @@ jobs:
         with:
           sarif_file: "trivy-results.sarif"
 
+      # --- ClamAV Scan ---
+      - name: Install ClamAV
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clamav clamav-freshclam
+
+      - name: Pull and export Docker image as tar
+        run: |
+          docker pull ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.get_tag.outputs.tag }}
+          docker save ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.get_tag.outputs.tag }} -o image.tar
+
+      - name: Extract image filesystem
+        run: |
+          mkdir image_fs
+          tar -xf image.tar -C image_fs
+          # Extract layer tarballs
+          mkdir image_layers
+          for layer in image_fs/*/layer.tar; do
+            tar -xf "$layer" -C image_layers
+          done
+
+      - name: Run ClamAV scan
+        run: |
+          clamscan -r image_layers > clamav-results.txt || true
+
+      - name: Upload ClamAV scan results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: clamav-results
+          path: clamav-results.txt
   scan:
     uses: dBildungsplattform/dbp-github-workflows/.github/workflows/check-helm-kics.yaml@5
     permissions:
