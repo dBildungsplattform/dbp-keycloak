@@ -117,7 +117,7 @@ jobs:
 
       - name: Extract image filesystem
         run: |
-          docker run --rm -v ${{ github.workspace }}:/scan clamav/clamav:latest clamscan /scan/image.tar
+          docker run --rm -v ${{ github.workspace }}:/scan clamav/clamav:latest clamscan /scan/image.tar > ${{ github.workspace }}/clamav-results.txt
 
       - name: Upload ClamAV scan results
         if: ${{ always() }}
