@@ -114,7 +114,7 @@ jobs:
           mkdir -p ${{ github.workspace }}/clamavscan
           mv image.tar ${{ github.workspace }}/clamavscan/image.tar
 
-      - name: Extract image filesystem
+      - name: Run ClamAV scan
         run: |
           docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest clamscan /scan/image.tar > ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
 
@@ -124,6 +124,17 @@ jobs:
         with:
           name: clamav-results-${{ matrix.variant }}
           path: clamav-results-${{ matrix.variant }}.txt
+
+      - name: Check ClamAV scan result
+        run: |
+          if grep -q "/scan/image.tar: OK" ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt; then
+            echo "No malware found for variant ${{ matrix.variant }}."
+          else
+            echo "Malware detected or scan failed for variant ${{ matrix.variant }}!"
+            cat ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
+            exit 1
+          fi
+          
   scan:
     uses: dBildungsplattform/dbp-github-workflows/.github/workflows/check-helm-kics.yaml@5
     permissions:
