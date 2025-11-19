@@ -79,6 +79,7 @@ jobs:
           context: .
           platforms: linux/amd64
           push: true
+          fail-fast: false
           tags: ${{ steps.docker_meta_img.outputs.tags }}
           labels: ${{ steps.docker_meta_img.outputs.labels }}
           build-args: |
