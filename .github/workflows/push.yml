@@ -122,7 +122,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: clamav-results
+          name: clamav-results-${{ matrix.variant }}
           path: clamav-results-${{ matrix.variant }}.txt
   scan:
     uses: dBildungsplattform/dbp-github-workflows/.github/workflows/check-helm-kics.yaml@5
