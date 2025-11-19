@@ -98,15 +98,15 @@ jobs:
           TRIVY_SKIP_JAVA_DB_UPDATE: false
       - name: upload trivy results
         if: ${{ always() }}
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: "trivy-results.sarif"
 
       # --- ClamAV Scan ---
       - name: Install ClamAV
         run: |
-          sudo apt-get update
-          sudo apt-get install -y clamav clamav-freshclam
+          apt-get update
+          apt-get install -y clamav clamav-freshclam
 
       - name: Pull and export Docker image as tar
         run: |
