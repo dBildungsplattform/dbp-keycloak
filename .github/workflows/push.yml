@@ -79,7 +79,6 @@ jobs:
           context: .
           platforms: linux/amd64
           push: true
-          fail-fast: false
           tags: ${{ steps.docker_meta_img.outputs.tags }}
           labels: ${{ steps.docker_meta_img.outputs.labels }}
           build-args: |
@@ -117,14 +116,14 @@ jobs:
 
       - name: Extract image filesystem
         run: |
-          docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest clamscan /scan/image.tar > ${{ github.workspace }}/clamav-results.txt
+          docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest clamscan /scan/image.tar > ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
 
       - name: Upload ClamAV scan results
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
           name: clamav-results
-          path: clamav-results.txt
+          path: clamav-results-${{ matrix.variant }}.txt
   scan:
     uses: dBildungsplattform/dbp-github-workflows/.github/workflows/check-helm-kics.yaml@5
     permissions:
