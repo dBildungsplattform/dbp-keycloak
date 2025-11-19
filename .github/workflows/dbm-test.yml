@@ -1,0 +1,20 @@
+name: Test Trivy Action on Feature Branch
+
+on:
+  push:
+    branches:
+      - feature/test-action
+  workflow_dispatch: # Optional: Manuelles Auslösen im GitHub UI
+
+jobs:
+  trivy_scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Trivy scan on nginx:latest
+        uses: aquasecurity/trivy-action@0.29.0
+        with:
+          image-ref: nginx:latest
+          format: table
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          scan-type: image
