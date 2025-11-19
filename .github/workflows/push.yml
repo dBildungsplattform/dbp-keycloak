@@ -110,8 +110,8 @@ jobs:
 
       - name: Pull and export Docker image as tar
         run: |
-          docker pull ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.get_tag.outputs.tag }}
-          docker save ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.get_tag.outputs.tag }} -o image.tar
+          docker pull ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }}
+          docker save ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }} -o image.tar
 
       - name: Extract image filesystem
         run: |
