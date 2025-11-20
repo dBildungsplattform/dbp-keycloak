@@ -23,13 +23,39 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and export to Docker
+      - name: Build image name and tags
+        id: docker_meta_img
+        uses: docker/metadata-action@v5
+        with:
+          context: git
+          images: |
+            name=ghcr.io/${{ github.repository }}-${{ matrix.variant }}
+          tags: |
+            type=ref,event=branch,priority=601
+            type=sha,format=long,priority=600,prefix=
+
+      - name: Build and push image to ghcr
+        id: docker_build_push
         uses: docker/build-push-action@v6
         with:
+          context: .
+          platforms: linux/amd64
           load: true
-          tags: ${{ env.TEST_TAG }}
+          tags: ${{ steps.docker_meta_img.outputs.tags }}
+          labels: ${{ steps.docker_meta_img.outputs.labels }}
+          build-args: |
+            KEYCLOAK_VARIANT=${{ matrix.variant }}
 
-      - name: Test
-        run: |
-          docker run --rm ${{ env.TEST_TAG }}
+
+      # - name: Build and push image to ghcr
+      #   id: docker_build_push
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: .
+      #     platforms: linux/amd64
+      #     push: true
+      #     tags: ${{ steps.docker_meta_img.outputs.tags }}
+      #     labels: ${{ steps.docker_meta_img.outputs.labels }}
+      #     build-args: |
+      #       KEYCLOAK_VARIANT=${{ matrix.variant }}
 
