@@ -42,7 +42,33 @@ jobs:
             type=ref,event=branch,priority=601
             type=sha,format=long,priority=600,prefix=
 
+      - name: Export Docker image as tar
+        run: |
+          docker save ghcr.io/${{ github.repository }}-${{ matrix.variant }} -o image.tar
+          mkdir -p ${{ github.workspace }}/clamavscan
+          mv image.tar ${{ github.workspace }}/clamavscan/image.tar
 
+      - name: Run ClamAV scan
+        run: |
+          docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest clamscan /scan/image.tar > ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
+
+      - name: Upload ClamAV scan results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: clamav-results-${{ matrix.variant }}
+          path: clamav-results-${{ matrix.variant }}.txt
+
+      - name: Check ClamAV scan result
+        run: |
+          if grep -q "/scan/image.tar: OK" ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt; then
+            echo "No malware found for variant ${{ matrix.variant }}."
+          else
+            echo "::warning::Malware detected or scan failed for variant ${{ matrix.variant }}!"
+            cat ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
+            # exit 1
+          fi
+          
       # - name: Build and push image to ghcr
       #   id: docker_build_push
       #   uses: docker/build-push-action@v6
