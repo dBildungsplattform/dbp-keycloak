@@ -81,8 +81,20 @@ jobs:
             # exit 1
           fi
           
-      - name: Push all scanned image tags to ghcr.io
-        run: |
-          echo "${{ steps.docker_meta_img.outputs.tags }}" | while read TAG; do
-            docker push "$TAG"
-          done
+      # - name: Push all scanned image tags to ghcr.io
+      #   run: |
+      #     echo "${{ steps.docker_meta_img.outputs.tags }}" | while read TAG; do
+      #       docker push "$TAG"
+      #     done
+
+      - name: Build and push image to ghcr
+        id: docker_build_push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.docker_meta_img.outputs.tags }}
+          labels: ${{ steps.docker_meta_img.outputs.labels }}
+          build-args: |
+            KEYCLOAK_VARIANT=${{ matrix.variant }}
