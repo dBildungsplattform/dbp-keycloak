@@ -37,14 +37,14 @@ jobs:
         with:
           context: git
           images: |
-            name=ghcr.io/${{ steps.lower-repo.outputs.repository }}-${{ matrix.variant }}
+            name=ghcr.io/${{ steps.lower-repo.outputs.repository }}
           tags: |
             type=ref,event=branch,priority=601
             type=sha,format=long,priority=600,prefix=
 
       - name: Export Docker image as tar
         run: |
-          docker save ghcr.io/${{ steps.lower-repo.outputs.repository }}-${{ matrix.variant }} -o image.tar
+          docker save ghcr.io/${{ steps.lower-repo.outputs.repository }} -o image.tar
           mkdir -p ${{ github.workspace }}/clamavscan
           mv image.tar ${{ github.workspace }}/clamavscan/image.tar
 
