@@ -42,6 +42,18 @@ jobs:
             type=ref,event=branch,priority=601
             type=sha,format=long,priority=600,prefix=
 
+      - name: Build and push image to ghcr
+        id: docker_build_push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64
+          local: true
+          tags: ${{ steps.docker_meta_img.outputs.tags }}
+          labels: ${{ steps.docker_meta_img.outputs.labels }}
+          build-args: |
+            KEYCLOAK_VARIANT=${{ matrix.variant }}
+
       - name: Export Docker image as tar
         run: |
           docker save ghcr.io/${{ steps.lower-repo.outputs.repository }} -o image.tar
