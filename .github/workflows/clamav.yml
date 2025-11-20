@@ -56,7 +56,6 @@ jobs:
 
       - name: Export Docker image as tar
         run: |
-          docker image ls -a 
           docker save ghcr.io/${{ steps.lower-repo.outputs.repository }} -o image.tar
           mkdir -p ${{ github.workspace }}/clamavscan
           mv image.tar ${{ github.workspace }}/clamavscan/image.tar
@@ -82,15 +81,6 @@ jobs:
             # exit 1
           fi
           
-      # - name: Build and push image to ghcr
-      #   id: docker_build_push
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     context: .
-      #     platforms: linux/amd64
-      #     push: true
-      #     tags: ${{ steps.docker_meta_img.outputs.tags }}
-      #     labels: ${{ steps.docker_meta_img.outputs.labels }}
-      #     build-args: |
-      #       KEYCLOAK_VARIANT=${{ matrix.variant }}
-
+      - name: Push Docker image to ghcr.io
+        run: |
+          docker push ghcr.io/${{ steps.lower-repo.outputs.repository }} 
