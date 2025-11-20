@@ -4,6 +4,7 @@ on:
   push:
     branches-ignore:
       - 'release'
+      - 'DOPS-383-*'
 
 jobs:
   branch_meta:
