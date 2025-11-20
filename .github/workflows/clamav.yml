@@ -5,10 +5,6 @@ on:
     branches:
       - 'DOPS-383-*'
 
-env:
-  TEST_TAG: user/app:test
-  LATEST_TAG: user/app:latest
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,18 +32,6 @@ jobs:
           tags: |
             type=ref,event=branch,priority=601
             type=sha,format=long,priority=600,prefix=
-
-      - name: Build and push image to ghcr
-        id: docker_build_push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          platforms: linux/amd64
-          load: true
-          tags: ${{ steps.docker_meta_img.outputs.tags }}
-          labels: ${{ steps.docker_meta_img.outputs.labels }}
-          build-args: |
-            KEYCLOAK_VARIANT=${{ matrix.variant }}
 
 
       # - name: Build and push image to ghcr
