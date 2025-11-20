@@ -44,7 +44,7 @@ jobs:
 
       - name: Export Docker image as tar
         run: |
-          docker save ghcr.io/${{ github.repository }}-${{ matrix.variant }} -o image.tar
+          docker save ghcr.io/${{ steps.lower-repo.outputs.repository }}-${{ matrix.variant }} -o image.tar
           mkdir -p ${{ github.workspace }}/clamavscan
           mv image.tar ${{ github.workspace }}/clamavscan/image.tar
 
