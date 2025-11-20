@@ -83,4 +83,4 @@ jobs:
           
       - name: Push Docker image to ghcr.io
         run: |
-          docker push ghcr.io/${{ steps.lower-repo.outputs.repository }} 
+          docker push ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ steps.docker_meta_img.outputs.tags }}
