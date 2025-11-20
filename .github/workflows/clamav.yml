@@ -56,6 +56,7 @@ jobs:
 
       - name: Export Docker image as tar
         run: |
+          docker image ls -a 
           docker save ghcr.io/${{ steps.lower-repo.outputs.repository }} -o image.tar
           mkdir -p ${{ github.workspace }}/clamavscan
           mv image.tar ${{ github.workspace }}/clamavscan/image.tar
