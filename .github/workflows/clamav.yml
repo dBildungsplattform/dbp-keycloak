@@ -81,6 +81,8 @@ jobs:
             # exit 1
           fi
           
-      - name: Push Docker image to ghcr.io
+      - name: Push all scanned image tags to ghcr.io
         run: |
-          docker push ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ steps.docker_meta_img.outputs.tags }}
+          echo "${{ steps.docker_meta_img.outputs.tags }}" | while read TAG; do
+            docker push "$TAG"
+          done
