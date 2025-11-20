@@ -37,7 +37,7 @@ jobs:
         with:
           context: git
           images: |
-            name=ghcr.io/${{ github.repository }}-${{ matrix.variant }}
+            name=ghcr.io/${{ steps.lower-repo.outputs.repository }}-${{ matrix.variant }}
           tags: |
             type=ref,event=branch,priority=601
             type=sha,format=long,priority=600,prefix=
