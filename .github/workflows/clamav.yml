@@ -11,7 +11,10 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-
+    strategy:
+      matrix:
+        variant: ['generic', 'erwin', 'enrichment']
     steps:
       - name: Log into ghcr.io
         uses: docker/login-action@v3
