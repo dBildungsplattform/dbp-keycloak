@@ -103,11 +103,6 @@ jobs:
           sarif_file: "trivy-results.sarif"
 
       # --- ClamAV Scan ---
-      - name: Install ClamAV
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y clamav clamav-freshclam
-
       - name: Export Docker image as tar
         run: |
           docker save ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }} -o image.tar
