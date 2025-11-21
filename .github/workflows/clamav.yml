@@ -92,5 +92,4 @@ jobs:
     needs: build_scan_and_push
     uses: ./.github/workflows/trivy.yml
     with:
-      inputs: |
-        image-ref: 'ghcr.io/${{ needs.build_scan_and_push.lower-repo.outputs.repository }}:${{ needs.build_scan_and_push.branch_meta.outputs.sha }}'
+      image-ref: ghcr.io/${{ needs.build_scan_and_push.lower-repo.outputs.repository }}:${{ needs.build_scan_and_push.branch_meta.outputs.sha }}
