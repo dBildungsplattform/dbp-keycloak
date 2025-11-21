@@ -88,7 +88,7 @@ jobs:
           done
 
       - name: Trigger Trivy Scan Workflow
-        uses: .github/workflows/trivy.yaml
+        uses: .github/workflows/trivy.yaml@DOPS-383-Image-Scan
         with:
           inputs: |
             image-ref: 'ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }}'
