@@ -86,6 +86,7 @@ jobs:
           echo "${{ steps.docker_meta_img.outputs.tags }}" | while read TAG; do
             docker push "$TAG"
           done
+        timeout-minutes: 10
 
       - name: Trigger Trivy Scan Workflow
         uses: ./.github/workflows/trivy.yml@DOPS-383-Image-Scan
