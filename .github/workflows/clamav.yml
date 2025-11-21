@@ -92,20 +92,17 @@ jobs:
           done
         timeout-minutes: 10
 
-  trivy_debug:
-    runs-on: ubuntu-latest
-    needs: build_scan_and_push
-    steps:
-      - name: Debug image-ref
-        run: |
-         echo "Image-Ref: ghcr.io/${{ needs.build_scan_and_push.lower-repo.outputs.repository }}"
-
   trivy_scan:
     needs: build_scan_and_push
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        variant: ['generic', 'erwin', 'enrichment']
     permissions:
       actions: read
       security-events: write
       contents: read
     uses: ./.github/workflows/trivy.yml
     with:
-      image-ref: ghcr.io/${{ needs.build_scan_and_push.lower-repo.outputs.repository }}
+      image-ref: ghcr.io/${{ github.repository }}-${{ matrix.variant }}
+
