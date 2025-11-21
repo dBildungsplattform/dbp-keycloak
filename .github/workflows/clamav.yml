@@ -66,6 +66,7 @@ jobs:
 
       - name: Run ClamAV scan
         run: |
+          docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest freshclam
           docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest clamscan /scan/image.tar > ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
 
       - name: Upload ClamAV scan results
@@ -87,7 +88,7 @@ jobs:
           
       - name: Push all scanned image tags to ghcr.io
         run: |
-          echo "${{ steps.docker_meta_img.outputs.tags }}" | while read TAG; do
+          echo "${{ steps.docker_meta_img.outputs.tags }}" | grep -v '^$' | while read TAG; do
             docker push "$TAG"
           done
         timeout-minutes: 10
@@ -103,5 +104,5 @@ jobs:
       contents: read
     uses: ./.github/workflows/trivy.yml
     with:
-      image-ref: ghcr.io/${{ github.repository }}-${{ matrix.variant }}
+      image-ref: ghcr.io/${{ github.repository }}-${{ matrix.variant }}:${{ github.sha }}
 
