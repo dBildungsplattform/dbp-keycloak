@@ -12,6 +12,7 @@ jobs:
       matrix:
         variant: ['generic', 'erwin', 'enrichment']
     permissions:
+      actions: read
       contents: read
       packages: write
     steps:
