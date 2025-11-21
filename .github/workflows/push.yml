@@ -4,6 +4,7 @@ on:
   push:
     branches-ignore:
       - 'release'
+      - 'DOPS-383-*'
 
 jobs:
   branch_meta:
@@ -98,10 +99,38 @@ jobs:
           TRIVY_SKIP_JAVA_DB_UPDATE: false
       - name: upload trivy results
         if: ${{ always() }}
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: "trivy-results.sarif"
 
+      # --- ClamAV Scan ---
+      - name: Export Docker image as tar
+        run: |
+          docker save ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }} -o image.tar
+          mkdir -p ${{ github.workspace }}/clamavscan
+          mv image.tar ${{ github.workspace }}/clamavscan/image.tar
+
+      - name: Run ClamAV scan
+        run: |
+          docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest clamscan /scan/image.tar > ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
+
+      - name: Upload ClamAV scan results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: clamav-results-${{ matrix.variant }}
+          path: clamav-results-${{ matrix.variant }}.txt
+
+      - name: Check ClamAV scan result
+        run: |
+          if grep -q "/scan/image.tar: OK" ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt; then
+            echo "No malware found for variant ${{ matrix.variant }}."
+          else
+            echo "::warning::Malware detected or scan failed for variant ${{ matrix.variant }}!"
+            cat ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
+            # exit 1
+          fi
+          
   scan:
     uses: dBildungsplattform/dbp-github-workflows/.github/workflows/check-helm-kics.yaml@5
     permissions:
