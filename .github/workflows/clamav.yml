@@ -11,6 +11,9 @@ jobs:
     strategy:
       matrix:
         variant: ['generic', 'erwin', 'enrichment']
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
