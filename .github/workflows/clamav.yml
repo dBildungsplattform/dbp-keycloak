@@ -90,7 +90,7 @@ jobs:
 
   trivy_scan:
     needs: build_scan_and_push
-    uses: ./.github/workflows/trivy.yml@DOPS-383-Image-Scan
+    uses: ./.github/workflows/trivy.yml
     with:
       inputs: |
         image-ref: 'ghcr.io/${{ needs.build_scan_and_push.lower-repo.outputs.repository }}:${{ needs.build_scan_and_push.branch_meta.outputs.sha }}'
