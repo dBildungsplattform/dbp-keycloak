@@ -92,6 +92,9 @@ jobs:
 
   trivy_scan:
     needs: build_scan_and_push
+    permissions:
+      actions: read
+      security-events: write
     uses: ./.github/workflows/trivy.yml
     with:
       image-ref: ghcr.io/${{ needs.build_scan_and_push.lower-repo.outputs.repository }}:${{ needs.build_scan_and_push.branch_meta.outputs.sha }}
