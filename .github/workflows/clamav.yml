@@ -8,6 +8,8 @@ on:
 jobs:
   build_scan_and_push:
     runs-on: ubuntu-latest
+    outputs:
+      repository: ${{ steps.lower-repo.outputs.repository }}
     strategy:
       matrix:
         variant: ['generic', 'erwin', 'enrichment']
@@ -96,7 +98,7 @@ jobs:
     steps:
       - name: Debug image-ref
         run: |
-         echo "Image-Ref: ghcr.io/${{ needs.build_scan_and_push.lower-repo.outputs.repository }}:${{ needs.build_scan_and_push.branch_meta.outputs.sha }}"
+         echo "Image-Ref: ghcr.io/${{ needs.build_scan_and_push.lower-repo.outputs.repository }}"
 
   trivy_scan:
     needs: build_scan_and_push
@@ -106,4 +108,4 @@ jobs:
       contents: read
     uses: ./.github/workflows/trivy.yml
     with:
-      image-ref: ghcr.io/${{ needs.build_scan_and_push.lower-repo.outputs.repository }}:${{ needs.build_scan_and_push.branch_meta.outputs.sha }}
+      image-ref: ghcr.io/${{ needs.build_scan_and_push.lower-repo.outputs.repository }}
