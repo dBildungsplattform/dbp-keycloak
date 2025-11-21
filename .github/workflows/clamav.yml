@@ -24,7 +24,7 @@ jobs:
           repo_var=${{ github.repository }}-${{ matrix.variant }}
           echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
 
-      - name: Build image name and tags
+      - name: Build image-name and tags
         id: docker_meta_img
         uses: docker/metadata-action@v5
         with:
@@ -42,7 +42,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push image to ghcr
+      - name: Build image
         id: docker_build_push
         uses: docker/build-push-action@v6
         with:
@@ -87,14 +87,8 @@ jobs:
             docker push "$TAG"
           done
 
-      # - name: Build and push image to ghcr
-      #   id: docker_push
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     context: .
-      #     platforms: linux/amd64
-      #     push: true
-      #     tags: ${{ steps.docker_meta_img.outputs.tags }}
-      #     labels: ${{ steps.docker_meta_img.outputs.labels }}
-      #     build-args: |
-      #       KEYCLOAK_VARIANT=${{ matrix.variant }}
+      - name: Trigger Trivy Scan Workflow
+        uses: .github/workflows/trivy.yaml
+        with:
+          inputs: |
+            image-ref: 'ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }}'
