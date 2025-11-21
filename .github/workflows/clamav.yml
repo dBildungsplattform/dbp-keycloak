@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       repository: ${{ steps.lower-repo.outputs.repository }}
+      image-tag: ${{ steps.set_tag.outputs.image_tag }}
     strategy:
       matrix:
         variant: ['generic', 'erwin', 'enrichment']
@@ -38,6 +39,11 @@ jobs:
           tags: |
             type=ref,event=branch,priority=601
             type=sha,format=long,priority=600,prefix=
+      
+      - name: Set image tag output
+        id: set_tag
+        run: |
+          echo "image_tag=$(echo '${{ steps.docker_meta_img.outputs.tags }}' | head -n 1)" >> $GITHUB_OUTPUT
 
       - name: Log into ghcr.io
         uses: docker/login-action@v3
@@ -104,5 +110,5 @@ jobs:
       contents: read
     uses: ./.github/workflows/trivy.yml
     with:
-      image-ref: ghcr.io/${{ github.repository }}-${{ matrix.variant }}:${{ github.sha }}
+      image-ref: ghcr.io/${{ github.repository }}-${{ matrix.variant }}:${{ needs.build_scan_and_push.outputs.image-tag }}
 
