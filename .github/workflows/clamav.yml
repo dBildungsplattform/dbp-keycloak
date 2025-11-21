@@ -99,3 +99,7 @@ jobs:
     uses: ./.github/workflows/trivy.yml
     with:
       image-ref: ghcr.io/${{ needs.build_scan_and_push.lower-repo.outputs.repository }}:${{ needs.build_scan_and_push.branch_meta.outputs.sha }}
+
+    steps:
+      - name: Debug image-ref
+        run: echo "Image-Ref: ghcr.io/${{ needs.build_scan_and_push.lower-repo.outputs.repository }}:${{ needs.build_scan_and_push.sha }}"
