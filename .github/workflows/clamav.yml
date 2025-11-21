@@ -94,7 +94,6 @@ jobs:
 
   trivy_scan:
     needs: build_scan_and_push
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         variant: ['generic', 'erwin', 'enrichment']
