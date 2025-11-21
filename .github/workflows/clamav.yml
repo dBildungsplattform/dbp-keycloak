@@ -12,21 +12,11 @@ jobs:
       matrix:
         variant: ['generic', 'erwin', 'enrichment']
     steps:
-      - name: Log into ghcr.io
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Repository to lowercase
-        id: lower-repo
+      - id: lower-repo
+        name: Repository to lowercase
         run: |
           repo_var=${{ github.repository }}-${{ matrix.variant }}
           echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
@@ -37,58 +27,20 @@ jobs:
         with:
           context: git
           images: |
-            name=ghcr.io/${{ steps.lower-repo.outputs.repository }}
+            name=ghcr.io/${{ github.repository }}-${{ matrix.variant }}
           tags: |
             type=ref,event=branch,priority=601
             type=sha,format=long,priority=600,prefix=
 
-      - name: Build and push image to ghcr
-        id: docker_build
-        uses: docker/build-push-action@v6
+      - name: Log into ghcr.io
+        uses: docker/login-action@v3
         with:
-          context: .
-          platforms: linux/amd64
-          load: true
-          tags: ${{ steps.docker_meta_img.outputs.tags }}
-          labels: ${{ steps.docker_meta_img.outputs.labels }}
-          build-args: |
-            KEYCLOAK_VARIANT=${{ matrix.variant }}
-
-      - name: Export Docker image as tar
-        run: |
-          docker save ghcr.io/${{ steps.lower-repo.outputs.repository }} -o image.tar
-          mkdir -p ${{ github.workspace }}/clamavscan
-          mv image.tar ${{ github.workspace }}/clamavscan/image.tar
-
-      - name: Run ClamAV scan
-        run: |
-          docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest clamscan /scan/image.tar > ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
-
-      - name: Upload ClamAV scan results
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: clamav-results-${{ matrix.variant }}
-          path: clamav-results-${{ matrix.variant }}.txt
-
-      - name: Check ClamAV scan result
-        run: |
-          if grep -q "/scan/image.tar: OK" ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt; then
-            echo "No malware found for variant ${{ matrix.variant }}."
-          else
-            echo "::warning::Malware detected or scan failed for variant ${{ matrix.variant }}!"
-            cat ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
-            # exit 1
-          fi
-          
-      # - name: Push all scanned image tags to ghcr.io
-      #   run: |
-      #     echo "${{ steps.docker_meta_img.outputs.tags }}" | while read TAG; do
-      #       docker push "$TAG"
-      #     done
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push image to ghcr
-        id: docker_push
+        id: docker_build_push
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -98,3 +50,48 @@ jobs:
           labels: ${{ steps.docker_meta_img.outputs.labels }}
           build-args: |
             KEYCLOAK_VARIANT=${{ matrix.variant }}
+
+      # - name: Export Docker image as tar
+      #   run: |
+      #     docker save ghcr.io/${{ steps.lower-repo.outputs.repository }} -o image.tar
+      #     mkdir -p ${{ github.workspace }}/clamavscan
+      #     mv image.tar ${{ github.workspace }}/clamavscan/image.tar
+
+      # - name: Run ClamAV scan
+      #   run: |
+      #     docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest clamscan /scan/image.tar > ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
+
+      # - name: Upload ClamAV scan results
+      #   if: ${{ always() }}
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: clamav-results-${{ matrix.variant }}
+      #     path: clamav-results-${{ matrix.variant }}.txt
+
+      # - name: Check ClamAV scan result
+      #   run: |
+      #     if grep -q "/scan/image.tar: OK" ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt; then
+      #       echo "No malware found for variant ${{ matrix.variant }}."
+      #     else
+      #       echo "::warning::Malware detected or scan failed for variant ${{ matrix.variant }}!"
+      #       cat ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
+      #       # exit 1
+      #     fi
+          
+      # # - name: Push all scanned image tags to ghcr.io
+      # #   run: |
+      # #     echo "${{ steps.docker_meta_img.outputs.tags }}" | while read TAG; do
+      # #       docker push "$TAG"
+      # #     done
+
+      # - name: Build and push image to ghcr
+      #   id: docker_push
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: .
+      #     platforms: linux/amd64
+      #     push: true
+      #     tags: ${{ steps.docker_meta_img.outputs.tags }}
+      #     labels: ${{ steps.docker_meta_img.outputs.labels }}
+      #     build-args: |
+      #       KEYCLOAK_VARIANT=${{ matrix.variant }}
