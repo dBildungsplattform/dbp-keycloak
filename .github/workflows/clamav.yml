@@ -101,14 +101,11 @@ jobs:
 
   trivy_scan:
     needs: build_scan_and_push
-    strategy:
-      matrix:
-        variant: ['generic', 'erwin', 'enrichment']
     permissions:
       actions: read
       security-events: write
       contents: read
     uses: ./.github/workflows/trivy.yml
     with:
-      image-ref: ghcr.io/${{ github.repository }}-${{ matrix.variant }}:${{ needs.build_scan_and_push.outputs.image-tag }}
+      image-ref: ${{ needs.build_scan_and_push.outputs.image-tag }}
 
