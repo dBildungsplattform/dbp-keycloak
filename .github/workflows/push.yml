@@ -4,7 +4,6 @@ on:
   push:
     branches-ignore:
       - 'release'
-      - 'DOPS-383-*'
 
 jobs:
   branch_meta:
@@ -66,6 +65,11 @@ jobs:
             type=ref,event=branch,priority=601
             type=sha,format=long,priority=600,prefix=
 
+      - name: Set image tag output
+        id: set_tag
+        run: |
+          echo "image_tag=$(echo '${{ steps.docker_meta_img.outputs.tags }}' | head -n 1 | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+
       - name: Log into ghcr.io
         uses: docker/login-action@v3
         with:
@@ -79,39 +83,21 @@ jobs:
         with:
           context: .
           platforms: linux/amd64
-          push: true
+          load: true
           tags: ${{ steps.docker_meta_img.outputs.tags }}
           labels: ${{ steps.docker_meta_img.outputs.labels }}
           build-args: |
             KEYCLOAK_VARIANT=${{ matrix.variant }}
 
-      - name: run trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.29.0
-        with:
-          image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }}
-          format: "sarif"
-          output: "trivy-results.sarif"
-          severity: "CRITICAL,HIGH"
-          ignore-unfixed: true
-          scan-type: 'image'
-        env:
-          TRIVY_SKIP_DB_UPDATE: false
-          TRIVY_SKIP_JAVA_DB_UPDATE: false
-      - name: upload trivy results
-        if: ${{ always() }}
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: "trivy-results.sarif"
-
-      # --- ClamAV Scan ---
       - name: Export Docker image as tar
         run: |
-          docker save ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }} -o image.tar
+          docker save ghcr.io/${{ steps.lower-repo.outputs.repository }} -o image.tar
           mkdir -p ${{ github.workspace }}/clamavscan
           mv image.tar ${{ github.workspace }}/clamavscan/image.tar
 
       - name: Run ClamAV scan
         run: |
+          docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest freshclam
           docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest clamscan /scan/image.tar > ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
 
       - name: Upload ClamAV scan results
@@ -130,6 +116,31 @@ jobs:
             cat ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
             # exit 1
           fi
+          
+      - name: Push all scanned image tags to ghcr.io
+        run: |
+          echo "${{ steps.docker_meta_img.outputs.tags }}" | grep -v '^$' | while read TAG; do
+            docker push "$TAG"
+          done
+        timeout-minutes: 10
+
+      - name: run trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.29.0
+        with:
+          image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }}
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "CRITICAL,HIGH"
+          ignore-unfixed: true
+          scan-type: 'image'
+        env:
+          TRIVY_SKIP_DB_UPDATE: false
+          TRIVY_SKIP_JAVA_DB_UPDATE: false
+      - name: upload trivy results
+        if: ${{ always() }}
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: "trivy-results.sarif"
           
   scan:
     uses: dBildungsplattform/dbp-github-workflows/.github/workflows/check-helm-kics.yaml@5

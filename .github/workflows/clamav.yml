@@ -1,9 +1,10 @@
 name: ClamAV Scan
 
 on:
-  push:
-    branches:
-      - 'DOPS-383-*'
+  # push:
+  #   branches:
+  #     - 'DOPS-383-*'
+  workflow_dispatch:
 
 jobs:
   build_scan_and_push:
