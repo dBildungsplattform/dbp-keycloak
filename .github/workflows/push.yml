@@ -109,7 +109,7 @@ jobs:
           else
             echo "::warning::Malware detected or scan failed for variant ${{ matrix.variant }}!"
             cat ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
-            # exit 1
+            exit 1
           fi
           
       - name: Push all scanned image tags to ghcr.io
