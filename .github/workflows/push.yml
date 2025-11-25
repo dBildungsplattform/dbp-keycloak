@@ -72,7 +72,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push image to ghcr
+      - name: Build image (for ClamAV scan)
         id: docker_build_push
         uses: docker/build-push-action@v6
         with:
@@ -112,7 +112,7 @@ jobs:
             exit 1
           fi
           
-      - name: Push all scanned image tags to ghcr.io
+      - name: Push all scanned image to ghcr.io
         run: |
           echo "${{ steps.docker_meta_img.outputs.tags }}" | grep -v '^$' | while read TAG; do
             docker push "$TAG"
