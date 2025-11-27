@@ -1,12 +1,14 @@
 # Keycloak Container Image
 
-This repository provides a container image for running Keycloak. The container is built on Debian 12 and includes OpenJDK 17. Building different variants based on customer/project needs is supported.
+This repository provides a container image for running Keycloak. The container is built on Debian 13 and includes OpenJDK 21. Building different variants based on customer/project needs is supported.
+
+The helm chart is built to run the container with `readOnlyRootFilesystem` enabled and puts `emptyDir`-Volumes where necessary.
 
 ## Configuration Options
 
 ### Build Arguments
 
-* **`KEYCLOAK_VERSION`**: Version of Keycloak to be downloaded and installed. Default is `26.2.5`.
+* **`KEYCLOAK_VERSION`**: Version of Keycloak to be downloaded and installed. Default is `26.4.2`.
   * Example: `--build-arg KEYCLOAK_VERSION=27.0.0`
 
 * **`KEYCLOAK_VARIANT`**: Defines the variant of Keycloak to be used. This refers to a subdirectory in `variants/` which contains an env file and supports adding more files (like themes) to keycloak.
