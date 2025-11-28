@@ -29,6 +29,11 @@ extraArgs: []
 extraVolumes: []
 extraVolumeMounts: []
 
+# specifies the limits for the tmp dirs as the image is used with readOnlyRootFilesystem
+emptyDirSizeLimits:
+  tmp: 500Mi
+  keycloakData: 500Mi
+
 # extraConfig is used to add additional environment variables to the Keycloak container.
 extraConfig:
   # The name of the ConfigMap that will be created.

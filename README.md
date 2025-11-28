@@ -1,6 +1,8 @@
 # Keycloak Container Image
 
-This repository provides a container image for running Keycloak. The container is built on Debian 13 and includes OpenJDK 21. Building different variants based on customer/project needs is supported.
+This repository provides a container image for running Keycloak.
+The container is built on Debian 13 and includes OpenJDK 21.
+Building different variants based on customer/project needs is supported.
 
 The helm chart is built to run the container with `readOnlyRootFilesystem` enabled and puts `emptyDir`-Volumes where necessary.
 

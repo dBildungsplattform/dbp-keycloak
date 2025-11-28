@@ -91,7 +91,7 @@ spec:
           - mountPath: /tmp
             name: tmp
           - mountPath: /opt/keycloak/data
-            name: tmp-data
+            name: tmp-kc-data
             {{- if .Values.realm.filepath }}
             - mountPath: "/opt/keycloak/data/import"
               name: realm-config
@@ -102,9 +102,11 @@ spec:
             {{- end }}
       volumes:
         - name: tmp
-          emptyDir: {}
-        - name: tmp-data
-          emptyDir: {}
+          emptyDir:
+            sizeLimit: {{ .Values.emptyDirSizeLimits.tmp }}
+        - name: tmp-kc-data
+          emptyDir:
+            sizeLimit: {{ .Values.emptyDirSizeLimits.keycloakData }}
         {{- if .Values.realm.filepath }}
         - name: realm-config
           configMap:
