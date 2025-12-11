@@ -1,0 +1,21 @@
+# .github/workflows/update-clamav.yml
+name: Update ClamAV DB
+on:
+  schedule:
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update ClamAV DB
+        run: |
+          sudo freshclam --datadir=clamdb
+
+      - name: Upload DB
+        uses: actions/upload-artifact@v4
+        with:
+          name: clamav-db
+          path: clamdb/
+          retention-days: 7
