@@ -14,7 +14,8 @@ jobs:
     steps:
       - name: Update ClamAV DB
         run: |
-          sudo freshclam --datadir=clamdb
+          mkdir clamdb
+          docker run --rm -v ${{ github.workspace }}/clamdb:/scan clamav/clamav:latest freshclam --datadir=${{ github.workspace }}/clamdb
 
       - name: Upload DB
         uses: actions/upload-artifact@v4
