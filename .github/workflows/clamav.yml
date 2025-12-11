@@ -15,6 +15,7 @@ jobs:
       - name: Update ClamAV DB
         run: |
           mkdir clamdb
+          chmod 777 clamdb
           docker run --rm -v ${{ github.workspace }}/clamdb:/clamdb clamav/clamav:latest freshclam --datadir=/clamdb
 
       - name: Upload DB
