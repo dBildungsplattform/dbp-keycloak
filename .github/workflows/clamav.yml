@@ -1,9 +1,12 @@
 # .github/workflows/update-clamav.yml
 name: Update ClamAV DB
 on:
-  schedule:
-    - cron: '0 */4 * * *'
-  workflow_dispatch:
+#  schedule:
+#    - cron: '0 */4 * * *'
+#  workflow_dispatch:
+  push:
+    branches-ignore:
+      - 'release'
 
 jobs:
   update:
