@@ -12,6 +12,22 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
+      - name: Check if clamdb exists
+        id: check_clamdb
+        run: |
+          if [ -d "clamdb" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Download ClamAV DB
+        if: steps.check_clamdb.outputs.exists == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: clamav-db
+          path: clamdb
+
       - name: Update ClamAV DB
         run: |
           mkdir clamdb
