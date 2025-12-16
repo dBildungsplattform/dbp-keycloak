@@ -43,7 +43,7 @@ jobs:
       security-events: write
     strategy:
       matrix:
-        variant: ['generic', 'erwin', 'enrichment', 'project']
+        variant: ['generic', 'erwin', 'enrichment', 'internal']
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
