@@ -38,7 +38,7 @@ jobs:
       image_tag: ${{ steps.docker_meta_img_trivy.outputs.tags }}
     permissions:
       packages: write
-      contents: read
+      contents: write
       actions: read
       security-events: write
     strategy:
