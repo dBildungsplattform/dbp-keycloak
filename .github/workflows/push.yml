@@ -85,14 +85,15 @@ jobs:
             KEYCLOAK_VARIANT=${{ matrix.variant }}
 
       - name: run trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }}
-          format: "sarif"
-          output: "trivy-results.sarif"
-          severity: "CRITICAL,HIGH"
+          format: "github"
+          output: "dependency-results.sbom.json"
+          severity: "MEDIUM,HIGH,CRITICAL"
           ignore-unfixed: true
           scan-type: 'image'
+          github-pat: ${{ secrets.GITHUB_TOKEN }}
         env:
           TRIVY_SKIP_DB_UPDATE: false
           TRIVY_SKIP_JAVA_DB_UPDATE: false
