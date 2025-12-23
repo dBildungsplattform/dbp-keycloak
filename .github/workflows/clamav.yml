@@ -31,9 +31,18 @@ jobs:
           chmod 777 clamdb
           docker run --rm -v ${{ github.workspace }}/clamdb:/clamdb clamav/clamav:latest freshclam --datadir=/clamdb
 
-      - name: Upload DB
-        uses: actions/upload-artifact@v4
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
         with:
-          name: clamav-db
-          path: clamdb/
-          retention-days: 7
+          tag_name: clamav-db-$(date +'%Y%m%d%H%M%S')
+          name: ClamAV DB Update
+          body: "Automated ClamAV DB update"
+          draft: false
+          prerelease: false
+
+      - name: Upload DB as Release Asset
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.create_release.outputs.tag_name }}
+          files: clamdb/*
