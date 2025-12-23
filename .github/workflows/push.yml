@@ -51,8 +51,9 @@ jobs:
       - id: lower-repo
         name: Repository to lowercase
         run: |
-          repo_var=${{ github.repository }}-${{ matrix.variant }}
-          echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
+          repo_var="${{ github.repository }}-${{ matrix.variant }}"
+          repo_lower=$(echo "$repo_var" | tr '[:upper:]' '[:lower:]')
+          echo "repository=$repo_lower" >> $GITHUB_OUTPUT
 
       - name: Build image name and tags
         id: docker_meta_img
@@ -83,6 +84,18 @@ jobs:
           labels: ${{ steps.docker_meta_img.outputs.labels }}
           build-args: |
             KEYCLOAK_VARIANT=${{ matrix.variant }}
+      - name: Download ClamAV DB
+        uses: actions/download-artifact@v4
+        with:
+          name: clamav-db
+          path: clamdb
+
+      - name: Check ClamAV DB directory
+        run: |
+          if [ ! -d "clamdb" ] || [ -z "$(ls -A clamdb)" ]; then
+            echo "::error::ClamAV DB download failed or clamdb directory is empty."
+            exit 1
+          fi
 
       - name: Export Docker image as tar
         run: |
@@ -92,7 +105,6 @@ jobs:
 
       - name: Run ClamAV scan
         run: |
-          docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest freshclam
           docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest clamscan /scan/image.tar > ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
 
       - name: Upload ClamAV scan results
@@ -158,8 +170,9 @@ jobs:
       - id: lower-helm-repo
         name: Repository to lowercase
         run: |
-          repo_var=${{ github.repository }}
-          echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
+          repo_var="${{ github.repository }}"
+          repo_lower=$(echo "$repo_var" | tr '[:upper:]' '[:lower:]')
+          echo "repository=$repo_lower" >> $GITHUB_OUTPUT
       - name: Log into ghcr.io
         uses: docker/login-action@v3
         with:
