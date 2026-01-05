@@ -109,8 +109,6 @@ jobs:
           image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }}
           format: "github"
           output: "dependency-results.sbom.json"
-          severity: "MEDIUM,HIGH,CRITICAL"
-          ignore-unfixed: true
           scan-type: 'image'
           github-pat: ${{ secrets.GITHUB_TOKEN }}
         env:
