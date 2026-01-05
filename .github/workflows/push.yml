@@ -101,7 +101,7 @@ jobs:
       - name: Upload trivy report as a Github artifact
         uses: actions/upload-artifact@v4
         with:
-          name: trivy-sbom-report
+          name: "trivy-sbom-report-${{ matrix.variant }}"
           path: '${{ github.workspace }}/dependency-results.sbom.json'
 
       - name: run trivy vulnerability scanner on images
