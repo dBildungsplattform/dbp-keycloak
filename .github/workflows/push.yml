@@ -84,6 +84,25 @@ jobs:
           build-args: |
             KEYCLOAK_VARIANT=${{ matrix.variant }}
 
+      - name: run trivy vulnerability scanner on images
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }}
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "CRITICAL,HIGH"
+          ignore-unfixed: true
+          scan-type: 'image'
+        env:
+          TRIVY_SKIP_DB_UPDATE: false
+          TRIVY_SKIP_JAVA_DB_UPDATE: false
+
+      - name: upload trivy results
+        if: ${{ always() }}
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: "trivy-results.sarif"
+
       - name: run trivy vulnerability scanner to generate SBOM
         uses: aquasecurity/trivy-action@0.33.1
         with:
@@ -104,24 +123,6 @@ jobs:
           name: "trivy-sbom-report-${{ matrix.variant }}"
           path: '${{ github.workspace }}/dependency-results.sbom.json'
 
-      - name: run trivy vulnerability scanner on images
-        uses: aquasecurity/trivy-action@0.29.0
-        with:
-          image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }}
-          format: "sarif"
-          output: "trivy-results.sarif"
-          severity: "CRITICAL,HIGH"
-          ignore-unfixed: true
-          scan-type: 'image'
-        env:
-          TRIVY_SKIP_DB_UPDATE: false
-          TRIVY_SKIP_JAVA_DB_UPDATE: false
-
-      - name: upload trivy results
-        if: ${{ always() }}
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: "trivy-results.sarif"
 
   scan:
     uses: dBildungsplattform/dbp-github-workflows/.github/workflows/check-helm-kics.yaml@5
