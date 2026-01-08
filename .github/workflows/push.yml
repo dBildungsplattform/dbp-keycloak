@@ -130,7 +130,8 @@ jobs:
             exit 1
           fi
           
-      - name: Push all scanned image to ghcr.io
+      - name: Push scanned image to ghcr.io, if it passed
+
         run: |
           echo "${{ steps.docker_meta_img.outputs.tags }}" | grep -v '^$' | while read TAG; do
             docker push "$TAG"
