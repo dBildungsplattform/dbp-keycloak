@@ -84,28 +84,34 @@ jobs:
           labels: ${{ steps.docker_meta_img.outputs.labels }}
           build-args: |
             KEYCLOAK_VARIANT=${{ matrix.variant }}
-      - name: Download ClamAV DB
-        uses: actions/download-artifact@v4
-        with:
-          name: clamav-db
-          path: clamdb
 
-      - name: Check ClamAV DB directory
-        run: |
-          if [ ! -d "clamdb" ] || [ -z "$(ls -A clamdb)" ]; then
-            echo "::error::ClamAV DB download failed or clamdb directory is empty."
-            exit 1
-          fi
+      # - name: Download ClamAV DB
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: clamav-db
+      #     path: clamdb
+
+      # - name: Check ClamAV DB directory
+      #   run: |
+      #     if [ ! -d "clamdb" ] || [ -z "$(ls -A clamdb)" ]; then
+      #       echo "::error::ClamAV DB download failed or clamdb directory is empty."
+      #       exit 1
+      #     fi
 
       - name: Export Docker image as tar
         run: |
-          docker save ghcr.io/${{ steps.lower-repo.outputs.repository }} -o image.tar
-          mkdir -p ${{ github.workspace }}/clamavscan
-          mv image.tar ${{ github.workspace }}/clamavscan/image.tar
+          mkdir -p ${{ github.workspace }}/clamavscan/container_fs
+          chmod -R 777 ${{ github.workspace }}/clamavscan
+          docker create --name temp_scan_container ghcr.io/${{ steps.lower-repo.outputs.repository }}
+          docker export temp_scan_container -o ${{ github.workspace }}/clamavscan/container_fs.tar
+          tar -xf ${{ github.workspace }}/clamavscan/container_fs.tar -C ${{ github.workspace }}/clamavscan/container_fs
+          docker rm temp_scan_container
+          rm -rf ${{ github.workspace }}/clamavscan/container_fs.tar
 
       - name: Run ClamAV scan
         run: |
-          docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest clamscan /scan/image.tar > ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
+        docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest freshclam --datadir=/scan
+        docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest clamscan /scan/container_fs -d /scan -r > ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
 
       - name: Upload ClamAV scan results
         if: ${{ always() }}
@@ -116,7 +122,7 @@ jobs:
 
       - name: Check ClamAV scan result
         run: |
-          if grep -q "/scan/image.tar: OK" ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt; then
+          if grep -q "Infected files: 0" ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt; then
             echo "No malware found for variant ${{ matrix.variant }}."
           else
             echo "::warning::Malware detected or scan failed for variant ${{ matrix.variant }}!"
