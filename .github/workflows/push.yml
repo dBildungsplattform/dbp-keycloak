@@ -102,7 +102,7 @@ jobs:
         run: |
           mkdir -p ${{ github.workspace }}/clamavscan/container_fs
           chmod -R 777 ${{ github.workspace }}/clamavscan
-          docker create --name temp_scan_container ghcr.io/${{ steps.lower-repo.outputs.repository }}
+          docker create --name temp_scan_container ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }}
           docker export temp_scan_container -o ${{ github.workspace }}/clamavscan/container_fs.tar
           tar -xf ${{ github.workspace }}/clamavscan/container_fs.tar -C ${{ github.workspace }}/clamavscan/container_fs
           docker rm temp_scan_container
