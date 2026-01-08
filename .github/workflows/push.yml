@@ -103,7 +103,19 @@ jobs:
           mkdir -p ${{ github.workspace }}/clamavscan/container_fs
           chmod -R 777 ${{ github.workspace }}/clamavscan
           docker create --name temp_scan_container ghcr.io/${{ steps.lower-repo.outputs.repository }}
-          docker export temp_scan_container -o ${{ github.workspace }}/clamavscan/container_fs.tar
+          # Export only the files that differ from the base image (debian:13-slim)
+          base_image_id=$(docker pull debian:13-slim --quiet | tail -n1)
+          built_image_id=$(docker inspect --format='{{.Image}}' temp_scan_container)
+          # Create temp containers for diff
+          base_cid=$(docker create "$base_image_id")
+          # Get list of changed/added files (status A or C) in the built image
+          diff_files=$(docker diff temp_scan_container | awk '/^[AC] /{print $2}')
+          mkdir -p ${{ github.workspace }}/clamavscan/container_fs
+          for file in $diff_files; do
+            # Copy each changed/added file from the built image container
+            docker cp temp_scan_container:"$file" "${{ github.workspace }}/clamavscan/container_fs${file}" 2>/dev/null || true
+          done
+          docker rm "$base_cid"
           tar -xf ${{ github.workspace }}/clamavscan/container_fs.tar -C ${{ github.workspace }}/clamavscan/container_fs
           docker rm temp_scan_container
           rm -rf ${{ github.workspace }}/clamavscan/container_fs.tar
