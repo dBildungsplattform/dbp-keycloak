@@ -73,7 +73,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build image (for ClamAV scan)
+      - name: Build the container image, scan it with ClamAV, and push it to ghcr, if it passed.
         id: docker_build_push
         uses: docker/build-push-action@v6
         with:
