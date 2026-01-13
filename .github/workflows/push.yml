@@ -38,7 +38,7 @@ jobs:
       image_tag: ${{ steps.docker_meta_img_trivy.outputs.tags }}
     permissions:
       packages: write
-      contents: write
+      contents: read
       actions: read
       security-events: write
     strategy:
@@ -85,8 +85,49 @@ jobs:
           build-args: |
             KEYCLOAK_VARIANT=${{ matrix.variant }}
 
-      - name: run trivy vulnerability scanner on images
-        uses: aquasecurity/trivy-action@0.33.1
+
+      - name: Export Docker image as tar
+        run: |
+          mkdir -p ${{ github.workspace }}/clamavscan/container_fs
+          chmod -R 777 ${{ github.workspace }}/clamavscan
+          docker create --name temp_scan_container ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }}
+          docker export temp_scan_container -o ${{ github.workspace }}/clamavscan/container_fs.tar
+          tar -xf ${{ github.workspace }}/clamavscan/container_fs.tar -C ${{ github.workspace }}/clamavscan/container_fs
+          docker rm temp_scan_container
+          rm -rf ${{ github.workspace }}/clamavscan/container_fs.tar
+
+      - name: Run ClamAV scan
+        run: |
+          docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest freshclam --datadir=/scan
+          docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest clamscan /scan/container_fs -d /scan -r > ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
+
+      - name: Upload ClamAV scan results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: clamav-results-${{ matrix.variant }}
+          path: clamav-results-${{ matrix.variant }}.txt
+
+      - name: Check ClamAV scan result
+        run: |
+          if grep -q "Infected files: 0" ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt; then
+            echo "No malware found for variant ${{ matrix.variant }}."
+          else
+            echo "::warning::Malware detected or scan failed for variant ${{ matrix.variant }}!"
+            cat ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
+            exit 1
+          fi
+          
+      - name: Push scanned image to ghcr.io, if it passed
+
+        run: |
+          echo "${{ steps.docker_meta_img.outputs.tags }}" | grep -v '^$' | while read TAG; do
+            docker push "$TAG"
+          done
+        timeout-minutes: 10
+
+      - name: run trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.29.0
         with:
           image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }}
           format: "sarif"
@@ -97,32 +138,12 @@ jobs:
         env:
           TRIVY_SKIP_DB_UPDATE: false
           TRIVY_SKIP_JAVA_DB_UPDATE: false
-
       - name: upload trivy results
         if: ${{ always() }}
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: "trivy-results.sarif"
-
-      - name: run trivy vulnerability scanner to generate SBOM
-        uses: aquasecurity/trivy-action@0.33.1
-        with:
-          image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }}
-          format: "github"
-          output: "dependency-results.sbom.json"
-          scan-type: 'image'
-          github-pat: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          TRIVY_SKIP_DB_UPDATE: false
-          TRIVY_SKIP_JAVA_DB_UPDATE: false
-
-      - name: Upload trivy report as a Github artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: "trivy-sbom-report-${{ matrix.variant }}"
-          path: '${{ github.workspace }}/dependency-results.sbom.json'
-
-
+          
   scan:
     uses: dBildungsplattform/dbp-github-workflows/.github/workflows/check-helm-kics.yaml@5
     permissions:

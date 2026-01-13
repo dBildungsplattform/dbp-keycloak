@@ -26,7 +26,7 @@ keycloak_pod_disruption_budget_min_available: "60%"
 # keycloak_auth_existing_secret: ""
 keycloak_auth_secret_name: "dbp-keycloak"
 
-keycloak_auth_admin_username: "temp-admin"
+keycloak_auth_admin_username: "admin"
 # keycloak_auth_admin_password: ""
 # keycloak_auth_rs256_private_key: ""
 # keycloak_auth_rs256_certificate: ""

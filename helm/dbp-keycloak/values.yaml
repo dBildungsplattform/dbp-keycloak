@@ -16,7 +16,7 @@ auth:
   # existingSecret: Refers to a secret already present in the cluster, which is required for the authentication and configuration of the database setup tasks.
   existingSecret: ""
   secretName: "dbp-keycloak"
-  adminUsername: "temp-admin"
+  adminUsername: "admin"
   adminPassword: ""
   keycloakRs256PrivateKey: ""
   keycloakRs256Certificate: ""
@@ -28,11 +28,6 @@ command: []
 extraArgs: []
 extraVolumes: []
 extraVolumeMounts: []
-
-# specifies the limits for the tmp dirs as the image is used with readOnlyRootFilesystem
-emptyDirSizeLimits:
-  tmp: 500Mi
-  keycloakData: 500Mi
 
 # extraConfig is used to add additional environment variables to the Keycloak container.
 extraConfig:
@@ -102,10 +97,11 @@ ingress:
     authOnly: false
 
 containerSecurityContext:
+  enabled: true
   runAsUser: 65532
   runAsNonRoot: true
   privileged: false
-  readOnlyRootFilesystem: true
+  readOnlyRootFilesystem: false
   allowPrivilegeEscalation: false
   capabilities:
     drop: ["ALL"]
@@ -124,6 +120,7 @@ resources:
 threadPool: 16
 
 startupProbe:
+  enabled: true
   httpGet:
     path: "/health/started"
     port: "mgmt"
@@ -134,6 +131,7 @@ startupProbe:
   successThreshold: 1
 
 livenessProbe:
+  enabled: true
   httpGet:
     path: "/health/live"
     port: "mgmt"
@@ -144,6 +142,7 @@ livenessProbe:
   successThreshold: 1
 
 readinessProbe:
+  enabled: true
   httpGet:
     path: "/health/ready"
     port: "mgmt"
