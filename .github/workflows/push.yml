@@ -52,7 +52,7 @@ jobs:
         name: Repository to lowercase
         run: |
           # build lowercase (@L) repository name
-          echo "repository=${{ github.repository@L }}-${{ matrix.variant@L }}" >> $GITHUB_OUTPUT
+          echo "repository=${{ github.repository }}@L-${{ matrix.variant }}@L" >> $GITHUB_OUTPUT
 
 
       - name: Build image name and tags
@@ -166,7 +166,7 @@ jobs:
         name: Repository to lowercase
         run: |
           # build lowercase (@L) repository name
-          echo "repository=${{ github.repository@L }}" >> $GITHUB_OUTPUT
+          echo "repository=${{ github.repository }}@L" >> $GITHUB_OUTPUT
       - name: Log into ghcr.io
         uses: docker/login-action@v3
         with:
