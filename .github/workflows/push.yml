@@ -165,9 +165,8 @@ jobs:
       - id: lower-helm-repo
         name: Repository to lowercase
         run: |
-          repo_var="${{ github.repository }}"
-          repo_lower=$(echo "$repo_var" | tr '[:upper:]' '[:lower:]')
-          echo "repository=$repo_lower" >> $GITHUB_OUTPUT
+          # build lowercase (@L) repository name
+          echo "repository=${{ github.repository@L }}" >> $GITHUB_OUTPUT
       - name: Log into ghcr.io
         uses: docker/login-action@v3
         with:
