@@ -51,9 +51,9 @@ jobs:
       - id: lower-repo
         name: Repository to lowercase
         run: |
-          repo_var="${{ github.repository }}-${{ matrix.variant }}"
-          repo_lower=$(echo "$repo_var" | tr '[:upper:]' '[:lower:]')
-          echo "repository=$repo_lower" >> $GITHUB_OUTPUT
+          # build lowercase (@L) repository name
+          echo "repository=${{ github.repository@L }}-${{ matrix.variant@L }}" >> $GITHUB_OUTPUT
+
 
       - name: Build image name and tags
         id: docker_meta_img
