@@ -38,7 +38,7 @@ jobs:
       image_tag: ${{ steps.docker_meta_img_trivy.outputs.tags }}
     permissions:
       packages: write
-      contents: read
+      contents: write
       actions: read
       security-events: write
     strategy:
@@ -84,6 +84,8 @@ jobs:
           build-args: |
             KEYCLOAK_VARIANT=${{ matrix.variant }}
 
+      - name: run trivy vulnerability scanner on images
+        uses: aquasecurity/trivy-action@0.33.1
 
       - name: Export Docker image as tar
         run: |
@@ -153,12 +155,32 @@ jobs:
         env:
           TRIVY_SKIP_DB_UPDATE: false
           TRIVY_SKIP_JAVA_DB_UPDATE: false
+
       - name: upload trivy results
         if: ${{ always() }}
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: "trivy-results.sarif"
-          
+
+      - name: run trivy vulnerability scanner to generate SBOM
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }}
+          format: "github"
+          output: "dependency-results.sbom.json"
+          scan-type: 'image'
+          github-pat: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          TRIVY_SKIP_DB_UPDATE: false
+          TRIVY_SKIP_JAVA_DB_UPDATE: false
+
+      - name: Upload trivy report as a Github artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: "trivy-sbom-report-${{ matrix.variant }}"
+          path: '${{ github.workspace }}/dependency-results.sbom.json'
+
+
   scan:
     uses: dBildungsplattform/dbp-github-workflows/.github/workflows/check-helm-kics.yaml@5
     permissions:
