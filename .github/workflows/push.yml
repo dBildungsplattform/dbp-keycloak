@@ -105,7 +105,7 @@ jobs:
 
       - name: Run ClamAV start Deamon
         run: |
-          docker run -d --rm --mount type=bind,source=${{ github.workspace }}/clamavscan,target=/scan --mount type=bind,source=${{ github.workspace }}/clamav/sockets,target=/tmp/ clamav/clamav:latest
+          docker run  --rm --mount type=bind,source=${{ github.workspace }}/clamavscan,target=/scan --mount type=bind,source=${{ github.workspace }}/clamav/sockets,target=/tmp/ clamav/clamav:latest &
           sleep 60
 
       - name: Run ClamAV SCAN
