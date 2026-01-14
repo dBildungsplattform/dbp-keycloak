@@ -110,7 +110,7 @@ jobs:
 
       - name: Run ClamAV SCAN
         run: |
-          docker run --rm --mount type=bind,source=${{ github.workspace }}/clamavscan,target=/scan -v sockets:=/tmp clamav/clamav:latest clamdscan /scan/container_fs -d /scan -r > ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
+          docker run --rm --mount type=bind,source=${{ github.workspace }}/clamavscan,target=/scan -v sockets:/tmp clamav/clamav:latest clamdscan /scan/container_fs -d /scan -r > ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
 
       - name: Upload ClamAV scan results
         if: ${{ always() }}
