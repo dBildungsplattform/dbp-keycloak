@@ -105,11 +105,12 @@ jobs:
 
       - name: Run ClamAV start Deamon
         run: |
-          docker run --rm --mount type=bind,source=${{ github.workspace }}/clamavscan,target=/scan --mount type=bind,source=${{ github.workspace }}/clamav/sockets,target=/run/clamav/ clamav/clamav:latest
+          docker run -d --rm --mount type=bind,source=${{ github.workspace }}/clamavscan,target=/scan --mount type=bind,source=${{ github.workspace }}/clamav/sockets,target=/tmp/ clamav/clamav:latest
+          sleep 60
 
       - name: Run ClamAV SCAN
         run: |
-          docker run --rm --mount type=bind,source=${{ github.workspace }}/clamavscan,target=/scan --mount type=bind,source=${{ github.workspace }}/clamav/sockets,target=/run/clamav/ clamav/clamav:latest clamdscan /scan/container_fs -d /scan -r > ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
+          docker run --rm --mount type=bind,source=${{ github.workspace }}/clamavscan,target=/scan --mount type=bind,source=${{ github.workspace }}/clamav/sockets,target=/tmp/ clamav/clamav:latest clamdscan /scan/container_fs -d /scan -r > ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
 
       - name: Upload ClamAV scan results
         if: ${{ always() }}
