@@ -116,9 +116,6 @@ jobs:
         run: |
           docker run --rm -v ${{ github.workspace }}:/workdir -v ${{ github.workspace }}/clamavscan:/scan -v sockets:/tmp clamav/clamav:latest clamdscan /scan/container_fs -m -w --fdpass -l /workdir/clamav-results-${{ matrix.variant }}.txt -v --stdout
 
-      - name: list dir
-        run: ls -la ${{ github.workspace }}
-
       - name: Upload ClamAV scan results
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
