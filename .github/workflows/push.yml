@@ -99,6 +99,11 @@ jobs:
         run: |
           docker volume create sockets
 
+      - name: create logfile
+        run: |
+          touch ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
+          chmod ugo+rw ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
+
       - name: Run ClamAV Update
         run: |
           docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest freshclam --datadir=/scan
@@ -109,7 +114,7 @@ jobs:
 
       - name: Run ClamAV SCAN
         run: |
-          docker run --rm -a stdout -a stderr -v ${{ github.workspace }}:/workdir -v ${{ github.workspace }}/clamavscan:/scan -v sockets:/tmp clamav/clamav:latest clamdscan /scan/container_fs -m -w --fdpass -l /workdir/clamav-results-${{ matrix.variant }}.txt -v --stdout
+          docker run --rm -v ${{ github.workspace }}:/workdir -v ${{ github.workspace }}/clamavscan:/scan -v sockets:/tmp clamav/clamav:latest clamdscan /scan/container_fs -m -w --fdpass -l /workdir/clamav-results-${{ matrix.variant }}.txt -v --stdout
 
       - name: list dir
         run: ls -la ${{ github.workspace }}
