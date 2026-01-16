@@ -95,10 +95,26 @@ jobs:
           docker rm temp_scan_container
           rm -rf ${{ github.workspace }}/clamavscan/container_fs.tar
 
-      - name: Run ClamAV scan
+      - name: Create ClamAV Socket dir
+        run: |
+          docker volume create sockets
+
+      - name: create logfile
+        run: |
+          touch ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
+          chmod ugo+rw ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
+
+      - name: Run ClamAV Update
         run: |
           docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest freshclam --datadir=/scan
-          docker run --rm -v ${{ github.workspace }}/clamavscan:/scan clamav/clamav:latest clamscan /scan/container_fs -d /scan -r > ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
+
+      - name: Run ClamAV start Deamon
+        run: |
+          docker run  --rm -v ${{ github.workspace }}/clamavscan:/scan -v sockets:/tmp clamav/clamav:latest &
+
+      - name: Run ClamAV SCAN
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/workdir -v ${{ github.workspace }}/clamavscan:/scan -v sockets:/tmp clamav/clamav:latest clamdscan /scan/container_fs -m -w --fdpass -l /workdir/clamav-results-${{ matrix.variant }}.txt -v --stdout
 
       - name: Upload ClamAV scan results
         if: ${{ always() }}
