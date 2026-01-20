@@ -51,7 +51,7 @@ jobs:
 
       - id: get_tag
         run: |
-         tag=$(git describe --tags)
+         tag=$(git describe --abbrev=0 --tags)
          echo "tag=$tag" >> $GITHUB_OUTPUT 
         #->set 0.0.1 for testing
 
