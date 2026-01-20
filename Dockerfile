@@ -8,7 +8,7 @@ RUN apt-get update && \
 
 FROM base AS build
 
-ARG KEYCLOAK_VERSION="26.3.3"
+ARG KEYCLOAK_VERSION="26.4.2"
 ARG KEYCLOAK_VARIANT="generic"
 
 RUN echo "Building variant ${KEYCLOAK_VARIANT} with keycloak version ${KEYCLOAK_VERSION}"
