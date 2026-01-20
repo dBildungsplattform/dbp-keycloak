@@ -122,7 +122,7 @@ jobs:
           platforms: linux/amd64
           push: true
           pull: true
-          tags: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.get_tag.outputs.tag }}
+          tags: ${{ steps.docker_meta_img.outputs.tags }}
           labels: ${{ steps.docker_meta_img.outputs.labels }}
           build-args: |
             KEYCLOAK_VARIANT=${{ matrix.variant }}
@@ -131,7 +131,7 @@ jobs:
       - name: run trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.29.0
         with:
-          image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.get_tag.outputs.tag }}
+          image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}@${{ steps.docker_build_push.outputs.digest }}
           format: "sarif"
           output: "trivy-results.sarif"
           severity: "CRITICAL,HIGH"
