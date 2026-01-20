@@ -3,8 +3,8 @@ name: Semantic Release
 on:
   push:
     branches:
-      - 'release'
-
+      #- 'release'
+      - 'DBP-1845-Add-project-keycloak-variant'
 jobs:
   release:
     name: Create Release
@@ -97,7 +97,8 @@ jobs:
           labels: |
             org.opencontainers.image.version=${{ needs.get_tag.outputs.tag }}
           tags: |
-            type=semver,pattern=${{ steps.get_keycloak_version.outputs.keycloak_version }}-{{version}}
+            type=raw,value=${{ steps.get_keycloak_version.outputs.keycloak_version }}-${{ needs.get_tag.outputs.tag }}
+            type=raw,value=latest
 
       - name: Login to registry
         uses: docker/login-action@v3
