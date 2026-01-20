@@ -57,10 +57,10 @@ jobs:
       - name: Get keycloak image version
         id: get_keycloak_version
         run: |
-          DEFAULT_VERSION="26.4.2"
-          KEYCLOAK_VERSION_FILE="./variants/${{ matrix.variant }}/keycloak-version"
-          if [ -f "$KEYCLOAK_VERSION_FILE" ]; then
-            KEYCLOAK_VERSION=$(cat "$KEYCLOAK_VERSION_FILE")
+          DEFAULT_VERSION=$(cat "./variants/base/keycloak-version")
+          KEYCLOAK_VARIANT_VERSION_FILE="./variants/${{ matrix.variant }}/keycloak-version"
+          if [ -f "$KEYCLOAK_VARIANT_VERSION_FILE" ]; then
+            KEYCLOAK_VERSION=$(cat "$KEYCLOAK_VARIANT_VERSION_FILE")
           else
             KEYCLOAK_VERSION=$DEFAULT_VERSION
           fi

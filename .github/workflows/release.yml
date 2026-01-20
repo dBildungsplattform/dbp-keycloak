@@ -30,10 +30,10 @@ jobs:
           @semantic-release/release-notes-generator
           @semantic-release/git
           @semantic-release/github
-      - name: Run Semantic-Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+      # - name: Run Semantic-Release
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: npx semantic-release
 
   get_tag:
     runs-on: ubuntu-latest
@@ -52,7 +52,8 @@ jobs:
       - id: get_tag
         run: |
          tag=$(git describe --tags)
-         echo "tag=$tag" >> $GITHUB_OUTPUT
+         echo "tag=$tag" >> $GITHUB_OUTPUT 
+        #->set 0.0.1 for testing
 
   build_and_upload_image:
     name: Publish image
@@ -73,6 +74,19 @@ jobs:
         with:
           ref: ${{ needs.get_tag.outputs.tag }}
           fetch-tags: true
+
+      - name: Get keycloak image version
+        id: get_keycloak_version
+        run: |
+          DEFAULT_VERSION=$(cat "./variants/base/keycloak-version")
+          KEYCLOAK_VARIANT_VERSION_FILE="./variants/${{ matrix.variant }}/keycloak-version"
+          if [ -f "$KEYCLOAK_VARIANT_VERSION_FILE" ]; then
+            KEYCLOAK_VERSION=$(cat "$KEYCLOAK_VARIANT_VERSION_FILE")
+          else
+            KEYCLOAK_VERSION=$DEFAULT_VERSION
+          fi
+          echo "keycloak_version=$KEYCLOAK_VERSION" >> $GITHUB_OUTPUT
+
       - name: Build image name and tags
         id: docker_meta_img
         uses: docker/metadata-action@v5.7.0
@@ -83,8 +97,7 @@ jobs:
           labels: |
             org.opencontainers.image.version=${{ needs.get_tag.outputs.tag }}
           tags: |
-            type=semver,pattern={{version}},enable=${{ startsWith(github.ref, 'refs/tags/') }}
-            type=semver,pattern={{major}}.{{minor}},enable=${{ startsWith(github.ref, 'refs/tags/') }}
+            type=semver,pattern=${{ steps.get_keycloak_version.outputs.keycloak_version }}-{{version}}
 
       - name: Login to registry
         uses: docker/login-action@v3
@@ -99,49 +112,39 @@ jobs:
           repo_var=${{ github.repository }}-${{ matrix.variant }}
           echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
 
-      - name: Get keycloak image version
-        id: get_keycloak_version
-        run: |
-          DEFAULT_VERSION="26.4.2"
-          KEYCLOAK_VERSION_FILE="./variants/${{ matrix.variant }}/keycloak-version"
-          if [ -f "$KEYCLOAK_VERSION_FILE" ]; then
-            KEYCLOAK_VERSION=$(cat "$KEYCLOAK_VERSION_FILE")
-          else
-            KEYCLOAK_VERSION=$DEFAULT_VERSION
-          fi
-          echo "keycloak_version=$KEYCLOAK_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Build and push image to ghcr
-        id: docker_build_push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          platforms: linux/amd64
-          push: true
-          pull: true
-          tags: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.get_tag.outputs.tag }}
-          labels: ${{ steps.docker_meta_img.outputs.labels }}
-          build-args: |
-            KEYCLOAK_VARIANT=${{ matrix.variant }}
-            KEYCLOAK_VERSION=${{ steps.get_keycloak_version.outputs.keycloak_version }}
 
-      - name: run trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.29.0
-        with:
-          image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.get_tag.outputs.tag }}
-          format: "sarif"
-          output: "trivy-results.sarif"
-          severity: "CRITICAL,HIGH"
-          ignore-unfixed: true
-          scan-type: 'image'
-        env:
-          TRIVY_SKIP_DB_UPDATE: false
-          TRIVY_SKIP_JAVA_DB_UPDATE: false
-      - name: upload trivy results
-        if: ${{ always() }}
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: "trivy-results.sarif"
+      # - name: Build and push image to ghcr
+      #   id: docker_build_push
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: .
+      #     platforms: linux/amd64
+      #     push: true
+      #     pull: true
+      #     tags: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.get_tag.outputs.tag }}
+      #     labels: ${{ steps.docker_meta_img.outputs.labels }}
+      #     build-args: |
+      #       KEYCLOAK_VARIANT=${{ matrix.variant }}
+      #       KEYCLOAK_VERSION=${{ steps.get_keycloak_version.outputs.keycloak_version }}
+
+      # - name: run trivy vulnerability scanner
+      #   uses: aquasecurity/trivy-action@0.29.0
+      #   with:
+      #     image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.get_tag.outputs.tag }}
+      #     format: "sarif"
+      #     output: "trivy-results.sarif"
+      #     severity: "CRITICAL,HIGH"
+      #     ignore-unfixed: true
+      #     scan-type: 'image'
+      #   env:
+      #     TRIVY_SKIP_DB_UPDATE: false
+      #     TRIVY_SKIP_JAVA_DB_UPDATE: false
+      # - name: upload trivy results
+      #   if: ${{ always() }}
+      #   uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: "trivy-results.sarif"
 
   # Helm Chart
   scan_helm:
@@ -149,41 +152,40 @@ jobs:
     permissions:
       contents: read
 
-  release_helm:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    concurrency:
-      group: helm_release
-      cancel-in-progress: false
-    needs:
-     - scan_helm
-     - build_and_upload_image
-     - get_tag
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - id: lower-helm-repo
-        name: Repository to lowercase
-        run: |
-          repo_var=${{ github.repository }}
-          echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
-      - name: Log into ghcr.io
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Push helm chart to ghcr
-        shell: bash
-        id: extract_branch_meta
-        env:
-          CHART_VERSION: "${{ needs.get_tag.outputs.tag }}"
-          CHART_APP_VERSION: "${{ needs.get_tag.outputs.tag }}"
-          CHART_NAME: "dbp-keycloak"
-          CHART_DIR: "helm"
-        run: |
-          helm version
-          helm package "$CHART_DIR/$CHART_NAME" --version $CHART_VERSION --app-version $CHART_APP_VERSION
-          helm push "$CHART_NAME-$CHART_VERSION.tgz" oci://ghcr.io/${{ steps.lower-helm-repo.outputs.repository }}
+  # release_helm:
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: read
+  #     packages: write
+  #   concurrency:
+  #     group: helm_release
+  #     cancel-in-progress: false
+  #   needs:
+  #    - scan_helm
+  #    - build_and_upload_image
+  #    - get_tag
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v4
+  #     - id: lower-helm-repo
+  #       name: Repository to lowercase
+  #       run: |
+  #         repo_var=${{ github.repository }}
+  #         echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
+  #     - name: Log into ghcr.io
+  #       uses: docker/login-action@v3
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Push helm chart to ghcr
+  #       shell: bash
+  #       id: extract_branch_meta
+  #       env:
+  #         CHART_VERSION: "${{ needs.get_tag.outputs.tag }}"
+  #         CHART_NAME: "dbp-keycloak"
+  #         CHART_DIR: "helm"
+  #       run: |
+  #         helm version
+  #         helm package "$CHART_DIR/$CHART_NAME" --version $CHART_VERSION
+  #         helm push "$CHART_NAME-$CHART_VERSION.tgz" oci://ghcr.io/${{ steps.lower-helm-repo.outputs.repository }}
