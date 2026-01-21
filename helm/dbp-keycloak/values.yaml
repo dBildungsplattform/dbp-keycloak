@@ -16,7 +16,7 @@ auth:
   # existingSecret: Refers to a secret already present in the cluster, which is required for the authentication and configuration of the database setup tasks.
   existingSecret: ""
   secretName: "dbp-keycloak"
-  adminUsername: "admin"
+  adminUsername: "temp-admin"
   adminPassword: ""
   keycloakRs256PrivateKey: ""
   keycloakRs256Certificate: ""
