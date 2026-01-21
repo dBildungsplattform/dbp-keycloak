@@ -6,11 +6,17 @@ Building different variants based on customer/project needs is supported.
 
 The helm chart is built to run the container with `readOnlyRootFilesystem` enabled and puts `emptyDir`-Volumes where necessary.
 
+## Pipeline Build and Configuration
+* The keycloak version can be provided separetely for every variant in the file `variants/<KEYCLOAK_VARIANT>/keycloak-version` - if the file does not exist, the default version provided in `variants/base/keycloak-version` is used
+* Versioning of the releases:
+  * release and helm chart: `<git-tag>` (app version is not set)
+  * image: `<keycloak-version>-<git-tag>` and `latest`
+
 ## Configuration Options
 
 ### Build Arguments
 
-* **`KEYCLOAK_VERSION`**: Version of Keycloak to be downloaded and installed. Default is `26.4.2`.
+* **`KEYCLOAK_VERSION`**: Version of Keycloak to be downloaded and installed. Default version is not specified in the Dockerfile (and only provided when building over the github action).
   * Example: `--build-arg KEYCLOAK_VERSION=27.0.0`
 
 * **`KEYCLOAK_VARIANT`**: Defines the variant of Keycloak to be used. This refers to a subdirectory in `variants/` which contains an env file and supports adding more files (like themes) to keycloak.
@@ -46,5 +52,5 @@ The files are copied to `/opt/keycloak`.
 To build the container image, use the following command:
 
 ```bash
-podman build --build-arg KEYCLOAK_VARIANT=generic -f Dockerfile -t keycloak:dev .
+podman build --build-arg KEYCLOAK_VARIANT=generic KEYCLOAK_VERSION=27.0.0 -f Dockerfile -t keycloak:dev .
 ```

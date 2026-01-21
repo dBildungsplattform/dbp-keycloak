@@ -8,10 +8,10 @@ RUN apt-get update && \
 
 FROM base AS build
 
-ARG KEYCLOAK_VERSION="26.5.1"
 ARG KEYCLOAK_VARIANT="generic"
+ARG KEYCLOAK_VERSION
 
-RUN echo "Building variant $KEYCLOAK_VARIANT"
+RUN echo "Building variant ${KEYCLOAK_VARIANT} with keycloak version ${KEYCLOAK_VERSION}"
 
 RUN apt-get update && apt-get install -y --no-install-recommends curl tar
 
