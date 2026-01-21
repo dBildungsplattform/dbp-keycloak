@@ -3,8 +3,7 @@ name: Semantic Release
 on:
   push:
     branches:
-      #- 'release'
-      - 'DBP-1845-Add-project-keycloak-variant'
+      - 'release'
 jobs:
   release:
     name: Create Release
@@ -30,10 +29,10 @@ jobs:
           @semantic-release/release-notes-generator
           @semantic-release/git
           @semantic-release/github
-      # - name: Run Semantic-Release
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   run: npx semantic-release
+      - name: Run Semantic-Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
 
   get_tag:
     runs-on: ubuntu-latest
