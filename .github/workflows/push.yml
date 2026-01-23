@@ -84,9 +84,6 @@ jobs:
           build-args: |
             KEYCLOAK_VARIANT=${{ matrix.variant }}
 
-      - name: run trivy vulnerability scanner on images
-        uses: aquasecurity/trivy-action@0.33.1
-
       - name: Export Docker image as tar
         run: |
           mkdir -p ${{ github.workspace }}/clamavscan/container_fs
@@ -144,7 +141,7 @@ jobs:
         timeout-minutes: 10
 
       - name: run trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ needs.branch_meta.outputs.sha }}
           format: "sarif"
