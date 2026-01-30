@@ -94,7 +94,6 @@ jobs:
           docker rm temp_scan_container
           rm -rf ${{ github.workspace }}/clamavscan/container_fs.tar
 
-
       - name: Create ClamAV Socket dir
         run: |
           docker volume create sockets
@@ -177,6 +176,7 @@ jobs:
         with:
           name: "trivy-sbom-report-${{ matrix.variant }}"
           path: '${{ github.workspace }}/dependency-results.sbom.json'
+
 
   scan:
     uses: dBildungsplattform/dbp-github-workflows/.github/workflows/check-helm-kics.yaml@5
