@@ -131,7 +131,7 @@ jobs:
             cat ${{ github.workspace }}/clamav-results-${{ matrix.variant }}.txt
             exit 1
           fi
-          
+
       - name: Push scanned image to ghcr.io, if it passed
 
         run: |

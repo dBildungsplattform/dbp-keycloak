@@ -129,6 +129,15 @@ jobs:
         with:
           sarif_file: "trivy-results.sarif"
 
+      - name: trigger gitlab pipeline to backup the image
+        run: |
+          curl --request POST \
+            --form token=${{ secrets.GITLAB_PIPELINE_TRIGGER_TOKEN }} \
+            --form "ref=main" \
+            --form "inputs[image-tag]=${{ needs.get_tag.outputs.tag }}" \
+            --form "inputs[image-name]=ghcr.io/${{ steps.lower-repo.outputs.repository }}" \
+            "https://git.dataport.de/api/v4/projects/13658/trigger/pipeline"
+
   # Helm Chart
   scan_helm:
     uses: dBildungsplattform/dbp-github-workflows/.github/workflows/check-helm-kics.yaml@5
