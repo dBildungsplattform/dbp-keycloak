@@ -94,6 +94,7 @@ jobs:
           docker rm temp_scan_container
           rm -rf ${{ github.workspace }}/clamavscan/container_fs.tar
 
+
       - name: Create ClamAV Socket dir
         run: |
           docker volume create sockets
