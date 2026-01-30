@@ -179,13 +179,20 @@ jobs:
 
       # todo: remove this after testing
       - name: trigger gitlab pipeline to backup the image
-        uses: digital-blueprint/gitlab-pipeline-trigger-action@v1
-        with:
-            host: 'git.dataport.de'
-            trigger_token: ${{ secrets.GITLAB_PIPELINE_TRIGGER_TOKEN }}
-            id: '13658'
-            ref: 'main'
-            variables: '{"image-tag":"${{ needs.branch_meta.outputs.sha }}","image-name":"ghcr.io/${{ steps.lower-repo.outputs.repository }}"}'
+        run: |
+          curl --request POST \
+            --form token=${{ secrets.GITLAB_PIPELINE_TRIGGER_TOKEN }} \
+            --form "ref=main" \
+            --form "inputs[image-tag]=${{ needs.branch_meta.outputs.sha }}" \
+            --form "inputs[image-name]=ghcr.io/${{ steps.lower-repo.outputs.repository }}" \
+            "https://git.dataport.de/api/v4/projects/13658/trigger/pipeline"
+        # uses: digital-blueprint/gitlab-pipeline-trigger-action@v1
+        # with:
+        #     host: 'git.dataport.de'
+        #     trigger_token: ${{ secrets.GITLAB_PIPELINE_TRIGGER_TOKEN }}
+        #     id: '13658'
+        #     ref: 'main'
+        #     variables: '{"image-tag":"${{ needs.branch_meta.outputs.sha }}","image-name":"ghcr.io/${{ steps.lower-repo.outputs.repository }}"}'
 
 
   scan:
