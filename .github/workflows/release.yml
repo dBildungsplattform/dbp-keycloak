@@ -3,8 +3,8 @@ name: Semantic Release
 on:
   push:
     branches:
-      #- 'release'
-      - 'DBP-1845-Add-project-keycloak-variant'
+      - 'release'
+      #- 'DBP-1845-Add-project-keycloak-variant'
 jobs:
   release:
     name: Create Release
