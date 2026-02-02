@@ -9,7 +9,17 @@ RUN apt-get update && \
 FROM base AS build
 
 ARG KEYCLOAK_VARIANT="generic"
-ARG KEYCLOAK_VERSION
+
+# load env vars for base and the selected variant
+COPY ./variants/base/env /tmp/env-base
+COPY ./variants/${KEYCLOAK_VARIANT}/env /tmp/env-variant
+
+# load env vars
+RUN set -o allexport && \
+    . /tmp/env-base && \
+    . /tmp/env-variant && \
+    set +a && \
+    env
 
 RUN echo "Building variant ${KEYCLOAK_VARIANT} with keycloak version ${KEYCLOAK_VERSION}"
 
@@ -36,11 +46,9 @@ RUN mkdir /tmp/keycloak && \
     mkdir -p /opt/keycloak/providers && \
     chmod -R g+rwX /opt/keycloak
 
-# load files and env vars for base and the selected variant
+# load files for base and the selected variant
 COPY ./variants/base/files/ /opt/keycloak/
 COPY ./variants/${KEYCLOAK_VARIANT}/files/ /opt/keycloak/
-COPY ./variants/base/env /tmp/env-base
-COPY ./variants/${KEYCLOAK_VARIANT}/env /tmp/env-variant
 
 # remove unused .gitkeep files
 RUN rm -f /opt/keycloak/.gitkeep
@@ -49,13 +57,8 @@ RUN rm -f /opt/keycloak/.gitkeep
 WORKDIR /opt/keycloak/
 RUN keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA -keysize 2048 -dname "CN=keycloak" -alias keycloak -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -validity 365 -keystore conf/server.keystore
 
-# load env vars and execute build
-RUN set -o allexport && \
-    . /tmp/env-base && \
-    . /tmp/env-variant && \
-    set +a && \
-    env && \
-    /opt/keycloak/bin/kc.sh build && \
+# execute build
+RUN /opt/keycloak/bin/kc.sh build && \
     /opt/keycloak/bin/kc.sh show-config
 
 RUN echo "Built variant $KEYCLOAK_VARIANT"

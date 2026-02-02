@@ -54,18 +54,6 @@ jobs:
           repo_var=${{ github.repository }}-${{ matrix.variant }}
           echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
 
-      - name: Get keycloak image version
-        id: get_keycloak_version
-        run: |
-          DEFAULT_VERSION=$(cat "./variants/base/keycloak-version")
-          KEYCLOAK_VARIANT_VERSION_FILE="./variants/${{ matrix.variant }}/keycloak-version"
-          if [ -f "$KEYCLOAK_VARIANT_VERSION_FILE" ]; then
-            KEYCLOAK_VERSION=$(cat "$KEYCLOAK_VARIANT_VERSION_FILE")
-          else
-            KEYCLOAK_VERSION=$DEFAULT_VERSION
-          fi
-          echo "keycloak_version=$KEYCLOAK_VERSION" >> $GITHUB_OUTPUT
-
       - name: Build image name and tags
         id: docker_meta_img
         uses: docker/metadata-action@v5
@@ -95,7 +83,6 @@ jobs:
           labels: ${{ steps.docker_meta_img.outputs.labels }}
           build-args: |
             KEYCLOAK_VARIANT=${{ matrix.variant }}
-            KEYCLOAK_VERSION=${{ steps.get_keycloak_version.outputs.keycloak_version }}
 
       - name: Export Docker image as tar
         run: |
