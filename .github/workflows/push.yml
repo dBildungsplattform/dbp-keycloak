@@ -53,9 +53,9 @@ jobs:
         run: |
           repo_var=${{ github.repository }}-${{ matrix.variant }}
           echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
-            - name: Get keycloak image version
-
-      - id: get_keycloak_version
+          
+      - name: Get keycloak image version
+        id: get_keycloak_version
         shell: bash
         run: |
           source "./variants/base/env"
