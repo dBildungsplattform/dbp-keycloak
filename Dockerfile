@@ -19,13 +19,10 @@ RUN set -o allexport && \
     . /tmp/env-base && \
     . /tmp/env-variant && \
     set +a && \
-    env
-
-RUN echo "Building variant ${KEYCLOAK_VARIANT} with keycloak version ${KEYCLOAK_VERSION}"
-
-RUN apt-get update && apt-get install -y --no-install-recommends curl tar
-
-RUN mkdir /tmp/keycloak && \
+    env && \
+    echo "Building variant ${KEYCLOAK_VARIANT} with keycloak version ${KEYCLOAK_VERSION}" && \
+    apt-get update && apt-get install -y --no-install-recommends curl tar && \
+    mkdir /tmp/keycloak && \
     curl --location --fail \
     --request GET \
     https://github.com/keycloak/keycloak/releases/download/${KEYCLOAK_VERSION}/keycloak-${KEYCLOAK_VERSION}.tar.gz \
@@ -58,7 +55,11 @@ WORKDIR /opt/keycloak/
 RUN keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA -keysize 2048 -dname "CN=keycloak" -alias keycloak -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -validity 365 -keystore conf/server.keystore
 
 # execute build
-RUN /opt/keycloak/bin/kc.sh build && \
+RUN set -o allexport && \
+    . /tmp/env-base && \
+    . /tmp/env-variant && \
+    set +a && \
+    /opt/keycloak/bin/kc.sh build && \
     /opt/keycloak/bin/kc.sh show-config
 
 RUN echo "Built variant $KEYCLOAK_VARIANT"
