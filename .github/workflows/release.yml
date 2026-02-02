@@ -76,6 +76,7 @@ jobs:
 
       - name: Get keycloak image version
         id: get_keycloak_version
+        shell: bash
         run: |
           source "./variants/base/env"
           source "./variants/${{ matrix.variant }}/env"
