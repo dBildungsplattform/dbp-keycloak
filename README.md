@@ -9,7 +9,9 @@ The helm chart is built to run the container with `readOnlyRootFilesystem` enabl
 ## Pipeline Build and Configuration
 * The keycloak version can be provided separetely for every variant in the file `variants/<KEYCLOAK_VARIANT>/keycloak-version` - if the file does not exist, the default version provided in `variants/base/keycloak-version` is used
 * Versioning of the releases:
-  * release and helm chart: `<git-tag>` (app version is not set)
+  * A new release can be triggered by pushing to the release branch
+  * The new version is generated based on conventional commits and a GitHub release and tag are created automatically
+  * Helm chart version: `<git-tag>` (app version is not set)
   * image: `<keycloak-version>-<git-tag>` and `latest`
 
 ## Configuration Options
