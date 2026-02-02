@@ -14,7 +14,6 @@ ARG KEYCLOAK_VARIANT="generic"
 COPY ./variants/base/env /tmp/env-base
 COPY ./variants/${KEYCLOAK_VARIANT}/env /tmp/env-variant
 
-# load env vars
 RUN set -o allexport && \
     . /tmp/env-base && \
     . /tmp/env-variant && \
