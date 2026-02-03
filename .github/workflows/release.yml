@@ -83,11 +83,6 @@ jobs:
           echo "DEBUG: KEYCLOAK_VERSION=${KEYCLOAK_VERSION}
           echo "keycloak_version=${KEYCLOAK_VERSION}" >> $GITHUB_OUTPUT
 
-      - name: Print keycloak image version
-        id: print_version
-        run: |
-          echo "DEBUG: KEYCLOAK_VERSION='${{ steps.get_keycloak_version.outputs.keycloak_version }}'"
-
       - name: Build image name and tags
         id: docker_meta_img
         uses: docker/metadata-action@v5.7.0
