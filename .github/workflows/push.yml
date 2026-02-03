@@ -53,7 +53,7 @@ jobs:
         run: |
           repo_var=${{ github.repository }}-${{ matrix.variant }}
           echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
-          
+
       - name: Get keycloak image version
         id: get_keycloak_version
         shell: bash
@@ -62,6 +62,14 @@ jobs:
           source "./variants/${{ matrix.variant }}/env"
           echo "DEBUG: KEYCLOAK_VERSION='$KEYCLOAK_VERSION'"
           echo "keycloak_version=$KEYCLOAK_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Print keycloak image version
+        id: print_version
+        shell: bash
+        run: |
+          source "./variants/base/env"
+          source "./variants/${{ matrix.variant }}/env"
+          echo "DEBUG: KEYCLOAK_VERSION='${{ steps.get_keycloak_version.outputs.keycloak_version }}'"
 
       - name: Build image name and tags
         id: docker_meta_img
