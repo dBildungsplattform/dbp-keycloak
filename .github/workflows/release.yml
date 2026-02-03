@@ -80,7 +80,8 @@ jobs:
         run: |
           source "./variants/base/env"
           source "./variants/${{ matrix.variant }}/env"
-          echo "keycloak_version=$KEYCLOAK_VERSION" >> $GITHUB_OUTPUT
+          echo "DEBUG: KEYCLOAK_VERSION=${KEYCLOAK_VERSION}
+          echo "keycloak_version=${KEYCLOAK_VERSION}" >> $GITHUB_OUTPUT
 
       - name: Print keycloak image version
         id: print_version
