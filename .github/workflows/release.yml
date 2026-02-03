@@ -3,8 +3,8 @@ name: Semantic Release
 on:
   push:
     branches:
-      - 'release'
-      #- 'DBP-1845-Add-project-keycloak-variant'
+      #- 'release'
+      - 'DBP-1845-Add-project-keycloak-variant'
 jobs:
   release:
     name: Create Release
@@ -81,6 +81,11 @@ jobs:
           source "./variants/base/env"
           source "./variants/${{ matrix.variant }}/env"
           echo "keycloak_version=$KEYCLOAK_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Print keycloak image version
+        id: print_version
+        run: |
+          echo "DEBUG: KEYCLOAK_VERSION='${{ steps.get_keycloak_version.outputs.keycloak_version }}'"
 
       - name: Build image name and tags
         id: docker_meta_img
