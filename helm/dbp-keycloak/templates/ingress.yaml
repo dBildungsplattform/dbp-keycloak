@@ -25,7 +25,7 @@ spec:
         paths:
           {{- range $path := .Values.keycloak.exposedPaths }}
           - path: "{{ $.Values.keycloak.httpRelativePath }}{{ $path }}"
-            pathType: "ImplementationSpecific"
+            pathType: "Prefix"
             backend:
               service:
                 name: "{{ include "common.names.fullname" $ }}"
