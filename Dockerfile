@@ -6,6 +6,7 @@ RUN apt-get update && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
+
 FROM base AS build
 
 ARG KEYCLOAK_VERSION="26.5.1"
