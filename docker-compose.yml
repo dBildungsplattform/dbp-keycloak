@@ -3,7 +3,6 @@ services:
     build:
       context: .
       args:
-        KEYCLOAK_VERSION: ${KEYCLOAK_VERSION:-26.2.5}
         KEYCLOAK_VARIANT: ${KEYCLOAK_VARIANT:-generic}
     ports:
       - ${KEYCLOAK_PORT:-10079}:8443
