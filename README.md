@@ -6,12 +6,17 @@ Building different variants based on customer/project needs is supported.
 
 The helm chart is built to run the container with `readOnlyRootFilesystem` enabled and puts `emptyDir`-Volumes where necessary.
 
+## Pipeline Build and Configuration
+* The keycloak version can be provided separetely for every variant in the file `variants/<KEYCLOAK_VARIANT>/env` - if the version is not set, the default version provided in `variants/base/env` is used
+* Versioning of the releases:
+  * A new release can be triggered by pushing to the release branch
+  * The new version is generated based on conventional commits and a GitHub release and tag are created automatically
+  * Helm chart version: `<git-tag>` (app version is not set)
+  * image: `<keycloak-version>-<git-tag>` and `latest`
+
 ## Configuration Options
 
-### Build Arguments
-
-* **`KEYCLOAK_VERSION`**: Version of Keycloak to be downloaded and installed. Default is `26.4.2`.
-  * Example: `--build-arg KEYCLOAK_VERSION=27.0.0`
+### Build Argument
 
 * **`KEYCLOAK_VARIANT`**: Defines the variant of Keycloak to be used. This refers to a subdirectory in `variants/` which contains an env file and supports adding more files (like themes) to keycloak.
   * `generic` (default): A general-purpose variant suitable for most use cases.
@@ -21,7 +26,7 @@ More basic Keycloak configurations can be found at `variants/base/env`.
 
 ### Environment Variables
 
-During the build process, environment variables are loaded from:
+During the build process, environment variables (inlcuding the keycloak version) are loaded from:
 * `variants/base/env`: Base environment variables common to all variants.
 * `variants/<KEYCLOAK_VARIANT>/env`: Variant-specific environment variables.
 
