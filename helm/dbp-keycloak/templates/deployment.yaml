@@ -92,14 +92,14 @@ spec:
             name: tmp
           - mountPath: /opt/keycloak/data
             name: tmp-kc-data
-            {{- if .Values.realm.filepath }}
-            - mountPath: "/opt/keycloak/data/import"
-              name: realm-config
-              readOnly: true
-            {{- end }}
-            {{- with .Values.extraVolumeMounts }}
-            {{- . | toYaml | nindent 12 }}
-            {{- end }}
+          {{- if .Values.realm.filepath }}
+          - mountPath: "/opt/keycloak/data/import"
+            name: realm-config
+            readOnly: true
+          {{- end }}
+          {{- with .Values.extraVolumeMounts }}
+          {{- . | toYaml | nindent 10 }}
+          {{- end }}
       volumes:
         - name: tmp
           emptyDir:
