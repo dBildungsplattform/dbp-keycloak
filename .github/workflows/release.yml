@@ -3,7 +3,8 @@ name: Semantic Release
 on:
   push:
     branches:
-      - 'release'
+      #- 'release'
+      - 'DBP-1845-update-trivy-version'
 
 jobs:
   release:
@@ -30,10 +31,10 @@ jobs:
           @semantic-release/release-notes-generator
           @semantic-release/git
           @semantic-release/github
-      - name: Run Semantic-Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+      #- name: Run Semantic-Release
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #  run: npx semantic-release
 
   get_tag:
     runs-on: ubuntu-latest
@@ -51,7 +52,7 @@ jobs:
 
       - id: get_tag
         run: |
-         tag=$(git describe --tags)
+         tag=$(git describe --abbrev=0 --tags)
          echo "tag=$tag" >> $GITHUB_OUTPUT
 
   build_and_upload_image:
@@ -116,7 +117,7 @@ jobs:
           build-args: |
             KEYCLOAK_VARIANT=${{ matrix.variant }}
       - name: run trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@0.34.2
         with:
           image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}@${{ steps.docker_build_push.outputs.digest }}
           format: "sarif"
