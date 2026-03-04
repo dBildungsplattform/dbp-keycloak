@@ -3,8 +3,7 @@ name: Semantic Release
 on:
   push:
     branches:
-      #- 'release'
-      - 'DBP-1845-update-trivy-version'
+      - 'release'
 
 jobs:
   release:
@@ -31,10 +30,10 @@ jobs:
           @semantic-release/release-notes-generator
           @semantic-release/git
           @semantic-release/github
-      #- name: Run Semantic-Release
-      #  env:
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #  run: npx semantic-release
+      - name: Run Semantic-Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
 
   get_tag:
     runs-on: ubuntu-latest
@@ -52,7 +51,7 @@ jobs:
 
       - id: get_tag
         run: |
-         tag=$(git describe --abbrev=0 --tags)
+         tag=$(git describe --tags)
          echo "tag=$tag" >> $GITHUB_OUTPUT
 
   build_and_upload_image:
