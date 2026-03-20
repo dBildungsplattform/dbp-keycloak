@@ -116,7 +116,7 @@ jobs:
           build-args: |
             KEYCLOAK_VARIANT=${{ matrix.variant }}
       - name: run trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.34.2
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         with:
           image-ref: ghcr.io/${{ steps.lower-repo.outputs.repository }}@${{ steps.docker_build_push.outputs.digest }}
           format: "sarif"
