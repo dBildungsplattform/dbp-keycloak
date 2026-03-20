@@ -137,7 +137,7 @@ jobs:
           curl --request POST \
             --form token=${{ secrets.GITLAB_PIPELINE_TRIGGER_TOKEN }} \
             --form "ref=main" \
-            --form "inputs[image-tag]=${{ needs.get_tag.outputs.tag }}" \
+            --form "inputs[image-tag]=${{ steps.get_keycloak_version.outputs.keycloak_version }}-${{ needs.get_tag.outputs.tag }}" \
             --form "inputs[image-name]=ghcr.io/${{ steps.lower-repo.outputs.repository }}" \
             "https://git.dataport.de/api/v4/projects/13658/trigger/pipeline"
 
