@@ -1,2 +1,2 @@
 # extends/overrides env file from base
-KEYCLOAK_VERSION=26.3.3
+KEYCLOAK_VERSION=26.5.6
