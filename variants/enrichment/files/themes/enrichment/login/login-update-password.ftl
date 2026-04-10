@@ -10,7 +10,7 @@
                     width="88"
                     height="82"
                     tabindex="1"
-                    alt="enrichment-logo"
+                    alt="Enrichment - Zur Startseite"
                     draggable="false"
                     class="h-[41px] w-[44px] mt-8">
             </a>
