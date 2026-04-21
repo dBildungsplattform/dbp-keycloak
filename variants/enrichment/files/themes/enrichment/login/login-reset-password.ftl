@@ -31,6 +31,7 @@
                                    type="text" autofocus autocomplete="username" placeholder="Nutzername oder E-Mail"
                                    class="input input-bordered input-sm <#if messagesPerField.existsError('username','password')>border-primary</#if>"
                                    aria-invalid="<#if messagesPerField.existsError('username')>true</#if>"
+                                   aria-describedby="<#if messagesPerField.existsError('username')>username-empty</#if>"
                             />
                             <span class="absolute right-0 bottom-0.5">
                                 <#if messagesPerField.existsError('username')>
@@ -42,6 +43,13 @@
                                 </#if>
                             </span>
                         </label>
+                        <#if messagesPerField.existsError('username')>
+                            <div id="username-empty" class="label flex justify-between">
+                                <span class="text-error label-text-alt">
+                                    Hinweis: Bitte geben Sie einen Nutzernamen an
+                                </span>
+                            </div>
+                        </#if>
 
                         <div class="${properties.kcFormGroupClass!} ${properties.kcFormSettingClass!}">
                             <button tabindex="6" name="login" id="kc-login" type="submit" class="btn btn-block my-4">
