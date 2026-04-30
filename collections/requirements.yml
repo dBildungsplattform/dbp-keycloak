@@ -1,0 +1,28 @@
+---
+collections:
+  - name: kubernetes.core
+    version: 2.1.1
+
+  # - name: community.general
+  #   version: 12.2.0
+  # - name: ansible.posix
+  #   version: 2.1.0
+
+  #   # if you update the version of the collection, you also have to update the ionos python sdk (Makefile)
+  # - name: ionoscloudsdk.ionoscloud
+  #   version: 7.4.1
+
+  #   # seems to only contain the 1pw lookup/module
+  # - name: git+https://github.com/hpi-schul-cloud/infra-tools.git
+  #   type: git
+  #   version: "infra-tools-4.3.1" # just pinned to the latest tag.
+
+  # - name: amazon.aws
+  #   version: 10.1.2
+
+  # - name: community.aws
+  #   version: 2.3.0
+
+  # - name: git+https://github.com/dBildungsplattform/infra-ansible-collections.git
+  #   type: git
+  #   version: 4.7.0

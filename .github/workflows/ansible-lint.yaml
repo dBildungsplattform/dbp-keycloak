@@ -17,4 +17,4 @@ jobs:
           setup_python: "true"
           python_version: "3.14"
           working_directory: "./ansible"
-          requirements_file: ""
+          requirements_file: "./collections/requirements.yml"
