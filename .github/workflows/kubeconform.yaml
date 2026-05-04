@@ -22,6 +22,6 @@ jobs:
           echo "gopath $GOPATH"
           echo $PATH
           ls -liash /home/runner/go
-          export PATH="$(go env GOPATH):${PATH}"
+          export PATH="$(go env GOPATH)/bin:${PATH}"
           echo $PATH
           helm template helm/dbp-keycloak | kubeconform -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' -strict
