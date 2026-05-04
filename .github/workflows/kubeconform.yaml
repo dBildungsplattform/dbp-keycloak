@@ -6,7 +6,7 @@ on:
 
 jobs:
   lint:
-    name: kubeconform
+    name: Kubeconform
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -14,8 +14,8 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Set up kubeconform
+      - name: Set up Kubeconform
         run: go install github.com/yannh/kubeconform/cmd/kubeconform@latest
 
-      - name: Run helm lint
+      - name: Run Kubeconform
         run: helm template helm/dbp-keycloak | kubeconform -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' -strict
