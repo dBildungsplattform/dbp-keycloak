@@ -19,5 +19,9 @@ jobs:
 
       - name: Run Kubeconform
         run: |
+          echo $GOPATH
+          echo $PATH
+          ls -liash $GOPATH
           export PATH="$(go env GOPATH):${PATH}"
+          echo $PATH
           helm template helm/dbp-keycloak | kubeconform -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' -strict
