@@ -1,0 +1,36 @@
+name: trivy-code-scan
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  scan:
+    name: Trivy Code Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read          # Required to checkout and read repo files
+      security-events: write  # Required to upload SARIF files to Security tab
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 1
+
+      - name: run trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        with:
+          scan-type: "fs"
+          format: "sarif"
+          output: "trivy-code-results.sarif"
+          # severity: "CRITICAL,HIGH"
+          # ignore-unfixed: true
+        # env:
+        #   TRIVY_SKIP_DB_UPDATE: false
+        #   TRIVY_SKIP_JAVA_DB_UPDATE: false
+
+      - name: upload trivy results
+        if: ${{ always() }}
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: "trivy-code-results.sarif"
