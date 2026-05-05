@@ -1,8 +1,9 @@
 name: trivy-code-scan
 
 on:
-  pull_request:
-    branches: ["main"]
+  push:
+    branches:
+      - "**"
 
 jobs:
   scan:
