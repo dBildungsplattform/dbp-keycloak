@@ -34,4 +34,4 @@ jobs:
         if: ${{ always() }}
         uses: github/codeql-action/upload-sarif@v4
         with:
-          sarif_file: "trivy-code-results.sarif"
+          sarif_file: "trivy-helm-results.sarif"
