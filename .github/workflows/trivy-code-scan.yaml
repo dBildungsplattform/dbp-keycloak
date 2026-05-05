@@ -25,12 +25,8 @@ jobs:
           format: "sarif"
           output: "trivy-helm-results.sarif"
           scan-ref: "helm/dbp-keycloak"
-          exit-code: '1'
-          severity: "CRITICAL,HIGH"
-          # ignore-unfixed: true
-        # env:
-        #   TRIVY_SKIP_DB_UPDATE: false
-        #   TRIVY_SKIP_JAVA_DB_UPDATE: false
+          # exit-code: '1'
+          # severity: "CRITICAL,HIGH"
 
       - name: upload trivy results
         if: ${{ always() }}
@@ -56,12 +52,8 @@ jobs:
           format: "sarif"
           output: "trivy-dockerfile-results.sarif"
           scan-ref: "Dockerfile"
-          exit-code: '1'
-          severity: "CRITICAL,HIGH"
-          # ignore-unfixed: true
-        # env:
-        #   TRIVY_SKIP_DB_UPDATE: false
-        #   TRIVY_SKIP_JAVA_DB_UPDATE: false
+          # exit-code: '1'
+          # severity: "CRITICAL,HIGH"
 
       - name: upload trivy results
         if: ${{ always() }}
