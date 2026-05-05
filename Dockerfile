@@ -54,6 +54,8 @@ WORKDIR /opt/keycloak/
 RUN keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA -keysize 2048 -dname "CN=keycloak" -alias keycloak -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -validity 365 -keystore conf/server.keystore
 
 # execute build
+# ignore hadolint file not found error
+# hadolint ignore=SC1091
 RUN set -o allexport && \
     . /tmp/env-base && \
     . /tmp/env-variant && \
