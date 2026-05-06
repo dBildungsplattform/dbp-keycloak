@@ -1,7 +1,8 @@
 name: hadolint
 on:
-  pull_request:
-    branches: ["main"]
+  push:
+    branches:
+      - "**"
 
 env:
   HADOLINT_SARIF_FILE: "hadolint-results.sarif"

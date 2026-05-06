@@ -1,7 +1,8 @@
 name: ansible-lint
 on:
-  pull_request:
-    branches: ["main"]
+  push:
+    branches:
+      - "**"
 
 env:
   ANSIBLE_LINT_SARIF_FILE: "ansible-lint-results.sarif"
