@@ -20,8 +20,8 @@ jobs:
         with:
           setup_python: "true"
           python_version: "3.14"
-          working_directory: "./ansible"
-          requirements_file: "../collections/requirements.yml"
+          # working_directory: "./ansible"
+          requirements_file: "collections/requirements.yml"
           args: "--sarif-file ${{ env.ANSIBLE_LINT_SARIF_FILE }}"
       - name: upload ansible-lint results
         if: ${{ always() }}
