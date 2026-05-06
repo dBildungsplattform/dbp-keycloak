@@ -22,7 +22,7 @@ jobs:
           python_version: "3.14"
           # working_directory: "./ansible"
           requirements_file: "collections/requirements.yml"
-          args: "--sarif-file ${{ env.ANSIBLE_LINT_SARIF_FILE }} -vv"
+          args: "--sarif-file ${{ env.ANSIBLE_LINT_SARIF_FILE }}"
       - name: upload ansible-lint results
         if: ${{ always() }}
         uses: github/codeql-action/upload-sarif@e46ed2cbd01164d986452f91f178727624ae40d7 # v4.35.3
