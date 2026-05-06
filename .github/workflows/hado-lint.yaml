@@ -20,7 +20,7 @@ jobs:
         uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: Dockerfile
-          failure-threshold: ignore
+          failure-threshold: none
           output-file: "${{ env.HADOLINT_SARIF_FILE }}"
           format: "sarif"
       - name: upload hadolint results
