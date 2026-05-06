@@ -23,6 +23,7 @@ jobs:
           failure-threshold: none
           output-file: "${{ env.HADOLINT_SARIF_FILE }}"
           format: "sarif"
+          verbose: true
       - name: upload hadolint results
         if: ${{ always() }}
         uses: github/codeql-action/upload-sarif@e46ed2cbd01164d986452f91f178727624ae40d7 # v4.35.3
