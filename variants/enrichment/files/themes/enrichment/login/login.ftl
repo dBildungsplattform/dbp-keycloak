@@ -17,7 +17,7 @@
             <div id="kc-form-wrapper" class="w-full md:w-[500px] bg-base-light rounded-base mt-8">
                 <div class="p-16">
 
-                    <h2 class="text-center mt-0">Anmeldung</h2>
+                    <h1 class="text-center mt-0">Anmeldung</h1>
 
                     <form id="kc-form-login" onsubmit="login.disabled = true; return true;"
                           action="${url.loginAction}" method="post">
