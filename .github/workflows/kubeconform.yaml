@@ -5,10 +5,17 @@ on:
     branches:
       - "**"
 
+env:
+  KUBECONFORM_SARIF_FILE: "kubeconform-results.sarif"
+  HELM_OUTPUT_DIR: "helm-template"
+
 jobs:
   lint:
     name: Kubeconform
     runs-on: ubuntu-latest
+    permissions:
+      contents: read          # Required to checkout and read repo files
+      security-events: write  # Required to upload SARIF files to Security tab
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -22,8 +29,18 @@ jobs:
         run: |
           export PATH="$(go env GOPATH)/bin:${PATH}"
 
-          helm template helm/dbp-keycloak | kubeconform \
+          helm template --output-dir ${{ env.HELM_OUTPUT_DIR }} helm/dbp-keycloak
+
+          kubeconform \
           -schema-location default \
           -schema-location \
           'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
-          -strict
+          -strict \
+          -output json \
+          ${{ env.HELM_OUTPUT_DIR }} \
+          | python3 kubeconform2sarif.py -r helm > ${{ env.KUBECONFORM_SARIF_FILE }}
+      - name: upload kubeconform results
+        if: ${{ always() }}
+        uses: github/codeql-action/upload-sarif@e46ed2cbd01164d986452f91f178727624ae40d7 # v4.35.3
+        with:
+          sarif_file: "${{ env.KUBECONFORM_SARIF_FILE }}"
