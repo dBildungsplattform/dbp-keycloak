@@ -2,6 +2,9 @@ import sys
 import json
 import re
 
+# Mapping helm lint level to SARIF allowed values
+level_map = {"error": "error", "warning": "warning", "info": "note"}
+
 sarif = {
     "version": "2.1.0",
     "runs": [
@@ -20,20 +23,26 @@ sarif = {
 lint_regex = re.compile(
     r"\[(?P<level>ERROR|WARNING|INFO)\]\s+(?P<file>[^:]+):(?P<message>.*)"
 )
+line_regex = re.compile(r"yaml: line (\d+):")
 
 for line in sys.stdin:
     match = lint_regex.match(line)
     if match:
         level = match.group("level").lower()
+        sarif_level = level_map.get(level, "none")
         file = match.group("file").strip()
         message = match.group("message").strip()
+        line_match = line_regex.search(message)
+        location = {"physicalLocation": {"artifactLocation": {"uri": file}}}
+        if line_match:
+            location["physicalLocation"]["region"] = {
+                "startLine": int(line_match.group(1))
+            }
         sarif["runs"][0]["results"].append(
             {
-                "level": level,
+                "level": sarif_level,
                 "message": {"text": message},
-                "locations": [
-                    {"physicalLocation": {"artifactLocation": {"uri": file}}}
-                ],
+                "locations": [location],
             }
         )
 
