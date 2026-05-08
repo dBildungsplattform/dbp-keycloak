@@ -4,12 +4,11 @@
         ${msg("loginAccountTitle")}
     <#elseif section = "form">
         <div id="kc-form" class="flex flex-col justify-center items-center h-full px-4 md:px-0">
-            <a href="${client.baseUrl}" class="cursor-pointer">
+            <a href="${client.baseUrl}" class="cursor-pointer" tabindex="1">
                 <img
                     src="${url.resourcesPath}/img/logo.svg"
                     width="88"
                     height="82"
-                    tabindex="1"
                     alt="enrichment-logo"
                     draggable="false"
                     class="h-[41px] w-[44px] mt-8">
@@ -44,7 +43,7 @@
                         </label>
 
                         <div class="${properties.kcFormGroupClass!} ${properties.kcFormSettingClass!}">
-                            <button tabindex="6" name="login" id="kc-login" type="submit" class="btn btn-block my-4">
+                            <button tabindex="3" name="login" id="kc-login" type="submit" class="btn btn-block my-4">
                                 Passwort zurücksetzen
                                 <svg class="inline-block" height="20" width="20" fill="#ffffff">
                                     <use href="${url.resourcesPath}/icons/arrow-forward.svg#arrow-forward"
@@ -53,7 +52,7 @@
                             </button>
                             <div id="kc-form-options" class="${properties.kcFormOptionsClass!} w-full flex justify-center">
                                 <div class="${properties.kcFormOptionsWrapperClass!}">
-                                    <span class="text-12">Kennen Sie Ihr Passwort? <a href="${url.loginUrl}">zurück zur Anmeldung</a></span>
+                                    <span class="text-12">Kennen Sie Ihr Passwort? <a href="${url.loginUrl}" tabindex="4">zurück zur Anmeldung</a></span>
                                 </div>
                             </div>
                         </div>
@@ -61,7 +60,7 @@
                 </div>
             </div>
             <div class="text-center mt-2">
-                <a href="${client.baseUrl}" tabindex="7" class="link cursor-pointer">zurück zur Startseite</a>
+                <a href="${client.baseUrl}" tabindex="5" class="link cursor-pointer">zurück zur Startseite</a>
             </div>
         </div>
         <script type="module" src="${url.resourcesPath}/js/passwordVisibility.js"></script>
