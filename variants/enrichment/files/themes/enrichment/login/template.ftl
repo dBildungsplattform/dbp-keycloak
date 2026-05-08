@@ -116,7 +116,7 @@
                         <div
                             class="col-span-2 md:col-span-1 flex justify-center items-center md:justify-end mb-4 md:mb-0">
                             <a href="">
-                                <svg height="114" width="274">
+                                <svg height="114" width="274" aria-hidden="true" focusable="false>
                                     <use href="${url.resourcesPath}/img/schleswig-holstein.svg#schleswig-holstein"
                                          class="text-info"
                                          height="114" width="274">

@@ -124,6 +124,10 @@ body {
     color: var(--color-neutral-content);
 }
 
+.text-error {
+    color: var(--color-primary);
+}
+
 .grid {
     display: grid;
 }

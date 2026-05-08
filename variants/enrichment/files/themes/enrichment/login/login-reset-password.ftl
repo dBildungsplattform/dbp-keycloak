@@ -9,14 +9,14 @@
                     src="${url.resourcesPath}/img/logo.svg"
                     width="88"
                     height="82"
-                    alt="enrichment-logo"
+                    alt="Enrichment - Zur Startseite"
                     draggable="false"
                     class="h-[41px] w-[44px] mt-8">
             </a>
             <div id="kc-form-wrapper" class="w-full md:w-[500px] bg-base-light rounded-base mt-8">
                 <div class="p-16">
 
-                    <h2 class="text-center mt-0">Passwort zurücksetzen</h2>
+                    <h1 class="text-center mt-0">Passwort zurücksetzen</h1>
                     <p>Um Ihr Passwort zurückzusetzen, geben Sie bitte Ihren Nutzernamen oder Ihre E-Mail-Adresse an.</p>
                     <p>Ein Link zum Zurücksetzen Ihres Passworts wird an die hinterlegte E-Mail-Adresse versendet.</p>
                     <form id="kc-reset-password-form" class="${properties.kcFormClass!}" action="${url.loginAction}"
@@ -30,6 +30,7 @@
                                    type="text" autofocus autocomplete="username" placeholder="Nutzername oder E-Mail"
                                    class="input input-bordered input-sm <#if messagesPerField.existsError('username','password')>border-primary</#if>"
                                    aria-invalid="<#if messagesPerField.existsError('username')>true</#if>"
+                                   aria-describedby="<#if messagesPerField.existsError('username')>username-empty</#if>"
                             />
                             <span class="absolute right-0 bottom-0.5">
                                 <#if messagesPerField.existsError('username')>
@@ -41,6 +42,13 @@
                                 </#if>
                             </span>
                         </label>
+                        <#if messagesPerField.existsError('username')>
+                            <div id="username-empty" class="label flex justify-between">
+                                <span class="text-error label-text-alt">
+                                    Hinweis: Bitte geben Sie einen Nutzernamen an
+                                </span>
+                            </div>
+                        </#if>
 
                         <div class="${properties.kcFormGroupClass!} ${properties.kcFormSettingClass!}">
                             <button tabindex="3" name="login" id="kc-login" type="submit" class="btn btn-block my-4">

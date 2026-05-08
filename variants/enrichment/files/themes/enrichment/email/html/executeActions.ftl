@@ -6,6 +6,7 @@
 <@layout.emailLayout>
 
     <#if requiredActionsText == "Passwort aktualisieren">
+        <h1>Willkommen beim Enrichment-Programm</h1>
         <p>Für Sie wurde ein Benutzerkonto im Enrichment-Programm angelegt.</p>
         <p>Ihr Nutzername lautet: <b>${user.getUsername()}</b></p>
         <p>Klicken Sie auf den unten stehenden Link, um das Passwort für Ihr Benutzerkonto zu setzen.</p>
