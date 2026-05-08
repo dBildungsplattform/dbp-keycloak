@@ -4,12 +4,11 @@
         ${msg("loginAccountTitle")}
     <#elseif section = "form">
         <div id="kc-form" class="flex flex-col justify-center items-center h-full px-4 md:px-0">
-            <a href="${client.baseUrl}" class="cursor-pointer">
+            <a href="${client.baseUrl}" class="cursor-pointer" tabindex="1">
                 <img
                     src="${url.resourcesPath}/img/logo.svg"
                     width="88"
                     height="82"
-                    tabindex="1"
                     alt="Enrichment - Zur Startseite"
                     draggable="false"
                     class="h-[41px] w-[44px] mt-8">
