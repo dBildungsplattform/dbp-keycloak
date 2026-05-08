@@ -1,0 +1,36 @@
+name: hadolint
+on:
+  push:
+    branches:
+      - "**"
+
+env:
+  HADOLINT_SARIF_FILE: "hadolint-results.sarif"
+
+jobs:
+  lint:
+    name: Hadolint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read          # Required to checkout and read repo files
+      security-events: write  # Required to upload SARIF files to Security tab
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 1
+
+      - name: Run hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+          failure-threshold: "none"
+          output-file: "${{ env.HADOLINT_SARIF_FILE }}"
+          format: "sarif"
+          verbose: true
+          no-fail: true
+      - name: upload hadolint results
+        if: ${{ always() }}
+        uses: github/codeql-action/upload-sarif@e46ed2cbd01164d986452f91f178727624ae40d7 # v4.35.3
+        with:
+          sarif_file: "${{ env.HADOLINT_SARIF_FILE }}"

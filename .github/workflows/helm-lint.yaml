@@ -1,0 +1,31 @@
+name: helm lint
+
+on:
+  push:
+    branches:
+      - "**"
+env:
+  HELM_LINT_SARIF_FILE: "helm-lint-results.sarif"
+jobs:
+  lint:
+    name: Helm Lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read          # Required to checkout and read repo files
+      security-events: write  # Required to upload SARIF files to Security tab
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 1
+
+      - name: Set up Helm
+        uses: azure/setup-helm@dda3372f752e03dde6b3237bc9431cdc2f7a02a2 # v5.0.0
+
+      - name: Run helm lint
+        run: helm lint helm/dbp-keycloak | python3 helm_lint2sarif.py > ${{ env.HELM_LINT_SARIF_FILE }}
+      - name: upload ansible-lint results
+        if: ${{ always() }}
+        uses: github/codeql-action/upload-sarif@e46ed2cbd01164d986452f91f178727624ae40d7 # v4.35.3
+        with:
+          sarif_file: "${{ env.HELM_LINT_SARIF_FILE }}"
