@@ -17,7 +17,7 @@
             <div id="kc-form-wrapper" class="w-full md:w-[500px] bg-base-light rounded-base mt-8">
                 <div class="p-16">
 
-                    <h2 class="text-center mt-0">Passwort zurücksetzen</h2>
+                    <h1 class="text-center mt-0">Passwort zurücksetzen</h1>
                     <p>Um Ihr Passwort zurückzusetzen, geben Sie bitte Ihren Nutzernamen oder Ihre E-Mail-Adresse an.</p>
                     <p>Ein Link zum Zurücksetzen Ihres Passworts wird an die hinterlegte E-Mail-Adresse versendet.</p>
                     <form id="kc-reset-password-form" class="${properties.kcFormClass!}" action="${url.loginAction}"

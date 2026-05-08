@@ -17,7 +17,7 @@
             <div id="kc-form-wrapper" class="w-full md:w-[500px] bg-base-light rounded-base mt-8">
                 <div class="p-16">
 
-                    <h2 class="text-center mt-0">Neues Passwort setzen</h2>
+                    <h1 class="text-center mt-0">Neues Passwort setzen</h1>
                     <p>Bitte vergeben Sie ein neues sicheres Passwort gemäß der Passwort-Policy.</p>
 
                     <div class="pl-8 text-[14px] pb-4">
