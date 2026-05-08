@@ -4,12 +4,11 @@
         ${msg("loginAccountTitle")}
     <#elseif section = "form">
         <div id="kc-form" class="flex flex-col justify-center items-center h-full px-4 md:px-0">
-            <a href="${client.baseUrl}" class="cursor-pointer">
+            <a href="${client.baseUrl}" class="cursor-pointer" tabindex="1">
                 <img
                     src="${url.resourcesPath}/img/logo.svg"
                     width="88"
                     height="82"
-                    tabindex="1"
                     alt="enrichment-logo"
                     draggable="false"
                     class="h-[41px] w-[44px] mt-8">
@@ -80,7 +79,7 @@
                             <span class="absolute right-0 bottom-0.5">
                                 <span class="cursor-pointer"
                                       aria-label="${msg("showPassword")}"
-                                      aria-controls="password-new" data-password-toggle tabindex="4"
+                                      aria-controls="password-new" data-password-toggle tabindex="3"
                                       data-icon-show="${properties.kcFormPasswordVisibilityIconShow!}"
                                       data-icon-hide="${properties.kcFormPasswordVisibilityIconHide!}">
                                     <svg class="inline-block mr-2" height="20" width="20">
@@ -103,7 +102,7 @@
                             <span class="label">
                                 <span class="label-text">Neues Passwort wiederholen</span>
                             </span>
-                            <input tabindex="2" id="password-confirm" name="password-confirm"
+                            <input tabindex="4" id="password-confirm" name="password-confirm"
                                    type="password" autofocus autocomplete="new-password" placeholder="Passwort"
                                    class="input input-bordered input-sm <#if messagesPerField.existsError('password')>border-primary</#if>"
                                    aria-invalid="<#if messagesPerField.existsError('password-confirm')>true</#if>"
@@ -111,7 +110,7 @@
                             <span class="absolute right-0 bottom-0.5">
                                 <span class="cursor-pointer"
                                       aria-label="${msg("showPassword")}"
-                                      aria-controls="password-confirm" data-password-toggle tabindex="4"
+                                      aria-controls="password-confirm" data-password-toggle tabindex="5"
                                       data-icon-show="${properties.kcFormPasswordVisibilityIconShow!}"
                                       data-icon-hide="${properties.kcFormPasswordVisibilityIconHide!}">
                                     <svg class="inline-block mr-2" height="20" width="20">
