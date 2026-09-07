@@ -16,11 +16,11 @@ jobs:
       security-events: write  # Required to upload SARIF files to Security tab
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 1
       - name: Run ansible-lint
-        uses: ansible/ansible-lint@5fac056c45595896c973fbde871f01f6cb14d74c # v26.4.0
+        uses: ansible/ansible-lint@665d9e07a1943254d2910faffc106adaf7ea7294 # v26.8.0
         with:
           setup_python: "true"
           python_version: "3.14"
@@ -29,6 +29,6 @@ jobs:
           args: "--sarif-file ${{ env.ANSIBLE_LINT_SARIF_FILE }}"
       - name: upload ansible-lint results
         if: ${{ always() }}
-        uses: github/codeql-action/upload-sarif@68bde559dea0fdcac2102bfdf6230c5f70eb485e # v4.35.4
+        uses: github/codeql-action/upload-sarif@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9
         with:
           sarif_file: "${{ env.ANSIBLE_LINT_SARIF_FILE }}"

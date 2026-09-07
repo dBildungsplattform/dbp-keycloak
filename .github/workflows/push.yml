@@ -46,7 +46,7 @@ jobs:
         variant: ['generic', 'erwin', 'enrichment', 'internal']
     steps:
       - name: Checkout Code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - id: lower-repo
         name: Repository to lowercase
@@ -66,7 +66,7 @@ jobs:
             type=sha,format=long,priority=600,prefix=
 
       - name: Log into ghcr.io
-        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -162,7 +162,7 @@ jobs:
 
       - name: upload trivy results
         if: ${{ always() }}
-        uses: github/codeql-action/upload-sarif@68bde559dea0fdcac2102bfdf6230c5f70eb485e # v4.35.4
+        uses: github/codeql-action/upload-sarif@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9
         with:
           sarif_file: "trivy-results.sarif"
 
@@ -186,7 +186,7 @@ jobs:
 
 
   scan:
-    uses: dBildungsplattform/dbp-github-workflows/.github/workflows/check-helm-kics.yaml@5
+    uses: dBildungsplattform/dbp-github-workflows/.github/workflows/check-helm-kics.yaml@c3bea3c4173b08f8d0569d1fcbe232dbf323bb8c # 8.3.1
     permissions:
       contents: read
   helm_release_sha:
@@ -202,14 +202,14 @@ jobs:
       packages: write
     steps:
       - name: Checkout Code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - id: lower-helm-repo
         name: Repository to lowercase
         run: |
           repo_var=${{ github.repository }}
           echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
       - name: Log into ghcr.io
-        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -241,14 +241,14 @@ jobs:
       packages: write
     steps:
       - name: Checkout Code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - id: lower-helm-repo
         name: Repository to lowercase
         run: |
           repo_var=${{ github.repository }}
           echo "repository=${repo_var@L}" >> $GITHUB_OUTPUT
       - name: Log into ghcr.io
-        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
