@@ -137,7 +137,7 @@
                     <svg class="inline-block fill-current" height="16" width="16" aria-hidden="true" focusable="false">
                         <use href="${url.resourcesPath}/icons/keyboard-backspace.svg#keyboard-backspace" width="16" height="16"></use>
                     </svg>
-                    zurück zur Startseite
+                    Zurück zur Startseite
                 </a>
             </div>
         </div>
